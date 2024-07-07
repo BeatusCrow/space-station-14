@@ -10,7 +10,7 @@ using Content.Shared.UserInterface;
 using Robust.Server.GameObjects;
 using Robust.Shared.Configuration;
 using Robust.Shared.Timing;
-using Content.Server.DropPod;
+using Content.Server.TeleportationZone;
 
 namespace Content.Server.NukeOps;
 
@@ -74,11 +74,6 @@ public sealed class WarDeclaratorSystem : EntitySystem
             var title = Loc.GetString(ent.Comp.SenderTitle);
             _chat.DispatchGlobalAnnouncement(ent.Comp.Message, title, true, ent.Comp.Sound, ent.Comp.Color);
             _adminLogger.Add(LogType.Chat, LogImpact.Low, $"{ToPrettyString(args.Actor):player} has declared war with this text: {ent.Comp.Message}");
-            var query = AllEntityQuery<DropPodConsoleComponent>();
-            while (query.MoveNext(out var uid, out var comp))
-            {
-                comp.WarDeclared = true;
-            }
         }
 
         UpdateUI(ent, ev.Status);

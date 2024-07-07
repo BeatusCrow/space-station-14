@@ -4,17 +4,21 @@ using Content.Server.Chat.Systems;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Shared.Coordinates;
-using Content.Shared.DropPod;
+using Content.Shared.TeleportationZone;
 using Content.Shared.Maps;
+using Content.Server.NukeOps;
 using Content.Shared.Weather;
 using Robust.Server.GameObjects;
+using Robust.Shared.Asynchronous;
+using Robust.Shared.Audio;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using System.Threading;
+using System.Threading.Tasks;
 
-namespace Content.Server.DropPod
+namespace Content.Server.TeleportationZone
 {
-    public sealed class DropPodSystem : EntitySystem
+    public sealed class TeleportationZoneSystem : EntitySystem
     {
         [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
         [Dependency] private readonly AlertLevelSystem _alertLevelSystem = default!;
@@ -30,57 +34,57 @@ namespace Content.Server.DropPod
         public override void Initialize()
         {
             base.Initialize();
-            SubscribeLocalEvent<DropPodConsoleComponent, BoundUIOpenedEvent>(OnBoundUIOpened);
-            SubscribeLocalEvent<DropPodConsoleComponent, DropPodRefreshMessage>(OnRefreshLandingButtonPressed);
-            SubscribeLocalEvent<DropPodConsoleComponent, DropPodStartMessage>(OnStartLandingButtonPressed);
-            SubscribeLocalEvent<DropPodConsoleComponent, DropPodPointSelectedMessage>(OnPointSelected);
+            // UI
+            SubscribeLocalEvent<TeleportationZoneConsoleComponent, BoundUIOpenedEvent>(OnBoundUIOpened);
+            SubscribeLocalEvent<TeleportationZoneConsoleComponent, TeleportationZoneRefreshMessage>(OnRefreshLandingButtonPressed);
+            SubscribeLocalEvent<TeleportationZoneConsoleComponent, TeleportationZoneStartMessage>(OnStartLandingButtonPressed);
+            SubscribeLocalEvent<TeleportationZoneConsoleComponent, TeleportationZonePointSelectedMessage>(OnPointSelected);
+            // NukeConsole
+            SubscribeLocalEvent<WarDeclaredEvent>(OnWarDeclared);
         }
 
-        private int UIN = 0;
-        private bool canActivate = false;
-        private float top_border = 0f;
-        private float bottom_border = 0f;
-        private float left_border = 0f;
-        private float right_border = 0f;
 
         #region Ui
-        private void OnPointSelected(EntityUid uid, DropPodConsoleComponent component, DropPodPointSelectedMessage args)
+        private void OnPointSelected(EntityUid uid, TeleportationZoneConsoleComponent component, TeleportationZonePointSelectedMessage args)
         {
-            UIN = args.Point; // we remember the unique identification number of the point, for further work with it
-            canActivate = true; // we give you the opportunity to start disembarking
+            component.LandingPointId = args.Point;
 
-            UpdateUI(uid);
+            UpdateUI(uid, true);
         }
 
-        private void OnBoundUIOpened(EntityUid uid, DropPodConsoleComponent component, BoundUIOpenedEvent args)
+        private void OnBoundUIOpened(EntityUid uid, TeleportationZoneConsoleComponent component, BoundUIOpenedEvent args)
         {
-            canActivate = false;
-
-            UpdateUI(uid);
+            UpdateUI(uid, false);
         }
 
 
-        private void OnRefreshLandingButtonPressed(EntityUid uid, DropPodConsoleComponent component, DropPodRefreshMessage message)
+        private void OnRefreshLandingButtonPressed(EntityUid uid, TeleportationZoneConsoleComponent component, TeleportationZoneRefreshMessage message)
         {
-            canActivate = false;
-
-            UpdateUI(uid);
+            UpdateUI(uid, false);
         }
 
-        private void UpdateUI(EntityUid uid)
+        private void UpdateUI(EntityUid uid, bool canActivate)
         {
             Dictionary<int, string> points = new Dictionary<int, string>(); // A dictionary is needed to convey the names of points
             var query = AllEntityQuery<LandingPointComponent>();
             while (query.MoveNext(out var item_uid, out var item_comp))
             {
-                points.Add(item_comp.UIN, item_comp.NameLandingPoint);
+                if (!TryComp<MetaDataComponent>(item_uid, out var item_MetaData))
+                    return;
+
+                var NameLandingPoint = "unknow";
+
+                if (item_MetaData.EntityPrototype!.EditorSuffix != null)
+                    NameLandingPoint = item_MetaData.EntityPrototype.EditorSuffix;
+
+                points.Add(item_uid.Id, NameLandingPoint);
             }
 
-            var state = new DropPodUiState(true, canActivate, points);
-            _userInterface.SetUiState(uid, DropPodUiKey.Key, state); // Updating the user interface
+            var state = new TeleportationZoneUiState(true, canActivate, points);
+            _userInterface.SetUiState(uid, TeleportationZoneUiKey.Key, state); // Updating the user interface
         }
 
-        private void OnStartLandingButtonPressed(EntityUid uid, DropPodConsoleComponent component, DropPodStartMessage message)
+        private void OnStartLandingButtonPressed(EntityUid uid, TeleportationZoneConsoleComponent component, TeleportationZoneStartMessage message)
         {
             EntityUid end_station_uid = uid;
             EntityUid end_stationAlert_uid = uid;
@@ -92,7 +96,7 @@ namespace Content.Server.DropPod
             var query_point = AllEntityQuery<LandingPointComponent>();
             while (query_point.MoveNext(out var item_uid, out var item_comp))
             {
-                if (item_comp.UIN == UIN)
+                if (item_uid.Id == component.LandingPointId)
                 {
                     x_form = Transform(item_uid);
                     Coords = x_form.Coordinates;
@@ -122,29 +126,29 @@ namespace Content.Server.DropPod
                 }
             }
 
-            var query_lighthouse = AllEntityQuery<DropPodBeaconComponent>();
+            var query_lighthouse = AllEntityQuery<TeleportationZoneBeaconComponent>();
             while (query_lighthouse.MoveNext(out var item_uid, out var item_comp))
             {
                 x_form = Transform(item_uid);
                 var landinglighthousCoords = x_form.Coordinates;
                 if (count == 0) // We assign the values of the first "beacon"
                 {
-                    top_border = landinglighthousCoords.Y;
-                    bottom_border = landinglighthousCoords.Y;
-                    left_border = landinglighthousCoords.X;
-                    right_border = landinglighthousCoords.X;
+                    component.top_border = landinglighthousCoords.Y;
+                    component.bottom_border = landinglighthousCoords.Y;
+                    component.left_border = landinglighthousCoords.X;
+                    component.right_border = landinglighthousCoords.X;
                     count++;
                     continue;
                 }
 
-                if (landinglighthousCoords.Y < bottom_border)
-                    bottom_border = landinglighthousCoords.Y;
-                if (landinglighthousCoords.Y > top_border)
-                    top_border = landinglighthousCoords.Y;
-                if (landinglighthousCoords.X > right_border)
-                    right_border = landinglighthousCoords.X;
-                if (landinglighthousCoords.X < left_border)
-                    left_border = landinglighthousCoords.X;
+                if (landinglighthousCoords.Y < component.bottom_border)
+                    component.bottom_border = landinglighthousCoords.Y;
+                if (landinglighthousCoords.Y > component.top_border)
+                    component.top_border = landinglighthousCoords.Y;
+                if (landinglighthousCoords.X > component.right_border)
+                    component.right_border = landinglighthousCoords.X;
+                if (landinglighthousCoords.X < component.left_border)
+                    component.left_border = landinglighthousCoords.X;
 
                 var query_station = AllEntityQuery<BecomesStationComponent>();
                 while (query_station.MoveNext(out var st_uid, out var data))
@@ -155,13 +159,6 @@ namespace Content.Server.DropPod
                         break;
                     }
                 }
-            }
-
-            if (!component.WarDeclared & component.Announcement) // If war has not been declared, then the landing will be loud
-            {
-                _alertLevelSystem.SetLevel(end_stationAlert_uid, "red", true, true, true);
-                _chat.DispatchGlobalAnnouncement($"{component.Text} X: {Coords.X} Y: {Coords.Y}", "Central Command", true, component.Sound, component.Color);
-                Thread.Sleep(component.Time * 1000);
             }
 
             if (!TryComp<MapGridComponent>(end_station_uid, out var end_station_gridComp))
@@ -186,7 +183,18 @@ namespace Content.Server.DropPod
                 if (!TryComp<MapGridComponent>(start_station_uid, out var start_station_gridComp))
                     return;
 
-                CheckTils(start_station_uid, start_station_gridComp, end_station_uid, end_station_gridComp, pos);
+                if(TryComp<NukeTeleportationZoneComponent>(uid, out var nukeComp))
+                {
+                    _alertLevelSystem.SetLevel(end_stationAlert_uid, "red", true, true, true);
+                    _chat.DispatchGlobalAnnouncement(string.Format(nukeComp.Text, nukeComp.Time, Coords.X, Coords.Y), "Central Command", true, nukeComp.Sound, nukeComp.Color);
+                    Task.Factory.StartNew(() => Thread.Sleep(nukeComp.Time! * 1000))
+                                         .ContinueWith((t) =>
+                        {
+                            CheckTils(component, start_station_uid, start_station_gridComp, end_station_uid, end_station_gridComp, pos);
+                        }, TaskScheduler.FromCurrentSynchronizationContext());
+                    break;
+                }
+                CheckTils(component, start_station_uid, start_station_gridComp, end_station_uid, end_station_gridComp, pos);
                 break;
             }
         }
@@ -201,26 +209,26 @@ namespace Content.Server.DropPod
         /// <param name="end_station_uid"> it is necessary to understand where to move objects </param>
         /// <param name="end_grid"> it is needed to determine the local coordinates at the station where the disembarkation will take place </param>
         /// <param name="pos"> it is necessary to move the object to the desired coordinates </param>
-        private void CheckTils(EntityUid start_station_uid, MapGridComponent start_grid, EntityUid end_station_uid, MapGridComponent end_grid, EntityCoordinates pos)
+        private void CheckTils(TeleportationZoneConsoleComponent component, EntityUid start_station_uid, MapGridComponent start_grid, EntityUid end_station_uid, MapGridComponent end_grid, EntityCoordinates pos)
         {
-            left_border -= 0.5f;  // we are aligning the values of the borders, because now we are counting
-            right_border -= 0.5f; // from the center of the tile (on which the lighthouse stands), and not from the lower-left corner
-            top_border -= 0.5f;
-            bottom_border -= 0.5f;
+            component.left_border -= 0.5f;  // we are aligning the values of the borders, because now we are counting
+            component.right_border -= 0.5f; // from the center of the tile (on which the lighthouse stands), and not from the lower-left corner
+            component.top_border -= 0.5f;
+            component.bottom_border -= 0.5f;
 
-            for (int i = (int) left_border + 1; i < (int) right_border; i++)
+            for (int i = (int) component.left_border + 1; i < (int) component.right_border; i++)
             {
-                for (int j = (int) top_border - 1; j > (int) bottom_border; j--)
+                for (int j = (int) component.top_border - 1; j > (int) component.bottom_border; j--)
                 {
                     var coords = new Vector2i(i, j);
 
                     if (!start_grid.TryGetTileRef(coords, out var tileRef))
                         continue;
 
-                    int dX = i - ((int) left_border + 1);
-                    int dY = j - ((int) top_border - 1);
+                    int dX = i - ((int) component.left_border + 1);
+                    int dY = j - ((int) component.top_border - 1);
                     var TileType = tileRef.Tile.GetContentTileDefinition().ID; // defining the tile type
-                    if (TileType == "Plating") // if it's just "plating", then the objects from this tile are not portable (they are outside the DropPod)
+                    if (TileType == "Plating") // if it's just "plating", then the objects from this tile are not portable (they are outside the TeleportationZone)
                     {
                         foreach (var entity in _lookupSystem.GetLocalEntitiesIntersecting(start_station_uid, coords))
                         {
@@ -324,7 +332,7 @@ namespace Content.Server.DropPod
 
 
         /// <summary>
-        /// This method is needed to move objects from one station to another when the DropPod is activated.
+        /// This method is needed to move objects from one station to another when the TeleportationZone is activated.
         /// We just change the coordinates of the objects and save some of their components.
         /// </summary>
         private void CreateEntityOnShuttle(EntityUid end_station_uid, MapGridComponent end_gridComp, EntityCoordinates pos, int dX, int dY, EntityUid entity, TransformComponent transComp, bool isAnch, Angle rot)
@@ -336,6 +344,17 @@ namespace Content.Server.DropPod
             _transform.SetCoordinates(entity, new_pos);
             transComp.Anchored = isAnch; // objects (e.g. walls) lose their attachment to the floor during teleportation
             transComp.LocalRotation = rot; // this is necessary so that the object is correctly rotated relative to the new station 
+        }
+        #endregion
+
+        #region NukeConsole
+        private void OnWarDeclared(ref WarDeclaredEvent ev)
+        {
+            var query = AllEntityQuery<NukeTeleportationZoneComponent>();
+            while (query.MoveNext(out var uid, out var comp))
+            {
+                comp.WarDeclared = true;
+            }
         }
         #endregion
     }

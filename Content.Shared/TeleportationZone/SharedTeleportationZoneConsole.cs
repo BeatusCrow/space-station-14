@@ -1,21 +1,21 @@
 using Robust.Shared.Serialization;
 
-namespace Content.Shared.DropPod;
+namespace Content.Shared.TeleportationZone;
 
 [Serializable, NetSerializable]
-public enum DropPodUiKey : byte
+public enum TeleportationZoneUiKey : byte
 {
     Key
 }
 
 [Serializable, NetSerializable]
-public sealed class DropPodUiState : BoundUserInterfaceState
+public sealed class TeleportationZoneUiState : BoundUserInterfaceState
 {
     public bool CanRefreshVol { get; }
     public bool CanStartVol { get; }
     public Dictionary<int, string> Points = new Dictionary<int, string>();
 
-    public DropPodUiState(bool canRefreshVol, bool canStartVol, Dictionary<int, string> points)
+    public TeleportationZoneUiState(bool canRefreshVol, bool canStartVol, Dictionary<int, string> points)
     {
         CanRefreshVol = canRefreshVol;
         CanStartVol = canStartVol;
@@ -28,21 +28,21 @@ public sealed class DropPodUiState : BoundUserInterfaceState
 }
 
 [Serializable, NetSerializable]
-public sealed class DropPodRefreshMessage : BoundUserInterfaceMessage
+public sealed class TeleportationZoneRefreshMessage : BoundUserInterfaceMessage
 {
 }
 
 [Serializable, NetSerializable]
-public sealed class DropPodStartMessage : BoundUserInterfaceMessage
+public sealed class TeleportationZoneStartMessage : BoundUserInterfaceMessage
 {
 }
 
 [Serializable, NetSerializable]
-public sealed class DropPodPointSelectedMessage : BoundUserInterfaceMessage
+public sealed class TeleportationZonePointSelectedMessage : BoundUserInterfaceMessage
 {
     public int Point { get; }
 
-    public DropPodPointSelectedMessage(int point)
+    public TeleportationZonePointSelectedMessage(int point)
     {
         Point = point;
     }

@@ -1,12 +1,12 @@
 - type: entity
-  name: DropPod Beacon
-  id: DropPodBeacon
+  name: TeleportationZone Beacon
+  id: TeleportationZoneBeacon
   parent:  MarkerBase
   components:
   - type: Sprite
-    sprite: Markers/droppod.rsi
+    sprite: Markers/teleportation_zone.rsi
     state: drop_pod_lighthouse
-  - type: DropPodBeacon
+  - type: TeleportationZoneBeacon
 
 - type: entity
   name: Landing point
@@ -14,7 +14,7 @@
   parent: MarkerBase
   components:
   - type: Sprite
-    sprite: Markers/droppod.rsi
+    sprite: Markers/teleportation_zone.rsi
     state: drop_pod_point
   - type: LandingPoint
 
@@ -25,7 +25,7 @@
   suffix: "BRIG"
   components:
   - type: Sprite
-    sprite: Markers/droppod.rsi
+    sprite: Markers/teleportation_zone.rsi
     state: drop_pod_point_brig
   - type: LandingPoint
     name: brig
@@ -38,7 +38,7 @@
   suffix: "CARGO"
   components:
   - type: Sprite
-    sprite: Markers/droppod.rsi
+    sprite: Markers/teleportation_zone.rsi
     state: drop_pod_point_cargo
   - type: LandingPoint
     name: cargo
@@ -51,7 +51,7 @@
   suffix: "ENG"
   components:
   - type: Sprite
-    sprite: Markers/droppod.rsi
+    sprite: Markers/teleportation_zone.rsi
     state: drop_pod_point_eng
   - type: LandingPoint
     name: eng
@@ -64,7 +64,7 @@
   suffix: "MED"
   components:
   - type: Sprite
-    sprite: Markers/droppod.rsi
+    sprite: Markers/teleportation_zone.rsi
     state: drop_pod_point_med
   - type: LandingPoint
     name: med

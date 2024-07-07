@@ -3,21 +3,21 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 using Robust.Shared.Audio;
 
-namespace Content.Server.DropPod
+namespace Content.Server.TeleportationZone
 {
     [RegisterComponent]
-    public sealed partial class DropPodConsoleComponent : Component
+    public sealed partial class NukeTeleportationZoneComponent : Component
     {
-        public bool WarDeclared = false; // This field is needed to prevent players from flying away on a capsule before the declaration of war
+        public bool WarDeclared = false;
 
         [DataField("announcement")]
         public bool Announcement = true;
 
         [DataField("text")]
-        public string Text = "Attention! A hostile corporation is trying to move an object to your station... The travel time is 12 seconds. The approximate coordinates of the movement are as follows: ";
+        public string Text = "Attention! A hostile corporation is trying to move an object to your station... The travel time is {0} seconds. The approximate coordinates of the movement are as follows: X: {1} Y: {2}";
 
         [DataField("time")]
-        public int Time = 12; // if you change the time, then change it in the text /\
+        public int Time = 12;
 
         [DataField("sound")]
         public SoundSpecifier Sound = new SoundPathSpecifier("/Audio/Announcements/war.ogg");
