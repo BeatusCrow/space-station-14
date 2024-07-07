@@ -27,9 +27,6 @@
   - type: Sprite
     sprite: Markers/teleportation_zone.rsi
     state: drop_pod_point_brig
-  - type: LandingPoint
-    name: brig
-    uin: 2
 
 - type: entity
   name: Landing point
@@ -40,9 +37,6 @@
   - type: Sprite
     sprite: Markers/teleportation_zone.rsi
     state: drop_pod_point_cargo
-  - type: LandingPoint
-    name: cargo
-    uin: 3
 
 - type: entity
   name: Landing point
@@ -53,9 +47,6 @@
   - type: Sprite
     sprite: Markers/teleportation_zone.rsi
     state: drop_pod_point_eng
-  - type: LandingPoint
-    name: eng
-    uin: 4
 
 - type: entity
   name: Landing point
@@ -66,6 +57,3 @@
   - type: Sprite
     sprite: Markers/teleportation_zone.rsi
     state: drop_pod_point_med
-  - type: LandingPoint
-    name: med
-    uin: 5
