@@ -12,13 +12,14 @@
   recipeUnlocks:
   - WeaponProtoKineticAccelerator
   - ShuttleGunKineticCircuitboard
+  - BorgModuleMiningWeapon # DS14
   # These are roundstart but not replenishable for salvage
 
 - type: technology
   id: DraconicMunitions
   name: research-technology-draconic-munitions
   icon:
-    sprite: Objects/Weapons/Guns/Ammunition/Boxes/pistol.rsi
+    sprite: _DeadSpace/Objects/Weapons/Guns/Ammunition/Boxes/pistol.rsi # DS14-texture-localization
     state: incendiarydisplay
   discipline: Arsenal
   tier: 1
@@ -35,6 +36,7 @@
   - MagazineBoxMagnumIncendiary
   - MagazineBoxLightRifleIncendiary
   - MagazineBoxRifleIncendiary
+  - MagazineBox357Incendiary # ADT
 
 - type: technology
   id: WeaponizedLaserManipulation
@@ -116,8 +118,6 @@
   - FlashPayload
   - ExplosivePayload
   - ChemicalPayload
-  - CableDetStack1
-  - EmptyDetonator
 
 - type: technology
   id: SpecialMeans
@@ -144,6 +144,7 @@
   cost: 10000
   recipeUnlocks:
   - WeaponLaserCannon
+  - WeaponLaserRifle # DS14
 
 - type: technology
   id: WaveParticleHarnessing
@@ -156,6 +157,7 @@
   cost: 10000
   recipeUnlocks:
   - WeaponXrayCannon
+  - WeaponIonRifle # DS14
 
 - type: technology
   id: KineticModifications
@@ -192,6 +194,20 @@
   - ShuttleGunFriendshipCircuitboard
   technologyPrerequisites:
   - SalvageWeapons
+
+# DS14-start
+- type: technology
+  id: NightVisionTechnology
+  name: research-technology-night-vision-technology
+  icon:
+    sprite: _DeadSpace/Clothing/Eyes/Hud/pnv.rsi
+    state: icon
+  discipline: Arsenal
+  tier: 2
+  cost: 7500
+  recipeUnlocks:
+  - ClothingEyesPNV
+# DS14-end
 
 - type: technology
   id: DualWieldingTechnology

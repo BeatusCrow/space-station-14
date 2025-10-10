@@ -17,7 +17,8 @@ public sealed partial class PendingZombieComponent : Component
     {
         DamageDict = new ()
         {
-            { "Poison", 0.3 },
+            { "Blunt", 0.5f }, // DS14-value
+            { "Poison", 1f }, // DS14-value
         }
     };
 
@@ -34,19 +35,19 @@ public sealed partial class PendingZombieComponent : Component
     /// The amount of time left before the infected begins to take damage.
     /// </summary>
     [DataField("gracePeriod"), ViewVariables(VVAccess.ReadWrite)]
-    public TimeSpan GracePeriod = TimeSpan.FromMinutes(2);
+    public TimeSpan GracePeriod = TimeSpan.Zero;
 
     /// <summary>
     /// The minimum amount of time initial infected have before they start taking infection damage.
     /// </summary>
     [DataField]
-    public TimeSpan MinInitialInfectedGrace = TimeSpan.FromMinutes(12.5f);
+    public TimeSpan MinInitialInfectedGrace = TimeSpan.FromMinutes(5f); // DS14-value
 
     /// <summary>
     /// The maximum amount of time initial infected have before they start taking damage.
     /// </summary>
     [DataField]
-    public TimeSpan MaxInitialInfectedGrace = TimeSpan.FromMinutes(15f);
+    public TimeSpan MaxInitialInfectedGrace = TimeSpan.FromMinutes(10f); // DS14-value
 
     /// <summary>
     /// The chance each second that a warning will be shown.

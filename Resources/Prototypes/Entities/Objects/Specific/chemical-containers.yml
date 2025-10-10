@@ -16,7 +16,7 @@
           map: [ "enum.SolutionContainerLayers.Fill" ]
           visible: false
     - type: Item
-      size: Normal
+      size: Large # DS14
       sprite: Objects/Specific/Chemistry/jug.rsi
     - type: MixableSolution
       solution: beaker
@@ -39,11 +39,8 @@
       interfaces:
         enum.TransferAmountUiKey.Key:
           type: TransferAmountBoundUserInterface
-    - type: Edible
-      edible: Drink
+    - type: Drink
       solution: beaker
-      destroyOnEmpty: false
-      utensil: Spoon
     - type: Spillable
       solution: beaker
     - type: Appearance

@@ -45,6 +45,13 @@
     sprite: Clothing/Head/Helmets/eva_syndicate.rsi
   - type: StaticPrice
     price: 500 # Suit is 1000
+  - type: Armor # DS14
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.9
+        Heat: 0.9
 
 #Cosmonaut Helmet
 - type: entity
@@ -110,7 +117,7 @@
   - type: PointLight
     radius: 5
     energy: 2
-    color: "#00ffff"
+    color: "#0096FF" # DS14
   - type: Tag
     tags:
     - CorgiWearable

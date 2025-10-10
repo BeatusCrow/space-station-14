@@ -22,18 +22,27 @@ using Robust.Shared.Enums;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
+using Content.DeadSpace.Interfaces.Server;
 
 namespace Content.Server.Database
 {
     public abstract class ServerDbBase
     {
         private readonly ISawmill _opsLog;
+
+        private IServerPlayTimeManager? _playTimeServer; // DS14-play-time-server-support
+
         public event Action<DatabaseNotification>? OnNotificationReceived;
 
         /// <param name="opsLog">Sawmill to trace log database operations to.</param>
         public ServerDbBase(ISawmill opsLog)
         {
             _opsLog = opsLog;
+
+            // DS14-play-time-server-support-start
+            if (IoCManager.Instance != null)
+                IoCManager.Instance.TryResolveType(out _playTimeServer);
+            // DS14-play-time-server-support-end
         }
 
         #region Preferences
@@ -218,6 +227,12 @@ namespace Content.Server.Database
             if (Enum.TryParse<Gender>(profile.Gender, true, out var genderVal))
                 gender = genderVal;
 
+            // Corvax-TTS-Start
+            var voice = profile.Voice;
+            if (voice == String.Empty)
+                voice = SharedHumanoidAppearanceSystem.DefaultSexVoice[sex];
+            // Corvax-TTS-End
+
             // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
             var markingsRaw = profile.Markings?.Deserialize<List<string>>();
 
@@ -262,6 +277,7 @@ namespace Content.Server.Database
                 profile.CharacterName,
                 profile.FlavorText,
                 profile.Species,
+                voice, // Corvax-TTS
                 profile.Age,
                 sex,
                 gender,
@@ -298,6 +314,7 @@ namespace Content.Server.Database
             profile.CharacterName = humanoid.Name;
             profile.FlavorText = humanoid.FlavorText;
             profile.Species = humanoid.Species;
+            profile.Voice = humanoid.Voice; // Corvax-TTS
             profile.Age = humanoid.Age;
             profile.Sex = humanoid.Sex.ToString();
             profile.Gender = humanoid.Gender.ToString();
@@ -561,6 +578,11 @@ namespace Content.Server.Database
         #region Playtime
         public async Task<List<PlayTime>> GetPlayTimes(Guid player, CancellationToken cancel)
         {
+            // DS14-play-time-server-support-start
+            if (_playTimeServer != null && _playTimeServer.UsePlayTimeServer())
+                return await _playTimeServer.GetPlayTimesAsync(player, cancel);
+            // DS14-play-time-server-support-end
+
             await using var db = await GetDb(cancel);
 
             return await db.DbContext.PlayTime
@@ -570,6 +592,25 @@ namespace Content.Server.Database
 
         public async Task UpdatePlayTimes(IReadOnlyCollection<PlayTimeUpdate> updates)
         {
+            // DS14-play-time-server-support-start
+            if (_playTimeServer != null && _playTimeServer.UsePlayTimeServer())
+            {
+                var data = updates.Select(x => new PlayTime()
+                {
+                    PlayerId = x.User.UserId,
+                    Tracker = x.Tracker,
+                    TimeSpent = x.Time
+                });
+
+                await _playTimeServer.UpdatePlayTimes(data);
+
+                if (!_playTimeServer.SaveLocaly())
+                {
+                    return;
+                }
+            }
+            // DS14-play-time-server-support-end
+
             await using var db = await GetDb();
 
             // Ideally I would just be able to send a bunch of UPSERT commands, but EFCore is a pile of garbage.
@@ -1074,7 +1115,7 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
                     players[i] = log.Players[i].PlayerUserId;
                 }
 
-                yield return new SharedAdminLog(log.Id, log.Type, log.Impact, log.Date, log.Message, players);
+                yield return new SharedAdminLog(log.Id, log.Type, log.Impact, log.Date, log.CurTime, log.Message, players);
             }
         }
 
@@ -1385,7 +1426,7 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
                 ban.LastEditedAt,
                 ban.ExpirationTime,
                 ban.Hidden,
-                new [] { ban.RoleId.Replace(BanManager.PrefixJob, null).Replace(BanManager.PrefixAntag, null) },
+                new [] { ban.RoleId.Replace(BanManager.JobPrefix, null) },
                 MakePlayerRecord(unbanningAdmin),
                 ban.Unban?.UnbanTime);
         }
@@ -1685,7 +1726,7 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
                     NormalizeDatabaseTime(firstBan.LastEditedAt),
                     NormalizeDatabaseTime(firstBan.ExpirationTime),
                     firstBan.Hidden,
-                    banGroup.Select(ban => ban.RoleId.Replace(BanManager.PrefixJob, null).Replace(BanManager.PrefixAntag, null)).ToArray(),
+                    banGroup.Select(ban => ban.RoleId.Replace(BanManager.JobPrefix, null)).ToArray(),
                     MakePlayerRecord(unbanningAdmin),
                     NormalizeDatabaseTime(firstBan.Unban?.UnbanTime)));
             }

@@ -128,6 +128,7 @@
         Piercing: 0.95
         Heat: 0.90
         Radiation: 0.25
+        Stun: 0.85 # DS14-value: 4 stunbaton hits for stun
   - type: ToggleableClothing
     slot: head
   - type: ContainerContainer
@@ -148,6 +149,7 @@
   - type: HideLayerClothing
     slots:
     - Tail
+    hideOnToggle: true
 
 - type: entity
   abstract: true
@@ -177,9 +179,6 @@
       flatReductions:
         Heat: 10 # the average lightbulb only does around four damage!
     slots: OUTERCLOTHING
-  - type: HideLayerClothing
-    slots:
-    - Tail
 
 - type: entity
   parent: ClothingOuterBase

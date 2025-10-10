@@ -1,0 +1,162 @@
+- type: startingGear
+  id: UnitologGear
+  storage:
+    back:
+    - UplinkRadioUnitology
+
+- type: startingGear
+  id: UnitologLeaderGear
+  storage:
+    back:
+    - UplinkRadioLeaderUnitology
+    - Candle
+    - Candle
+    - Candle
+    - CrayonBlack
+
+- type: antag
+  id: UniHead
+  name: roles-antag-uni-head-name
+  antagonist: true
+  setPreference: true
+  objective: roles-antag-uni-head-objective
+  requirements:
+    - !type:OverallPlaytimeRequirement
+      time: 432000 # 120 hours
+
+- type: antag
+  id: Uni
+  name: roles-antag-uni-name
+  antagonist: true
+  setPreference: false
+  objective: roles-antag-uni-objective
+
+- type: antag
+  id: UniEnslaved
+  name: roles-antag-uni-enslaved-name
+  antagonist: true
+  setPreference: false
+  objective: roles-antag-uni-enslaved-objective
+
+- type: entity
+  parent: BaseGameRule
+  id: Unitology
+  components:
+  - type: GameRule
+    minPlayers: 40
+  - type: AntagLoadProfileRule
+    speciesOverride: Human
+    speciesOverrideBlacklist:
+    #Species that do not work with nukies should be included in this list.
+    #Once the issues are fixed the species should be removed from this list to be enabled.
+    #Balance concerns are not a valid reason to disable a species, except for high-impact Nukie-specific exploits.
+    - IPS
+    - IPC
+    - Diona
+    - Xenomorph
+  - type: UnitologyRule
+  - type: AntagObjectives
+    objectives:
+    - UniSubmissionObjective
+    - UniInfectObjective
+    - UniInvitationObjective
+  - type: AntagSelection
+    definitions:
+    - prefRoles: [ UniHead ]
+      fallbackRoles: [ Uni, UniEnslaved ]
+      max: 2
+      min: 2
+      playerRatio: 15
+      briefing:
+        text: uni-head-role-greeting
+        color: CornflowerBlue
+        sound: "/Audio/_DeadSpace/Necromorfs/unitolog_start.ogg"
+      startingGear: UnitologLeaderGear
+      components:
+      - type: IntrinsicRadioTransmitter
+        channels:
+        - Unitolog
+      - type: ActiveRadio
+        channels:
+        - Unitolog
+      - type: IntrinsicRadioReceiver
+      - type: Unitology
+      - type: UnitologyHead
+      - type: AutoImplant
+        implants:
+        - StorageImplant
+        - DnaScramblerImplant
+        - FreedomImplant
+      - type: NpcFactionMember
+        factions:
+        - Necromorfs
+      mindRoles:
+      - MindRoleHeadUnitology
+      blacklist:
+        components:
+          - ImmunitetInfectionDead
+          - ImmunNecroobelisk
+        requireAll: false
+    - prefRoles: [ Uni ]
+      fallbackRoles: [ UniHead, UniEnslaved ]
+      max: 0
+      min: 0
+      playerRatio: 15
+      briefing:
+        text: uni-role-greeting
+        color: CornflowerBlue
+        sound: "/Audio/_DeadSpace/Necromorfs/unitolog_start.ogg"
+      components:
+      - type: IntrinsicRadioTransmitter
+        channels:
+        - Unitolog
+      - type: ActiveRadio
+        channels:
+        - Unitolog
+      - type: IntrinsicRadioReceiver
+      - type: Unitology
+      - type: NpcFactionMember
+        factions:
+        - Necromorfs
+      mindRoles:
+      - MindRoleUnitology
+      blacklist:
+        components:
+          - ImmunitetInfectionDead
+          - ImmunNecroobelisk
+        requireAll: false
+    - prefRoles: [ UniEnslaved ]
+      fallbackRoles: [ UniHead, Uni ]
+      max: 0
+      min: 0
+      briefing:
+        text: uni-enslaved-role-greeting
+        color: CornflowerBlue
+        sound: "/Audio/_DeadSpace/Necromorfs/unitolog_start.ogg"
+      components:
+      - type: IntrinsicRadioTransmitter
+        channels:
+        - Unitolog
+      - type: ActiveRadio
+        channels:
+        - Unitolog
+      - type: IntrinsicRadioReceiver
+      - type: Unitology
+      mindRoles:
+      - MindRoleEnslavedUnitology
+      blacklist:
+        components:
+          - ImmunitetInfectionDead
+          - ImmunNecroobelisk
+        requireAll: false
+
+- type: entity
+  id: CentcommSendNecroobeliskArtefact
+  parent: BaseGameRule
+  components:
+  - type: StationEvent
+    duration: 120
+    earliestStart: 20
+    minimumPlayers: 30
+    willNotStartRandomly: true
+  - type: NecroobeliskArtefactRule

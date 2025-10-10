@@ -5,6 +5,7 @@
   components:
   - type: EnergySword
   - type: ItemToggle
+    onActivate: false # DS14
     soundActivate:
       path: /Audio/Weapons/ebladeon.ogg
     soundDeactivate:
@@ -21,7 +22,7 @@
       doAfterDuration: 4.0
   - type: ItemToggleHot
   - type: ItemToggleSize
-    activatedSize: Huge
+    activatedSize: Ginormous
   - type: ItemTogglePointLight
     toggleableVisualsColorModulatesLights: true
   - type: ItemToggleMeleeWeapon
@@ -303,9 +304,9 @@
         variation: 0.250
     activatedDamage:
         types:
-            Slash: 12
-            Heat: 12
-            Structural: 15
+            Slash: 15
+            Heat: 15
+            Structural: 20
   - type: ItemToggleActiveSound
     activeSound:
       path: /Audio/Weapons/ebladehum.ogg

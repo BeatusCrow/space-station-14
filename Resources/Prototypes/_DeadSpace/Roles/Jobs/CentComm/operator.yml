@@ -1,0 +1,47 @@
+- type: job
+  id: CentralCommandOperator
+  name: job-name-centcom-operator
+  description: job-description-centcom-operator
+  playTimeTracker: JobCentralCommandOperator
+  setPreference: false
+  startingGear: CentcomOperatorGear
+  icon: "JobIconNanotrasen"
+  supervisors: job-supervisors-centcom-administrator
+  canBeAntag: false
+  accessGroups:
+  - AllAccess
+  access:
+  - CentralCommand
+  special:
+  - !type:AddImplantSpecial
+    implants: [ MindShieldImplant, TrackingImplant, DeathRattleImplantCentcomm ]
+  - !type:AddComponentSpecial
+    components:
+    - type: AntagImmune
+    - type: ZombieImmune
+
+- type: startingGear
+  id: CentcomOperatorGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCentcomOfficial
+    shoes: ClothingShoesBootsJack
+    head: ClothingHeadHatCentcomcap
+    # eyes: ClothingEyesGlassesSunglasses
+    gloves: ClothingHandsGlovesColorBlack
+    id: CentcomOperatorPDA
+    ears: ClothingHeadsetCentCom
+    neck: ClothingNeckTieDet
+    belt: BoxFolderCentComClipboard
+    pocket1: RubberStampCentcom
+    pocket2: ClothingMaskGasCentcom
+
+- type: chameleonOutfit
+  id: CentralCommandOperatorChameleonOutfit
+  job: CentralCommandOperator
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCentcomOfficial
+    shoes: ClothingShoesBootsJack
+    head: ClothingHeadHatCentcomcap
+    gloves: ClothingHandsGlovesColorBlack
+    neck: ClothingNeckTieDet
+    belt: BoxFolderCentComClipboard

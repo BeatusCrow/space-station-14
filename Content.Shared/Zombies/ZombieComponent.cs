@@ -27,7 +27,7 @@ public sealed partial class ZombieComponent : Component
     /// being overly protected by bundling up.
     /// </summary>
     [ViewVariables(VVAccess.ReadWrite)]
-    public float MinZombieInfectionChance = 0.05f;
+    public float MinZombieInfectionChance = 0.45f; // DS14-value
 
     /// <summary>
     /// How effective each resistance type on a piece of armor is. Using a damage specifier for this seems illegal.
@@ -43,7 +43,7 @@ public sealed partial class ZombieComponent : Component
     };
 
     [ViewVariables(VVAccess.ReadWrite)]
-    public float ZombieMovementSpeedDebuff = 0.70f;
+    public float ZombieMovementSpeedDebuff = 0.85f; // DS14-value
 
     /// <summary>
     /// The skin color of the zombie
@@ -113,8 +113,8 @@ public sealed partial class ZombieComponent : Component
             { "Blunt", -0.4 },
             { "Slash", -0.2 },
             { "Piercing", -0.2 },
-            { "Heat", -0.02 },
-            { "Shock", -0.02 }
+            { "Heat", -0.25 },
+            { "Shock", -0.25 }
         }
     };
 
@@ -132,9 +132,11 @@ public sealed partial class ZombieComponent : Component
     {
         DamageDict = new()
         {
-            { "Blunt", -2 },
-            { "Slash", -2 },
-            { "Piercing", -2 }
+            { "Blunt", -8 },
+            { "Slash", -8 },
+            { "Piercing", -8 },
+            { "Cold", -8 },
+            { "Heat", -8 }
         }
     };
 

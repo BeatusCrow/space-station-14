@@ -1,0 +1,15 @@
+ent-ClickTestBase = Базовый тест кликов
+    .suffix = ДЕБАГ
+    .desc = { "" }
+ent-ClickTestRotatingCornerVisible = Тест клика: вращающийся угол (видимый)
+    .desc = { "" }
+ent-ClickTestRotatingCornerVisibleNoRot = Тест клика: вращающийся угол (видимый, без вращения)
+    .desc = { "" }
+ent-ClickTestRotatingCornerInvisible = Тест клика: вращающийся угол (невидимый)
+    .desc = { "" }
+ent-ClickTestRotatingCornerInvisibleNoRot = Тест клика: вращающийся угол (невидимый, без вращения)
+    .desc = { "" }
+ent-ClickTestFixedCornerVisible = Тест клика: фиксированный угол (видимый)
+    .desc = { "" }
+ent-ClickTestFixedCornerInvisible = Тест клика: фиксированный угол (невидимый)
+    .desc = { "" }

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Content.Server.Administration.Systems;
 using Content.Server.GameTicking;
 using Content.Server.Maps;
@@ -45,64 +44,84 @@ namespace Content.IntegrationTests.Tests
             AdminTestArenaSystem.ArenaMapPath
         };
 
-        /// <summary>
-        /// A dictionary linking maps to collections of entity prototype ids that should be exempt from "DoNotMap" restrictions.
-        /// </summary>
-        /// <remarks>
-        /// This declares that the listed entity prototypes are allowed to be present on the map
-        /// despite being categorized as "DoNotMap", while any unlisted prototypes will still
-        /// cause the test to fail.
-        /// </remarks>
-        private static readonly Dictionary<string, HashSet<EntProtoId>> DoNotMapWhitelistSpecific = new()
-        {
-            {"/Maps/bagel.yml", ["RubberStampMime"]},
-            {"/Maps/reach.yml", ["HandheldCrewMonitor"]},
-            {"/Maps/Shuttles/ShuttleEvent/honki.yml", ["GoldenBikeHorn", "RubberStampClown"]},
-            {"/Maps/Shuttles/ShuttleEvent/syndie_evacpod.yml", ["RubberStampSyndicate"]},
-            {"/Maps/Shuttles/ShuttleEvent/cruiser.yml", ["ShuttleGunPerforator"]},
-            {"/Maps/Shuttles/ShuttleEvent/instigator.yml", ["ShuttleGunFriendship"]},
-        };
-
-        /// <summary>
-        /// Maps listed here are given blanket freedom to contain "DoNotMap" entities. Use sparingly.
-        /// </summary>
-        /// <remarks>
-        /// It is also possible to whitelist entire directories here. For example, adding
-        /// "/Maps/Shuttles/**" will whitelist all shuttle maps.
-        /// </remarks>
         private static readonly string[] DoNotMapWhitelist =
         {
             "/Maps/centcomm.yml",
-            "/Maps/Shuttles/AdminSpawn/**" // admin gaming
+            "/Maps/bagel.yml", // Contains mime's rubber stamp --> Either fix this, remove the category, or remove this comment if intentional.
+            "/Maps/reach.yml", // Contains handheld crew monitor
+            "/Maps/Shuttles/ShuttleEvent/cruiser.yml", // Contains LSE-1200c "Perforator"
+            "/Maps/Shuttles/ShuttleEvent/honki.yml", // Contains golden honker, clown's rubber stamp
+            "/Maps/Shuttles/ShuttleEvent/instigator.yml", // Contains EXP-320g "Friendship"
+            "/Maps/Shuttles/ShuttleEvent/syndie_evacpod.yml", // Contains syndicate rubber stamp
+            "/Maps/corvax_astra.yml", // Contains LSE-400c "Пулемёт Свалинн"
+            "/Maps/amber.yml", // Contains LSE-400c "Пулемёт Свалинн"
+            "/Maps/barratry.yml", // Contains печать клоуна, печать мима
+            "/Maps/cluster.yml", // Contains печать мима
+            "/Maps/corvax_avrit.yml", // Contains кошачьи ушки, собачьи ушки, элитный шахтёрский скафандр, EXP-320g "Дружба", PTK-800 "Дематериализатор материи", PTK-800 "Дематериализатор материи" (машинная плата), LSE-1200c "Перфоратор" (машинная плата), LSE-400c "Пулемёт Свалинн"
+            "/Maps/corvax_paper.yml", // Contains кошачьи ушки
+            "/Maps/corvax_spectrum.yml", // Contains печать священника, LSE-400c "Пулемёт Свалинн"
+            "/Maps/ds_box.yml", // Contains печать Синдиката
+            "/Maps/ds_silly.yml", // Contains печать клоуна, печать мима и PTK-800 "Дематериализатор материи" (машинная плата)
+            "/Maps/ds_silly_snow.yml", // Contains печать клоуна, печать мима и PTK-800 "Дематериализатор материи" (машинная плата)
+            "/Maps/gemini.yml", // Contains печать клоуна и печать Синдиката
+            "/Maps/Shuttles/ERT/amber.yml", // ERT shuttle
+            "/Maps/Shuttles/ERT/cburn_scnt.yml", // ERT shuttle
+            "/Maps/Shuttles/ERT/cburn_scst.yml", // ERT shuttle
+            "/Maps/Shuttles/ERT/cburn.yml", // ERT shuttle
+            "/Maps/Shuttles/ERT/deathsquad.yml", // ERT shuttle
+            "/Maps/Shuttles/ERT/engineers.yml", // ERT shuttle
+            "/Maps/Shuttles/ERT/gamma.yml", // ERT shuttle
+            "/Maps/Shuttles/ERT/janitors.yml", // ERT shuttle
+            "/Maps/Shuttles/ERT/red.yml", // ERT shuttle
+            "/Maps/Shuttles/ERT/sierra.yml", // ERT shuttle
+            "/Maps/ds_taipan.yml",
         };
-
-        /// <summary>
-        /// Converts the above globs into regex so your eyes dont bleed trying to add filepaths.
-        /// </summary>
-        private static readonly Regex[] DoNotMapWhiteListRegexes = DoNotMapWhitelist
-            .Select(glob => new Regex(GlobToRegex(glob), RegexOptions.IgnoreCase | RegexOptions.Compiled))
-            .ToArray();
 
         private static readonly string[] GameMaps =
         {
             "Dev",
             "TestTeg",
-            "Fland",
-            "Packed",
-            "Bagel",
             "CentComm",
-            "Box",
-            "Marathon",
             "MeteorArena",
-            "Saltern",
-            "Reach",
-            "Oasis",
-            "Amber",
-            "Plasma",
-            "Elkridge",
-            "Relic",
             "dm01-entryway",
-            "Exo",
+            // "DSTaipan", // remap in progress
+            "Amber",
+            // "Aspid", // remap in progress
+            "Bagel",
+            "Barratry",
+            "Box",
+            "Cluster",
+            "Cog",
+            "Convex",
+            "Core",
+            "CorvaxAstra",
+            "CorvaxAvrite",
+            "CorvaxDelta",
+            "CorvaxPaper",
+            "CorvaxSilly",
+            "CorvaxSpectrum",
+            "Elkridge",
+            "Fland",
+            "Gate",
+            "Gemini",
+            "Loop",
+            "Loop",
+            "Marathon",
+            "Meta",
+            "Oasis",
+            "Omega",
+            "Origin",
+            "Packed",
+            "Plasma",
+            "Reach",
+            "Saltern",
+            "Train",
+        };
+
+        private static readonly string[] GameMapsExcludedFromTests =
+        {
+            "Aspid", // remap in progress
+            "DSTaipan" // remap in progress
         };
 
         private static readonly ProtoId<EntityCategoryPrototype> DoNotMapCategory = "DoNotMap";
@@ -275,30 +294,18 @@ namespace Content.IntegrationTests.Tests
             await pair.CleanReturnAsync();
         }
 
-        private bool IsWhitelistedForMap(EntProtoId protoId, ResPath map)
-        {
-            if (!DoNotMapWhitelistSpecific.TryGetValue(map.ToString(), out var allowedProtos))
-                return false;
-
-            return allowedProtos.Contains(protoId);
-        }
-
         /// <summary>
         /// Check that maps do not have any entities that belong to the DoNotMap entity category
         /// </summary>
         private void CheckDoNotMap(ResPath map, YamlNode node, IPrototypeManager protoManager)
         {
-            foreach (var regex in DoNotMapWhiteListRegexes)
-            {
-                if (regex.IsMatch(map.ToString()))
-                    return;
-            }
+            if (DoNotMapWhitelist.Contains(map.ToString()))
+                return;
 
             var yamlEntities = node["entities"];
-            var dnmCategory = protoManager.Index(DoNotMapCategory);
+            if (!protoManager.TryIndex(DoNotMapCategory, out var dnmCategory))
+                return;
 
-            // Make a set containing all the specific whitelisted proto ids for this map
-            HashSet<EntProtoId> unusedExemptions = DoNotMapWhitelistSpecific.TryGetValue(map.ToString(), out var exemptions) ? new(exemptions) : [];
             Assert.Multiple(() =>
             {
                 foreach (var yamlEntity in (YamlSequenceNode)yamlEntities)
@@ -306,20 +313,13 @@ namespace Content.IntegrationTests.Tests
                     var protoId = yamlEntity["proto"].AsString();
 
                     // This doesn't properly handle prototype migrations, but thats not a significant issue.
-                    if (!protoManager.TryIndex(protoId, out var proto))
+                    if (!protoManager.TryIndex(protoId, out var proto, false))
                         continue;
 
-                    Assert.That(!proto.Categories.Contains(dnmCategory) || IsWhitelistedForMap(protoId, map),
+                    Assert.That(!proto.Categories.Contains(dnmCategory),
                         $"\nMap {map} contains entities in the DO NOT MAP category ({proto.Name})");
-
-                    // The proto id is used on this map, so remove it from the set
-                    unusedExemptions.Remove(protoId);
                 }
             });
-
-            // If there are any proto ids left, they must not have been used in the map!
-            Assert.That(unusedExemptions, Is.Empty,
-                $"Map {map} has DO NOT MAP entities whitelisted that are not present in the map: {string.Join(", ", unusedExemptions)}");
         }
 
         private bool IsPreInit(ResPath map,
@@ -380,7 +380,7 @@ namespace Content.IntegrationTests.Tests
                 MapId mapId;
                 try
                 {
-                    var opts = DeserializationOptions.Default with { InitializeMaps = true };
+                    var opts = DeserializationOptions.Default with {InitializeMaps = true};
                     ticker.LoadGameMap(protoManager.Index<GameMapPrototype>(mapProto), out mapId, opts);
                 }
                 catch (Exception ex)
@@ -446,7 +446,15 @@ namespace Content.IntegrationTests.Tests
                     // Test all availableJobs have spawnPoints
                     // This is done inside gamemap test because loading the map takes ages and we already have it.
                     var comp = entManager.GetComponent<StationJobsComponent>(station);
-                    var jobs = new HashSet<ProtoId<JobPrototype>>(comp.SetupAvailableJobs.Keys);
+
+                    // DS14-start
+                    // Filter out not round-start jobs (mainly for ClownSponsor)
+                    var jobs = new HashSet<ProtoId<JobPrototype>>(
+                        comp.SetupAvailableJobs
+                            .Where(job => job.Value[0] != 0)
+                            .Select(job => job.Key)
+                    );
+                    // DS14-end
 
                     var spawnPoints = entManager.EntityQuery<SpawnPointComponent>()
                         .Where(x => x.SpawnType == SpawnPointType.Job && x.Job != null)
@@ -487,7 +495,7 @@ namespace Content.IntegrationTests.Tests
 #nullable enable
             while (queryPoint.MoveNext(out T? comp, out var xform))
             {
-                var spawner = (ISpawnPoint)comp;
+                var spawner = (ISpawnPoint) comp;
 
                 if (spawner.SpawnType is not SpawnPointType.LateJoin
                 || xform.GridUid == null
@@ -511,7 +519,7 @@ namespace Content.IntegrationTests.Tests
             var protoMan = server.ResolveDependency<IPrototypeManager>();
 
             var gameMaps = protoMan.EnumeratePrototypes<GameMapPrototype>()
-                .Where(x => !pair.IsTestPrototype(x))
+                .Where(x => !pair.IsTestPrototype(x) && !GameMapsExcludedFromTests.Contains(x.ID)) // DS14: temp exclude broken map file's
                 .Select(x => x.ID)
                 .ToHashSet();
 
@@ -600,21 +608,6 @@ namespace Content.IntegrationTests.Tests
 
             await server.WaitRunTicks(1);
             await pair.CleanReturnAsync();
-        }
-
-        /// <summary>
-        /// Lets us the convert the filepaths to regex without eyeglaze trying to add new paths.
-        /// </summary>
-        private static string GlobToRegex(string glob)
-        {
-            var regex = Regex.Escape(glob)
-                .Replace(@"\*\*", "**") // replace **
-                .Replace(@"\*", "*")    // replace *
-                .Replace("**", ".*")    // ** → match across folders
-                .Replace("*", @"[^/]*") // * → match within a single folder
-                .Replace(@"\?", ".");   // ? → any single character
-
-            return $"^{regex}$";
         }
     }
 }

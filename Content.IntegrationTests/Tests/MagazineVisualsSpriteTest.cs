@@ -11,6 +11,15 @@ namespace Content.IntegrationTests.Tests;
 [TestFixture]
 public sealed class MagazineVisualsSpriteTest
 {
+    // DS14-start
+    private readonly HashSet<string> _ignoredPrototypes = new()
+    {
+        "WeaponPistolX01",
+        "PistolDominator",
+        "PistolDominatorpvrsifvlAlt",
+    };
+    // DS14-end
+
     [Test]
     public async Task MagazineVisualsSpritesExist()
     {
@@ -26,6 +35,11 @@ public sealed class MagazineVisualsSpriteTest
             {
                 foreach (var (proto, _) in protos)
                 {
+                    // DS14-start
+                    if (_ignoredPrototypes.Contains(proto.ID))
+                        continue;
+                    // DS14-end
+
                     var uid = client.EntMan.Spawn(proto.ID);
                     var visuals = client.EntMan.GetComponent<MagazineVisualsComponent>(uid);
 

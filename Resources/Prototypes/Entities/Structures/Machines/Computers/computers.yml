@@ -152,6 +152,15 @@
       board: !type:Container
         ents: []
       disk_slot: !type:ContainerSlot {}
+  # DS14-start
+  - type: DeviceNetwork
+    deviceNetId: Wired
+  - type: DeviceList
+  - type: DeviceLinkSource
+    range: 30
+    ports:
+      - ShuttleConsoleSender
+  # DS14-end
   - type: GuideHelp
     guides:
     - ShuttleCraft
@@ -503,7 +512,7 @@
   - type: Computer
     board: ResearchComputerCircuitboard
   - type: AccessReader
-    access: [["Research"]]
+    access: [["ResearchDirector"]] # DS14
   - type: PointLight
     radius: 1.5
     energy: 1.6
@@ -664,6 +673,10 @@
     access: [[ "Command" ]]
   - type: CommunicationsConsole
     title: comms-console-announcement-title-station
+    sound:
+      path: /Audio/_DeadSpace/Announcements/announce.ogg # DS14-Announcements
+      params:
+        volume: -2
   - type: DeviceNetwork
     deviceNetId: Wireless
     transmitFrequencyId: ShuttleTimer
@@ -778,6 +791,10 @@
     color: "#1d8bad"
     canShuttle: false
     global: true
+    sound:
+      path: /Audio/_DeadSpace/Announcements/centcomm.ogg # DS14-Announcements
+      params:
+        volume: -2
   - type: Computer
     board: CentcommCommsComputerCircuitboard
   - type: PointLight
@@ -895,7 +912,7 @@
     energy: 1.6
     color: "#b89f25"
   - type: AccessReader
-    access: [["Cargo"]]
+    access: [["Quartermaster"]] # DS14
   - type: DeviceNetwork
     deviceNetId: Wireless
     receiveFrequencyId: BasicDevice
@@ -940,8 +957,6 @@
     board: CargoRequestEngineeringComputerCircuitboard
   - type: PointLight
     color: "#c9c042"
-  - type: AccessReader
-    access: [["Engineering"]]
 
 - type: entity
   id: ComputerCargoOrdersMedical
@@ -973,8 +988,6 @@
     board: CargoRequestMedicalComputerCircuitboard
   - type: PointLight
     color: "#41e0fc"
-  - type: AccessReader
-    access: [["Medical"]]
 
 - type: entity
   id: ComputerCargoOrdersScience
@@ -1006,8 +1019,6 @@
     board: CargoRequestScienceComputerCircuitboard
   - type: PointLight
     color: "#b53ca1"
-  - type: AccessReader
-    access: [["Research"]]
 
 - type: entity
   id: ComputerCargoOrdersSecurity
@@ -1039,8 +1050,6 @@
     board: CargoRequestSecurityComputerCircuitboard
   - type: PointLight
     color: "#d11d00"
-  - type: AccessReader
-    access: [["Security"]]
 
 - type: entity
   id: ComputerCargoOrdersService
@@ -1072,8 +1081,6 @@
     board: CargoRequestServiceComputerCircuitboard
   - type: PointLight
     color: "#afe837"
-  - type: AccessReader
-    access: [["Service"], ["Theatre"]]
 
 - type: entity
   id: ComputerCargoBounty
@@ -1636,86 +1643,3 @@
     containers:
       circuit_holder: !type:ContainerSlot
       board: !type:Container
-
-- type: entity
-  id: StationAiFixerComputer
-  parent: BaseComputer
-  name: AI restoration console
-  description: Used to repair damaged artifical intelligences.
-  components:
-  - type: Sprite
-    layers:
-    - map: [ "computerLayerBody" ]
-      state: computer
-    - map: [ "computerLayerKeyboard" ]
-      state: generic_keyboard
-    - map: [ "computerLayerScreen" ]
-      state: ai-fixer-empty
-    - map: [ "computerLayerKeys" ]
-      state: rd_key
-    - map: [ "enum.WiresVisualLayers.MaintenancePanel" ]
-      state: generic_panel_open
-  - type: Appearance
-  - type: GenericVisualizer
-    visuals:
-      enum.ComputerVisuals.Powered:
-        computerLayerScreen:
-          True: { visible: true, shader: unshaded }
-          False: { visible: false }
-        computerLayerKeys:
-          True: { visible: true, shader: unshaded }
-          False: { visible: true, shader: shaded }
-      enum.StationAiFixerConsoleVisuals.Key:
-        computerLayerScreen:
-          Repair0: { state: ai-fixer-progress-0 }
-          Repair1: { state: ai-fixer-progress-1 }
-          Repair2: { state: ai-fixer-progress-2 }
-          Repair3: { state: ai-fixer-progress-3 }
-          Purge0: { state: ai-fixer-purge-0 }
-          Purge1: { state: ai-fixer-purge-1 }
-          Purge2: { state: ai-fixer-purge-2 }
-          Purge3: { state: ai-fixer-purge-3 }
-          Empty: { state: ai-fixer-empty }
-          Occupied: { state: ai-fixer-full }
-          Rebooting: { state: ai-fixer-404 }
-          Dead: { state: ai-fixer-404 }
-      enum.WiresVisuals.MaintenancePanelState:
-        enum.WiresVisualLayers.MaintenancePanel:
-          True: { visible: false }
-          False: { visible: true }
-  - type: ApcPowerReceiver
-    powerLoad: 1000
-  - type: Computer
-    board: StationAiFixerCircuitboard
-  - type: AccessReader
-    access: [ [ "ResearchDirector" ] ]
-  - type: Lock
-    unlockOnClick: false
-  - type: StationAiFixerConsole
-  - type: ItemSlotsLock
-    slots:
-    - station_ai_holder
-  - type: ItemSlotRequiresPower
-  - type: ItemSlots
-    slots:
-      station_ai_holder:
-        ejectOnBreak: true
-        lockedFailPopup: station-ai-fixer-console-is-locked
-        whitelistFailPopup: station-ai-fixer-console-station-ai-holder-required
-        whitelist:
-          requireAll: true
-          components:
-          - StationAiHolder
-          - Item
-  - type: ContainerContainer
-    containers:
-      station_ai_holder: !type:ContainerSlot
-      board: !type:Container
-  - type: ActivatableUI
-    key: enum.StationAiFixerConsoleUiKey.Key
-  - type: UserInterface
-    interfaces:
-      enum.StationAiFixerConsoleUiKey.Key:
-        type: StationAiFixerConsoleBoundUserInterface
-      enum.WiresUiKey.Key:
-        type: WiresBoundUserInterface

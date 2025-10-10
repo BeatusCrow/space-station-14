@@ -50,6 +50,9 @@
       sprite: Structures/Windows/cracks.rsi
   - type: StaticPrice
     price: 100
+  - type: Construction # DS14
+    graph: Windows
+    node: miningWindow
 
 - type: entity
   parent: ShuttleWindow
@@ -70,7 +73,7 @@
     - Window
   - type: IconSmooth
     mode: Diagonal
-    key: windows
+    key: walls #corvax smooth
     base: state
   - type: Icon
     sprite: Structures/Windows/mining_diagonal.rsi
@@ -96,3 +99,6 @@
   - type: DamageVisuals
     damageOverlay:
       sprite: Structures/Windows/cracks_diagonal.rsi
+  - type: Construction # DS14
+    graph: DiagonalWindow
+    node: miningWindowDiagonal

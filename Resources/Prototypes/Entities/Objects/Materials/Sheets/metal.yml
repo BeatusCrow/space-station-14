@@ -197,6 +197,10 @@
         - ReagentId: Carbon
           Quantity: 1
         canReact: false
+  - type: Tag # DS14
+    tags:
+    - Sheet
+    - Plasteel
 
 - type: entity
   parent: SheetPlasteel

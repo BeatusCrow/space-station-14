@@ -128,5 +128,5 @@
         volume: -10
     activatedDamage:
       types:
-        Blunt: 8
-        Shock: 16
+        Blunt: 5 # DS14-value
+        Shock: 15 # DS14-value

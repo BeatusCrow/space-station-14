@@ -1,0 +1,263 @@
+- type: construction
+  id: ADTBlackSofaLeftSideRecipe
+  graph: Seat
+  startNode: start
+  targetNode: adtblacksofaleft
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: ADTBlackSofaMiddleRecipe
+  graph: Seat
+  startNode: start
+  targetNode: adtblacksofamiddle
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: ADTBlackSofaRightSideRecipe
+  graph: Seat
+  startNode: start
+  targetNode: adtblacksofaright
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: ADTDeckChairRecipe
+  graph: bed
+  startNode: start
+  targetNode: adtdeckchair
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: ADTBlackChairRecipe
+  graph: Seat
+  startNode: start
+  targetNode: adtblackchair
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: ADTDoubleBedTopRecipe
+  graph: bed
+  startNode: start
+  targetNode: adtdoublebedtop
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: ADTDoubleBedBottomRecipe
+  graph: bed
+  startNode: start
+  targetNode: adtdoublebedbottom
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: ADTRedSofaLeftSideRecipe
+  graph: Seat
+  startNode: start
+  targetNode: adtredsofaleft
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: ADTRedSofaMiddleRecipe
+  graph: Seat
+  startNode: start
+  targetNode: adtredsofamiddle
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: ADTRedSofaRightSideRecipe
+  graph: Seat
+  startNode: start
+  targetNode: adtredsofaright
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: ADTVioletSofaLeftSideRecipe
+  graph: Seat
+  startNode: start
+  targetNode: adtvioletsofaleft
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: ADTVioletSofaMiddleRecipe
+  graph: Seat
+  startNode: start
+  targetNode: adtvioletsofamiddle
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: ADTVioletSofaRightSideRecipe
+  graph: Seat
+  startNode: start
+  targetNode: adtvioletsofaright
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: ADTLeatherSofaLeftSideRecipe
+  graph: Seat
+  startNode: start
+  targetNode: adtleathersofaleft
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: ADTLeatherSofaMiddleRecipe
+  graph: Seat
+  startNode: start
+  targetNode: adtleathersofamiddle
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: ADTLeatherSofaRightSideRecipe
+  graph: Seat
+  startNode: start
+  targetNode: adtleathersofaright
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: ADTVioletChairRecipe
+  graph: Seat
+  startNode: start
+  targetNode: adtvioletchair
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: ADTRedChairRecipe
+  graph: Seat
+  startNode: start
+  targetNode: adtredchair
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: ADTLeatherChairRecipe
+  graph: Seat
+  startNode: start
+  targetNode: adtleatherchair
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: ADTChurchBenchLeftSideRecipe
+  graph: Seat
+  startNode: start
+  targetNode: adtchurchbenchleft
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: ADTChurchBenchMiddleRecipe
+  graph: Seat
+  startNode: start
+  targetNode: adtchurchbenchmiddle
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: ADTChurchBenchRightSideRecipe
+  graph: Seat
+  startNode: start
+  targetNode: adtchurchbenchright
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked

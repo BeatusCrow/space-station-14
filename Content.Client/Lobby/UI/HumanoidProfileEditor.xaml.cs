@@ -9,8 +9,10 @@ using Content.Client.Players.PlayTimeTracking;
 using Content.Client.Sprite;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Systems.Guidebook;
+using Content.DeadSpace.Interfaces.Client;
 using Content.Shared.CCVar;
 using Content.Shared.Clothing;
+using Content.Shared.Corvax.CCCVars;
 using Content.Shared.GameTicking;
 using Content.Shared.Guidebook;
 using Content.Shared.Humanoid;
@@ -32,6 +34,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using Direction = Robust.Shared.Maths.Direction;
 
@@ -50,6 +53,7 @@ namespace Content.Client.Lobby.UI
         private readonly MarkingManager _markingManager;
         private readonly JobRequirementsManager _requirements;
         private readonly LobbyUIController _controller;
+        private IClientSponsorsManager? _sponsorsManager; // DS14-sponsors
 
         private readonly SpriteSystem _sprite;
 
@@ -220,6 +224,18 @@ namespace Content.Client.Lobby.UI
             };
 
             #endregion Gender
+
+            // Corvax-TTS-Start
+            #region Voice
+
+            if (configurationManager.GetCVar(CCCVars.TTSEnabled))
+            {
+                TTSContainer.Visible = true;
+                InitializeVoice();
+            }
+
+            #endregion
+            // Corvax-TTS-End
 
             RefreshSpecies();
 
@@ -491,7 +507,7 @@ namespace Content.Client.Lobby.UI
         /// </summary>
         public void RefreshTraits()
         {
-            TraitsList.RemoveAllChildren();
+            TraitsList.DisposeAllChildren();
 
             var traits = _prototypeManager.EnumeratePrototypes<TraitPrototype>().OrderBy(t => Loc.GetString(t.Name)).ToList();
             TabContainer.SetTabTitle(3, Loc.GetString("humanoid-profile-editor-traits-tab"));
@@ -603,6 +619,8 @@ namespace Content.Client.Lobby.UI
         /// </summary>
         public void RefreshSpecies()
         {
+            IoCManager.Instance!.TryResolveType(out _sponsorsManager); // DS14-sponsors
+
             SpeciesButton.Clear();
             _species.Clear();
 
@@ -618,6 +636,16 @@ namespace Content.Client.Lobby.UI
                 {
                     SpeciesButton.SelectId(i);
                 }
+
+                if (_sponsorsManager != null && _species[i].SponsorOnly)
+                {
+                    SpeciesButton.SetItemDisabled(SpeciesButton.GetIdx(i), true);
+
+                    if (_sponsorsManager.TryGetInfo(out var sponsor) && sponsor.AllowedMarkings.Contains(_species[i].ID))
+                    {
+                        SpeciesButton.SetItemDisabled(SpeciesButton.GetIdx(i), false);
+                    }
+                }
             }
 
             // If our species isn't available then reset it to default.
@@ -627,12 +655,20 @@ namespace Content.Client.Lobby.UI
                 {
                     SetSpecies(SharedHumanoidAppearanceSystem.DefaultSpecies);
                 }
+                var chosenSpecies = _species.Find(x => x.Name == Profile.Species);
+                if (_sponsorsManager != null && chosenSpecies != null && chosenSpecies.SponsorOnly)
+                {
+                    if (_sponsorsManager.TryGetInfo(out var sponsor) && sponsor.AllowedMarkings.Contains(chosenSpecies.ID))
+                    {
+                        SetSpecies(SharedHumanoidAppearanceSystem.DefaultSpecies);
+                    }
+                }
             }
         }
 
         public void RefreshAntags()
         {
-            AntagList.RemoveAllChildren();
+            AntagList.DisposeAllChildren();
             var items = new[]
             {
                 ("humanoid-profile-editor-antag-preference-yes-button", 0),
@@ -657,13 +693,16 @@ namespace Content.Client.Lobby.UI
 
                 var title = Loc.GetString(antag.Name);
                 var description = Loc.GetString(antag.Objective);
-                selector.Setup(items, title, 250, description, guides: antag.Guides);
+                selector.Setup(items, title, 350, description, guides: antag.Guides); // DS14
                 selector.Select(Profile?.AntagPreferences.Contains(antag.ID) == true ? 0 : 1);
 
-                if (!_requirements.IsAllowed(
-                        antag,
-                        (HumanoidCharacterProfile?)_preferencesManager.Preferences?.SelectedCharacter,
-                        out var reason))
+                var requirements = _entManager.System<SharedRoleSystem>().GetAntagRequirement(antag);
+                // DS14-syndicate-sponsor-start
+                if (_sponsorsManager?.TryGetInfo(out var sponsor) == true && sponsor.HavePriorityAntag)
+                {
+                    selector.UnlockRequirements();
+                }
+                else if (!_requirements.CheckRoleRequirements(requirements, (HumanoidCharacterProfile?)_preferencesManager.Preferences?.SelectedCharacter, out var reason))
                 {
                     selector.LockRequirements(reason);
                     Profile = Profile?.WithAntagPreference(antag.ID, false);
@@ -673,6 +712,7 @@ namespace Content.Client.Lobby.UI
                 {
                     selector.UnlockRequirements();
                 }
+                // DS14-syndicate-sponsor-end
 
                 selector.OnSelected += preference =>
                 {
@@ -766,6 +806,7 @@ namespace Content.Client.Lobby.UI
             UpdateAgeEdit();
             UpdateEyePickers();
             UpdateSaveButton();
+            UpdateTTSVoicesControls(); // Corvax-TTS
             UpdateMarkings();
             UpdateHairPickers();
             UpdateCMarkingsHair();
@@ -812,7 +853,7 @@ namespace Content.Client.Lobby.UI
             if (_prototypeManager.HasIndex<GuideEntryPrototype>(species))
                 page = new ProtoId<GuideEntryPrototype>(species.Id); // Gross. See above todo comment.
 
-            if (_prototypeManager.Resolve(DefaultSpeciesGuidebook, out var guideRoot))
+            if (_prototypeManager.TryIndex(DefaultSpeciesGuidebook, out var guideRoot))
             {
                 var dict = new Dictionary<ProtoId<GuideEntryPrototype>, GuideEntry>();
                 dict.Add(DefaultSpeciesGuidebook, guideRoot);
@@ -826,7 +867,7 @@ namespace Content.Client.Lobby.UI
         /// </summary>
         public void RefreshJobs()
         {
-            JobList.RemoveAllChildren();
+            JobList.DisposeAllChildren();
             _jobCategories.Clear();
             _jobPriorities.Clear();
             var firstCategory = true;
@@ -921,7 +962,7 @@ namespace Content.Client.Lobby.UI
                     };
                     var jobIcon = _prototypeManager.Index(job.Icon);
                     icon.Texture = _sprite.Frame0(jobIcon.Icon);
-                    selector.Setup(items, job.LocalizedName, 200, job.LocalizedDescription, icon, job.Guides);
+                    selector.Setup(items, job.LocalizedName, 350, job.LocalizedDescription, icon, job.Guides); // DS14
 
                     if (!_requirements.IsAllowed(job, (HumanoidCharacterProfile?)_preferencesManager.Preferences?.SelectedCharacter, out var reason))
                     {
@@ -1090,11 +1131,10 @@ namespace Content.Client.Lobby.UI
             if (Profile is null) return;
 
             var skin = _prototypeManager.Index<SpeciesPrototype>(Profile.Species).SkinColoration;
-            var strategy = _prototypeManager.Index(skin).Strategy;
 
-            switch (strategy.InputType)
+            switch (skin)
             {
-                case SkinColorationStrategyInput.Unary:
+                case HumanoidSkinColor.HumanToned:
                 {
                     if (!Skin.Visible)
                     {
@@ -1102,14 +1142,13 @@ namespace Content.Client.Lobby.UI
                         RgbSkinColorContainer.Visible = false;
                     }
 
-                    var color = strategy.FromUnary(Skin.Value);
+                    var color = SkinColor.HumanSkinTone((int) Skin.Value);
 
                     Markings.CurrentSkinColor = color;
-                    Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithSkinColor(color));
-
+                    Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithSkinColor(color));//
                     break;
                 }
-                case SkinColorationStrategyInput.Color:
+                case HumanoidSkinColor.Hues:
                 {
                     if (!RgbSkinColorContainer.Visible)
                     {
@@ -1117,11 +1156,36 @@ namespace Content.Client.Lobby.UI
                         RgbSkinColorContainer.Visible = true;
                     }
 
-                    var color = strategy.ClosestSkinColor(_rgbSkinColorSelector.Color);
+                    Markings.CurrentSkinColor = _rgbSkinColorSelector.Color;
+                    Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithSkinColor(_rgbSkinColorSelector.Color));
+                    break;
+                }
+                case HumanoidSkinColor.TintedHues:
+                {
+                    if (!RgbSkinColorContainer.Visible)
+                    {
+                        Skin.Visible = false;
+                        RgbSkinColorContainer.Visible = true;
+                    }
+
+                    var color = SkinColor.TintedHues(_rgbSkinColorSelector.Color);
 
                     Markings.CurrentSkinColor = color;
                     Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithSkinColor(color));
+                    break;
+                }
+                case HumanoidSkinColor.VoxFeathers:
+                {
+                    if (!RgbSkinColorContainer.Visible)
+                    {
+                        Skin.Visible = false;
+                        RgbSkinColorContainer.Visible = true;
+                    }
 
+                    var color = SkinColor.ClosestVoxColor(_rgbSkinColorSelector.Color);
+
+                    Markings.CurrentSkinColor = color;
+                    Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithSkinColor(color));
                     break;
                 }
             }
@@ -1176,6 +1240,7 @@ namespace Content.Client.Lobby.UI
             }
 
             UpdateGenderControls();
+            UpdateTTSVoicesControls(); // Corvax-TTS
             Markings.SetSex(newSex);
             ReloadPreview();
         }
@@ -1185,6 +1250,14 @@ namespace Content.Client.Lobby.UI
             Profile = Profile?.WithGender(newGender);
             ReloadPreview();
         }
+
+        // Corvax-TTS-Start
+        private void SetVoice(string newVoice)
+        {
+            Profile = Profile?.WithVoice(newVoice);
+            IsDirty = true;
+        }
+        // Corvax-TTS-End
 
         private void SetSpecies(string newSpecies)
         {
@@ -1270,7 +1343,7 @@ namespace Content.Client.Lobby.UI
             var sexes = new List<Sex>();
 
             // add species sex options, default to just none if we are in bizzaro world and have no species
-            if (_prototypeManager.Resolve<SpeciesPrototype>(Profile.Species, out var speciesProto))
+            if (_prototypeManager.TryIndex<SpeciesPrototype>(Profile.Species, out var speciesProto))
             {
                 foreach (var sex in speciesProto.Sexes)
                 {
@@ -1300,11 +1373,10 @@ namespace Content.Client.Lobby.UI
                 return;
 
             var skin = _prototypeManager.Index<SpeciesPrototype>(Profile.Species).SkinColoration;
-            var strategy = _prototypeManager.Index(skin).Strategy;
 
-            switch (strategy.InputType)
+            switch (skin)
             {
-                case SkinColorationStrategyInput.Unary:
+                case HumanoidSkinColor.HumanToned:
                 {
                     if (!Skin.Visible)
                     {
@@ -1312,11 +1384,11 @@ namespace Content.Client.Lobby.UI
                         RgbSkinColorContainer.Visible = false;
                     }
 
-                    Skin.Value = strategy.ToUnary(Profile.Appearance.SkinColor);
+                    Skin.Value = SkinColor.HumanSkinToneFromColor(Profile.Appearance.SkinColor);
 
                     break;
                 }
-                case SkinColorationStrategyInput.Color:
+                case HumanoidSkinColor.Hues:
                 {
                     if (!RgbSkinColorContainer.Visible)
                     {
@@ -1324,11 +1396,36 @@ namespace Content.Client.Lobby.UI
                         RgbSkinColorContainer.Visible = true;
                     }
 
-                    _rgbSkinColorSelector.Color = strategy.ClosestSkinColor(Profile.Appearance.SkinColor);
+                    // set the RGB values to the direct values otherwise
+                    _rgbSkinColorSelector.Color = Profile.Appearance.SkinColor;
+                    break;
+                }
+                case HumanoidSkinColor.TintedHues:
+                {
+                    if (!RgbSkinColorContainer.Visible)
+                    {
+                        Skin.Visible = false;
+                        RgbSkinColorContainer.Visible = true;
+                    }
+
+                    // set the RGB values to the direct values otherwise
+                    _rgbSkinColorSelector.Color = Profile.Appearance.SkinColor;
+                    break;
+                }
+                case HumanoidSkinColor.VoxFeathers:
+                {
+                    if (!RgbSkinColorContainer.Visible)
+                    {
+                        Skin.Visible = false;
+                        RgbSkinColorContainer.Visible = true;
+                    }
+
+                    _rgbSkinColorSelector.Color = SkinColor.ClosestVoxColor(Profile.Appearance.SkinColor);
 
                     break;
                 }
             }
+
         }
 
         public void UpdateSpeciesGuidebookIcon()
@@ -1339,7 +1436,7 @@ namespace Content.Client.Lobby.UI
             if (species is null)
                 return;
 
-            if (!_prototypeManager.Resolve<SpeciesPrototype>(species, out var speciesProto))
+            if (!_prototypeManager.TryIndex<SpeciesPrototype>(species, out var speciesProto))
                 return;
 
             // Don't display the info button if no guide entry is found
@@ -1531,7 +1628,7 @@ namespace Content.Client.Lobby.UI
                 return;
 
             StartExport();
-            await using var file = await _dialogManager.OpenFile(new FileDialogFilters(new FileDialogFilters.Group("yml")), FileAccess.Read);
+            await using var file = await _dialogManager.OpenFile(new FileDialogFilters(new FileDialogFilters.Group("yml")));
 
             if (file == null)
             {
@@ -1541,7 +1638,8 @@ namespace Content.Client.Lobby.UI
 
             try
             {
-                var profile = _entManager.System<HumanoidAppearanceSystem>().FromStream(file, _playerManager.LocalSession!);
+                var allowedMarkings = _sponsorsManager?.TryGetInfo(out var sponsor) == true ? sponsor.AllowedMarkings.ToArray() : [];
+                var profile = _entManager.System<HumanoidAppearanceSystem>().FromStream(file, _playerManager.LocalSession!, allowedMarkings);
                 var oldProfile = Profile;
                 SetProfile(profile, CharacterSlot);
 

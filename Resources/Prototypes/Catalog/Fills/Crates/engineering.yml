@@ -235,13 +235,13 @@
 
 - type: entity
   id: CrateTechBoardRandom
-  parent: ToteBase
+  parent: CrateEngineering
   name: surplus boards
   description: Surplus boards from somewhere.
   components:
   - type: EntityTableContainerFill
     containers:
-      storagebase: !type:NestedSelector
+      entity_storage: !type:NestedSelector
         tableId: RandomTechBoardTable
         rolls: !type:RangeNumberSelector
           range: 6, 8
@@ -256,3 +256,32 @@
     contents:
     - id: AirGrenade
       amount: 3
+
+# ADT-start
+
+- type: entity
+  id: CrateEngineeringVoidJetpack
+  parent: CrateGenericSteel
+  components:
+  - type: StorageFill
+    contents:
+      - id: JetpackVoid
+        amount: 2
+
+- type: entity
+  id: ADTCargoUtilisatorComplectCrate
+  parent: CrateGenericSteel
+  components:
+  - type: StorageFill
+    contents:
+      - id: ClothingOuterHardsuitSpatio
+      - id: ClothingMaskGasExplorer
+      - id: ClothingShoesBootsMag
+      - id: ClothingUniformJumpsuitSalvageSpecialist
+      - id: ClothingUniformJumpsuitSalvageFormal
+      - id: ClothingUniformJumpskirtCargoSalvage
+      - id: ClothingUniformJumpskirtCargoSalvageFormal
+      - id: ClothingBackpackSatchelSalvage
+      - id: ClothingBackpackDuffelSalvage
+      - id: ClothingBackpackSalvage
+      - id: SurvivalKnife

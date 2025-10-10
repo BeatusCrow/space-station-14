@@ -38,7 +38,7 @@
     makeSentient: true
     name: ghost-role-information-revenant-name
     description: ghost-role-information-revenant-description
-    rules: ghost-role-information-antagonist-rules
+    rules: ghost-role-information-revenant-rules
     mindRoles:
     - MindRoleGhostRoleSoloAntagonist
     raffle:
@@ -66,9 +66,6 @@
         type: StoreBoundUserInterface
   - type: Visibility
     layer: 2 #ghost vis layer
-  - type: ActionGrant
-    actions:
-    - ActionRevenantShop
   - type: Store
     categories:
     - RevenantAbilities
@@ -89,3 +86,5 @@
     tags:
     - SlowImmune
     - KnockdownImmune
+  - type: TTS # Corvax-TTS
+    voice: Kelthuzad

@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared.Construction.Prototypes;
+using Content.DeadSpace.Interfaces.Client;
 using Content.Shared.Preferences;
 using Robust.Client;
 using Robust.Client.Player;
@@ -19,6 +20,7 @@ namespace Content.Client.Lobby
         [Dependency] private readonly IClientNetManager _netManager = default!;
         [Dependency] private readonly IBaseClient _baseClient = default!;
         [Dependency] private readonly IPlayerManager _playerManager = default!;
+        private IClientSponsorsManager? _sponsorsManager; // DS14-sponsors
 
         public event Action? OnServerDataLoaded;
 
@@ -33,6 +35,8 @@ namespace Content.Client.Lobby
             _netManager.RegisterNetMessage<MsgDeleteCharacter>();
 
             _baseClient.RunLevelChanged += BaseClientOnRunLevelChanged;
+
+            IoCManager.Instance!.TryResolveType(out _sponsorsManager); // DS14-sponsors
         }
 
         private void BaseClientOnRunLevelChanged(object? sender, RunLevelChangedEventArgs e)
@@ -62,7 +66,10 @@ namespace Content.Client.Lobby
         public void UpdateCharacter(ICharacterProfile profile, int slot)
         {
             var collection = IoCManager.Instance!;
-            profile.EnsureValid(_playerManager.LocalSession!, collection);
+            // DS14-sponsors-start
+            var allowedMarkings = _sponsorsManager != null && _sponsorsManager.TryGetInfo(out var sponsor) ? sponsor.AllowedMarkings.ToArray() : [];
+            profile.EnsureValid(_playerManager.LocalSession!, collection, allowedMarkings);
+            // DS14-sponsors-end
             var characters = new Dictionary<int, ICharacterProfile>(Preferences.Characters) {[slot] = profile};
             Preferences = new PlayerPreferences(characters, Preferences.SelectedCharacterIndex, Preferences.AdminOOCColor, Preferences.ConstructionFavorites);
             var msg = new MsgUpdateCharacter

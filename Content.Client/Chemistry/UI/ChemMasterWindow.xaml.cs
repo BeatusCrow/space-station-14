@@ -12,8 +12,14 @@ using System.Linq;
 using System.Numerics;
 using Content.Shared.FixedPoint;
 using Robust.Client.Graphics;
+using Robust.Shared.Console;
 using static Robust.Client.UserInterface.Controls.BoxContainer;
 using Robust.Client.GameObjects;
+// DS14-start
+using Content.Client.UserInterface.ControlExtensions;
+using static Robust.Client.UserInterface.Controls.LineEdit;
+using static Robust.Client.UserInterface.Controls.BaseButton;
+// DS14-end
 
 namespace Content.Client.Chemistry.UI
 {
@@ -41,6 +47,11 @@ namespace Content.Client.Chemistry.UI
         {
             RobustXamlLoader.Load(this);
             IoCManager.InjectDependencies(this);
+
+            // DS14-start
+            SearchBar.OnTextChanged += OnPanelInfoSearchChanged;
+            ClearSearchButton.OnPressed += OnClearSearchPressed;
+            // DS14-end
 
             _sprite = _entityManager.System<SpriteSystem>();
 
@@ -135,6 +146,45 @@ namespace Content.Client.Chemistry.UI
 
             return buttons;
         }
+
+        // DS14-start
+        private void OnPanelInfoSearchChanged(LineEditEventArgs args)
+        {
+            if (string.IsNullOrEmpty(args.Text))
+            {
+                ClearSearchButton.Disabled = true;
+
+                foreach (var reagent in BufferInfo.Children)
+                {
+                    reagent.Visible = true;
+                }
+                return;
+            }
+
+            ClearSearchButton.Disabled = false;
+
+            foreach (var reagent in BufferInfo.Children.OfType<PanelContainer>())
+            {
+                var label = reagent.Children.FirstOrDefault()?.Children.OfType<Label>().FirstOrDefault();
+
+                if (label?.Text == null)
+                {
+                    continue;
+                }
+                reagent.Visible = label.Text.Contains(args.Text, StringComparison.CurrentCultureIgnoreCase);
+            }
+        }
+
+        private void OnClearSearchPressed(ButtonEventArgs args)
+        {
+            foreach (var reagent in BufferInfo.Children.OfType<PanelContainer>())
+            {
+                reagent.Visible = true;
+            }
+
+            SearchBar.Clear();
+        }
+        // DS14-end
 
         /// <summary>
         /// Update the UI state when new state data is received from the server.

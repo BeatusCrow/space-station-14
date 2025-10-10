@@ -84,11 +84,18 @@
     sprite: Objects/Misc/nukedisk.rsi
     state: icon
 
+# - type: stealTargetGroup
+#   id: WeaponEnergyShotgun
+#   name: steal-target-groups-weapon-energy-shot-gun
+#   sprite:
+#     sprite: Objects/Weapons/Guns/Battery/energy_shotgun.rsi
+#     state: base
+
 - type: stealTargetGroup
-  id: WeaponEnergyMagnum
-  name: steal-target-groups-weapon-energy-magnum
+  id: WeaponPistolX01
+  name: steal-target-groups-weapon-X01-pistol
   sprite:
-    sprite: Objects/Weapons/Guns/Battery/energy_magnum.rsi
+    sprite: _DeadSpace/Objects/Weapons/Guns/Battery/x01.rsi
     state: icon
 
 # Thief Collection
@@ -120,13 +127,6 @@
   sprite:
     sprite: Objects/Devices/door_remote.rsi
     state: door_remotebase
-
-- type: stealTargetGroup
-  id: OfficerHandgun
-  name: steal-target-groups-officer-handguns
-  sprite:
-    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
-    state: base
 
 - type: stealTargetGroup
   id: EncryptionKey
@@ -236,13 +236,6 @@
     state: ame-part
 
 - type: stealTargetGroup
-  id: ChiefEngineerToolBelt
-  name: steal-target-groups-belt-ce
-  sprite:
-    sprite: Clothing/Belt/ce.rsi
-    state: icon
-
-- type: stealTargetGroup
   id: SalvageExpeditionsComputerCircuitboard
   name: steal-target-groups-salvage-expeditions-computer-circuitboard
   sprite:
@@ -291,13 +284,6 @@
     sprite: Objects/Devices/cartridge.rsi
     state: cart-sec
 
-- type: stealTargetGroup
-  id: CaptainSword
-  name: steal-target-groups-captain-sword
-  sprite:
-    sprite: Objects/Weapons/Melee/captain_sabre.rsi
-    state: icon
-
 #Thief structures
 
 - type: stealTargetGroup
@@ -328,12 +314,12 @@
     sprite: Objects/Specific/Xenoarchaeology/xeno_artifacts.rsi
     state: ano28
 
-- type: stealTargetGroup
-  id: FreezerHeater
-  name: steal-target-groups-freezer-heater
-  sprite:
-    sprite: Structures/Piping/Atmospherics/thermomachine.rsi
-    state: heaterOff
+# - type: stealTargetGroup
+#   id: FreezerHeater
+#   name: steal-target-groups-freezer-heater
+#   sprite:
+#     sprite: Structures/Piping/Atmospherics/thermomachine.rsi
+#     state: heaterOff
 
 - type: stealTargetGroup
   id: Teg

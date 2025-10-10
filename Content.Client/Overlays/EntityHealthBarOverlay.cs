@@ -13,6 +13,7 @@ using Robust.Client.Graphics;
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
 using static Robust.Shared.Maths.Color;
+using Content.Shared.Stealth.Components;
 
 namespace Content.Client.Overlays;
 
@@ -57,7 +58,7 @@ public sealed class EntityHealthBarOverlay : Overlay
         const float scale = 1f;
         var scaleMatrix = Matrix3Helpers.CreateScale(new Vector2(scale, scale));
         var rotationMatrix = Matrix3Helpers.CreateRotation(-rotation);
-        _prototype.Resolve(StatusIcon, out var statusIcon);
+        _prototype.TryIndex(StatusIcon, out var statusIcon);
 
         var query = _entManager.AllEntityQueryEnumerator<MobThresholdsComponent, MobStateComponent, DamageableComponent, SpriteComponent>();
         while (query.MoveNext(out var uid,
@@ -76,6 +77,11 @@ public sealed class EntityHealthBarOverlay : Overlay
 
             if (damageableComponent.DamageContainerID == null || !DamageContainers.Contains(damageableComponent.DamageContainerID))
                 continue;
+
+            if (_entManager.HasComponent<StealthComponent>(uid))
+            {
+                continue;
+            }
 
             // we use the status icon component bounds if specified otherwise use sprite
             var bounds = _entManager.GetComponentOrNull<StatusIconComponent>(uid)?.Bounds ?? _spriteSystem.GetLocalBounds((uid, spriteComponent));

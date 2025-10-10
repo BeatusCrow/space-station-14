@@ -114,7 +114,6 @@
     - PlushieSnake
     - PlushieArachind
     - PlushieMoth
-    - PlushieVulp
     - PlushieHampter
     - PlushiePenguin
     - PlushieHuman
@@ -129,7 +128,6 @@
     - PlasticBanana
     - RevolverCapGun
     - SnapPopBox
-    - TennisBall
     - ToyMouse
     - ToyAi
     - ToyNuke
@@ -156,6 +154,10 @@
     - WeaponWaterPistol
     - WhoopieCushion
     - Whistle
+    - PlushieJokerge
+    - PlushieFloran
+    - PlushieJuggernaut
+    - PlushieLieutenant
   - type: WiresPanel
   - type: Wires
     layoutId: Arcade

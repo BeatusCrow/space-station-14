@@ -102,6 +102,8 @@
   - type: IgnoreUIRange
   - type: ShowAntagIcons
   - type: ShowContrabandDetails
+  - type: ShowJobIcons # DS14
+  - type: ShowMindShieldIcons # DS14
   - type: Inventory
     templateId: aghost
   - type: Loadout
@@ -109,6 +111,12 @@
   - type: BypassInteractionChecks
   - type: ExplosionResistance
     damageCoefficient: 0
+  - type: MovementSpeedModifier # DS14
+    baseWalkSpeed: 20
+  - type: InteractionPopup # DS14
+    successChance: 1
+    interactSuccessString: hugging-success-generic
+    interactSuccessSound: /Audio/Effects/thudswoosh.ogg
 
 - type: entity
   abstract: true
@@ -127,6 +135,10 @@
   name: Solar Control Interface
   description: View a Solar Control Interface.
   components:
+  - type: Action
+    icon: _Corvax/Interface/AdminActions/solar.png # Corvax-Resprite
+    iconOn: _Corvax/Interface/AdminActions/solar.png # Corvax-Resprite
+    keywords: [ "AI", "console", "interface" ]
   - type: InstantAction
     event: !type:ToggleIntrinsicUIEvent { key: enum.SolarControlConsoleUiKey.Key }
 
@@ -137,8 +149,8 @@
   description: View a Communications Interface.
   components:
   - type: Action
-    icon: { sprite: Interface/Actions/actions_ai.rsi, state: comms_console }
-    iconOn: { sprite: Interface/Actions/actions_ai.rsi, state: comms_console }
+    icon: _Corvax/Interface/AdminActions/communications.png # Corvax-Resprite
+    iconOn: _Corvax/Interface/AdminActions/communications.png # Corvax-Resprite
     keywords: [ "AI", "console", "interface" ]
     priority: -4
   - type: InstantAction
@@ -151,8 +163,8 @@
   description: View a Mass Scanner Interface.
   components:
   - type: Action
-    icon: { sprite: Interface/Actions/actions_ai.rsi, state: mass_scanner }
-    iconOn: { sprite: Interface/Actions/actions_ai.rsi, state: comms_console }
+    icon: _Corvax/Interface/AdminActions/radar.png # Corvax-Resprite
+    iconOn: _Corvax/Interface/AdminActions/radar.png # Corvax-Resprite
     keywords: [ "AI", "console", "interface" ]
     priority: -6
   - type: InstantAction
@@ -164,6 +176,10 @@
   name: Cargo Ordering Interface
   description: View a Cargo Ordering Interface.
   components:
+  - type: Action
+    icon: _Corvax/Interface/AdminActions/cargo.png # Corvax-Resprite
+    iconOn: _Corvax/Interface/AdminActions/cargo.png # Corvax-Resprite
+    keywords: [ "AI", "console", "interface" ]
   - type: InstantAction
     event: !type:ToggleIntrinsicUIEvent { key: enum.CargoConsoleUiKey.Orders }
 
@@ -174,8 +190,8 @@
   description: View a Crew Monitoring Interface.
   components:
   - type: Action
-    icon: { sprite: Interface/Actions/actions_ai.rsi, state: crew_monitor }
-    iconOn: { sprite: Interface/Actions/actions_ai.rsi, state: crew_monitor }
+    icon: _Corvax/Interface/AdminActions/monitoring.png # Corvax-Resprite
+    iconOn: _Corvax/Interface/AdminActions/monitoring.png # Corvax-Resprite
     keywords: [ "AI", "console", "interface" ]
     priority: -8
   - type: InstantAction
@@ -188,8 +204,8 @@
   description: View a Station Records Interface.
   components:
   - type: Action
-    icon: { sprite: Interface/Actions/actions_ai.rsi, state: station_records }
-    iconOn: { sprite: Interface/Actions/actions_ai.rsi, state: station_records }
+    icon: _Corvax/Interface/AdminActions/records.png # Corvax-Resprite
+    iconOn: _Corvax/Interface/AdminActions/records.png # Corvax-Resprite
     keywords: [ "AI", "console", "interface" ]
     priority: -7
   - type: InstantAction

@@ -50,7 +50,7 @@
 - type: typingIndicator
   id: vox
   typingState: vox0
-  idleState: vox0 # TODO add idle state sprite
+  idleState: vox3 # DS14
   offset: -0.125, 0.125
 
 - type: typingIndicator
@@ -82,3 +82,26 @@
   typingState: regal0
   idleState: regal3
   offset: 0, 0.125
+
+# DS14-start
+
+- type: typingIndicator
+  id: felinid
+  spritePath: /Textures/_DeadSpace/Effects/speech.rsi
+  typingState: neko0
+  idleState: neko3
+  offset: 0.025, 0.125
+
+- type: typingIndicator
+  id: vulpkanin
+  spritePath: /Textures/_DeadSpace/Effects/speech.rsi
+  typingState: vulp0
+  idleState: vulp3
+  offset: 0.125, 0.175
+
+- type: typingIndicator
+  id: plafeim
+  spritePath: /Textures/_DeadSpace/Effects/speech.rsi
+  typingState: plaf0
+  idleState: plaf3
+  offset: 0.150, 0.250

@@ -1,0 +1,181 @@
+- type: microwaveMealRecipe
+  id: RecipeLasanga
+  name: lasanga recipe
+  result: Lasanga
+  time: 20
+  group: Savory
+  solids:
+    FoodTomato: 1
+    FoodMeat: 1
+    FoodCheeseSlice: 2
+  reagents:
+    Milk: 5
+    Egg: 10
+
+- type: microwaveMealRecipe
+  id: RecipeNotsandwich
+  name: notsandwich recipe
+  result: NotSandwich
+  time: 10
+  group: Savory
+  solids:
+    ClothingMaskItalianMoustache: 1
+    FoodBreadPlainSlice: 2
+
+- type: microwaveMealRecipe
+  id: RecipeChawanmushi
+  name: chawanmushi recipe
+  result: Chawanmushi
+  time: 15
+  group: Savory
+  reagents:
+    Milk: 5
+    Egg: 10
+    Water: 5
+
+- type: microwaveMealRecipe
+  id: RecipeBoneSoup1
+  name: bone soup recipe
+  result: FoodSoupBone
+  time: 10
+  group: Soup
+  reagents:
+    Water: 10
+  solids:
+    FoodBowlBig: 1
+    HandsAnimal: 1
+
+- type: microwaveMealRecipe
+  id: RecipeBoneSoup2
+  name: bone soup recipe
+  result: FoodSoupBone
+  time: 10
+  group: Soup
+  reagents:
+    Water: 10
+  solids:
+    FoodBowlBig: 1
+    LegsAnimal: 1
+
+- type: microwaveMealRecipe
+  id: RecipeBoneSoup3
+  name: bone soup recipe
+  result: FoodSoupBone
+  time: 10
+  group: Soup
+  reagents:
+    Water: 10
+  solids:
+    FoodBowlBig: 1
+    FeetAnimal: 1
+
+- type: microwaveMealRecipe
+  id: RecipeBoneSoup4
+  name: bone soup recipe
+  result: FoodSoupBone
+  time: 10
+  group: Soup
+  reagents:
+    Water: 10
+  solids:
+    TorsoAnimal: 1
+    FoodBowlBig: 1
+
+- type: microwaveMealRecipe
+  id: RecipeSawdustSoup
+  name: sawdust soup recipe
+  result: FoodSoupSawdust
+  time: 20
+  group: Soup
+  reagents:
+    Water: 30
+    Cellulose: 20
+  solids:
+    FoodBowlBig: 1
+
+- type: microwaveMealRecipe
+  id: RecipeCaviarBurger
+  name: caviar burger recipe
+  result: FoodCaviarBurger
+  time: 5
+  group: Savory
+  solids:
+    FoodBreadPlainSlice: 1
+    FoodCaviar: 1
+
+- type: microwaveMealRecipe
+  id: RecipeCaviarMagicBurger
+  name: magic caviar burger recipe
+  result: FoodCaviarMagicBurger
+  time: 5
+  group: Savory
+  solids:
+    FoodBreadPlainSlice: 1
+    FoodCaviarMagic: 1
+
+- type: microwaveMealRecipe
+  id: RecipeCaviarHoloBurger
+  name: holo caviar burger recipe
+  result: FoodCaviarHoloBurger
+  time: 5
+  group: Breads
+  solids:
+    FoodBreadPlainSlice: 1
+    FoodCaviarHolo: 1
+
+- type: microwaveMealRecipe
+  id: RecipeCaviarRainbowBurger
+  name: rainbow caviar burger recipe
+  result: FoodCaviarRainbowBurger
+  time: 5
+  group: Savory
+  solids:
+    FoodBreadPlainSlice: 1
+    FoodCaviarRainbow: 1
+
+- type: microwaveMealRecipe
+  id: RecipeCaviarBlackBurger
+  name: black caviar burger recipe
+  result: FoodCaviarBlackBurger
+  time: 5
+  group: Savory
+  solids:
+    FoodBreadPlainSlice: 1
+    FoodCaviarBlack: 1
+
+- type: microwaveMealRecipe
+  id: RecipeHoneyCake
+  name: honey cake recipe
+  result: FoodHoneyCake
+  time: 15
+  group: Cake
+  reagents:
+    Sugar: 20
+  solids:
+    FoodCakePlain: 1
+
+- type: microwaveMealRecipe
+  id: RecipeFoodMegaSandwich
+  name: megasandwich recipe
+  result: FoodMegaSandwich
+  time: 15
+  group: Savory
+  reagents:
+    Mayo: 10
+  solids:
+    FoodBreadBaguette: 1
+    FoodMeatCutlet: 3
+    FoodCheeseSlice: 2
+    FoodTomato: 2
+    FoodCabbage: 1
+
+- type: microwaveMealRecipe
+  id: RecipeMashedPotatoes
+  name: mashed potatoes recipe
+  result: MashedPotatoes
+  time: 20
+  group: Savory
+  reagents:
+    Milk: 10
+  solids:
+    FoodPotato: 2

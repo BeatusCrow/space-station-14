@@ -208,13 +208,12 @@
   - type: Item
     storedOffset: 0,-2
   - type: Gun
-    fireRate: 5
+    fireRate: 7
     availableModes:
     - SemiAuto
+    - Burst
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/mk58.ogg
-  - type: StealTarget
-    stealGroup: OfficerHandgun
 
 - type: entity
   name: N1984

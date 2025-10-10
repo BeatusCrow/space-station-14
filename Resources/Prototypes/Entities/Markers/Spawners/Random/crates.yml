@@ -90,6 +90,7 @@
     - id: CrateServiceJanitorialSupplies
     - id: JanitorialTrolley
       weight: 0.2
+    - id: CrateServicePhotocopierToners # DS14
 
 - type: entityTable
   id: LowValueEngineeringCrateTable

@@ -46,12 +46,6 @@
   - type: Storage
     storageOpenSound:
       collection: BikeHorn
-      params:
-        variation: 0.125
-    storageInsertSound:
-      collection: FootstepClown
-      params:
-        variation: 0.125
 
 - type: entity
   parent: ClothingBackpack
@@ -127,9 +121,6 @@
   components:
   - type: Sprite
     sprite: Clothing/Back/Backpacks/mime.rsi
-  - type: Storage
-    storageOpenSound: null
-    storageInsertSound: null
 
 - type: entity
   parent: ClothingBackpack
@@ -214,7 +205,9 @@
     sprite: Clothing/Back/Backpacks/ertleader.rsi
   - type: Storage
     grid:
-    - 0,0,10,3
+    - 0,0,9,5
+  - type: ExplosionResistance # DS14
+    damageCoefficient: 0.1
 
 - type: entity
   parent: ClothingBackpackERTLeader

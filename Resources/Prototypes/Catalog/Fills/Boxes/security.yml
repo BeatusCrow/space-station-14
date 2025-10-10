@@ -137,22 +137,18 @@
     - state: forensic
 
 - type: entity
+  name: tape recorder box
   parent: BoxCardboard
-  id: BoxDetonator
-  name: detonator box
-  description: A box of explosive detonators and triggers.
+  id: BoxTapeRecorder
+  description: A box with colorful cassette tapes and a tape recorder.
   components:
-  - type: Item
-    shape:
-    - 0,0,1,1
   - type: StorageFill
     contents:
-    - id: EmptyDetonator
-      amount: 3
-    - id: TimerTrigger
-      amount: 2
-    - id: VoiceTrigger
+      - id: CassetteTape
+        amount: 4
+      - id: TapeRecorder
+        amount: 1
   - type: Sprite
     layers:
-    - state: box_security
-    - state: trigger
+      - state: box_security
+      - state: recorder

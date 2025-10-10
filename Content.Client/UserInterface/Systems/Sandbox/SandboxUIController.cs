@@ -119,7 +119,7 @@ public sealed class SandboxUIController : UIController, IOnStateChanged<Gameplay
 
         // TODO: These need moving to opened so at least if they're not synced properly on open they work.
         _window.ToggleLightButton.Pressed = !_light.Enabled;
-        _window.ToggleFovButton.Pressed = !_eye.CurrentEye.DrawFov;
+        // _window.ToggleFovButton.Pressed = !_eye.CurrentEye.DrawFov;
         _window.ToggleShadowsButton.Pressed = !_light.DrawShadows;
         _window.ShowMarkersButton.Pressed = _marker.MarkersVisible;
         _window.ShowBbButton.Pressed = (_debugPhysics.Flags & PhysicsDebugFlags.Shapes) != 0x0;
@@ -146,7 +146,7 @@ public sealed class SandboxUIController : UIController, IOnStateChanged<Gameplay
         _window.GiveFullAccessButton.OnPressed += _ => _sandbox.GiveAdminAccess();
         _window.GiveAghostButton.OnPressed += _ => _sandbox.GiveAGhost();
         _window.ToggleLightButton.OnToggled += _ => _sandbox.ToggleLight();
-        _window.ToggleFovButton.OnToggled += _ => _sandbox.ToggleFov();
+        // _window.ToggleFovButton.OnToggled += _ => _sandbox.ToggleFov();
         _window.ToggleShadowsButton.OnToggled += _ => _sandbox.ToggleShadows();
         _window.SuicideButton.OnPressed += _ => _sandbox.Suicide();
         _window.ToggleSubfloorButton.OnPressed += _ => _sandbox.ToggleSubFloor();

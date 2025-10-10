@@ -1,0 +1,143 @@
+- type: entity
+  save: false
+  parent: BaseMobSpeciesOrganic
+  id: BaseMobSpeciesXenomorph
+  abstract: true
+  components:
+  - type: Icon
+    sprite: _DeadSpace/Sponsor/Mobs/Species/Xenomorph/parts.rsi
+    state: full
+  - type: Barotrauma
+    damage:
+      types:
+        Blunt: 0.07 #per second, scales with pressure and other constants.
+  - type: Respirator #It just works?
+    minSaturation: 5.0
+  - type: Temperature
+    heatDamageThreshold: 325
+    coldDamageThreshold: 150
+    currentTemperature: 310.15
+    specificHeat: 42
+    coldDamage:
+      types:
+        Cold: 0.05 #per second, scales with temperature & other constants
+    heatDamage:
+      types:
+        Heat: 3 #per second, scales with temperature & other constants
+  - type: Fingerprint
+  - type: Blindable
+  - type: TypingIndicator
+    proto: alien
+  - type: Speech
+    speechVerb: LargeMob
+    speechSounds: Lizard
+  - type: EmoteOnDamage
+    withChat: true
+    hiddenFromChatWindow: false
+    emotes:
+    - ScreamOnDamage
+  - type: Damageable
+    damageContainer: Biological
+    damageModifierSet: XenoRace
+  - type: Bloodstream
+    bloodReagent: AcidicBlood
+  - type: Hunger
+    baseDecayRate: 0.05
+  - type: Thirst
+    baseDecayRate: 0.05
+  - type: Perishable
+    molsPerSecondPerUnitMass: 0.0005
+  - type: Vocal
+    sounds:
+      Male: UnisexXenomorph
+      Female: UnisexXenomorph
+      Unsexed: UnisexXenomorph
+  - type: MeleeWeapon
+    soundHit:
+     collection: AlienClaw
+    animation: WeaponArcClaw
+    damage:
+      types:
+        Slash: 6
+  - type: StatusEffects
+    allowed:
+    - Stun
+    - KnockedDown
+    - SlowedDown
+    - Stutter
+    - Electrocution
+    - SlurredSpeech
+    - RatvarianLanguage
+    - PressureImmunity
+    - Muted
+    - ForcedSleep
+    - TemporaryBlindness
+    - Pacified
+    - StaminaModifier
+    - Flashed
+    - RadiationProtection
+    - Drowsiness
+    - Adrenaline
+  - type: InteractionPopup
+    successChance: 1.0
+    interactSuccessString: petting-success-bingus
+    interactFailureString: petting-failure-generic
+    interactSuccessSpawn: EffectHearts
+    interactSuccessSound:
+      path: /Audio/_DeadSpace/Sponsor/Sound/meow_xeno.ogg
+  - type: Butcherable
+    butcheringType: Spike
+    spawned:
+      - id: FoodMeatXeno
+        amount: 5
+  - type: PassiveDamage # Slight passive regen. Assuming one damage type, comes out to about 4 damage a minute.
+    allowedStates:
+    - Alive
+    - Critical
+    - Dead
+    damage:
+      types:
+        Caustic: -0.7
+      groups:
+        Brute: -0.5
+  - type: Sanity
+  - type: LizardAccent
+  - type: EmotePanel # DS14-Emote-panel
+  # - type: FootPrints
+    # leftBarePrint: "footprint-left-bare-lizard"
+    # rightBarePrint: "footprint-right-bare-lizard"
+
+
+- type: damageModifierSet
+  id: XenoRace
+  coefficients:
+    Blunt: 0.9
+    Slash: 0.95
+    Shock: 1.2
+    Heat: 1.5
+    Caustic: 0.5
+
+- type: entity
+  parent: BaseMobSpeciesXenomorph
+  id: BaseMobXenomorph
+  name: Ксеноморф
+  abstract: true
+  components:
+  - type: Body
+    prototype: Xenomorph
+    requiredLegs: 2
+  - type: HumanoidAppearance
+    species: Xenomorph
+  - type: DamageVisuals
+    damageOverlayGroups:
+      Brute:
+        sprite: Mobs/Effects/brute_damage.rsi
+        color: "#9106d1"
+
+- type: entity
+  parent: BaseSpeciesDummy
+  id: MobXenomorphDummy
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HumanoidAppearance
+    species: Xenomorph

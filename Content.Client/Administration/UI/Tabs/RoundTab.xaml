@@ -4,7 +4,7 @@
     Margin="4"
     MinSize="50 50">
     <GridContainer
-        Columns="3">
+        Columns="2">
         <controls:ConfirmButton Name="StartRound" Text="{Loc administration-ui-round-tab-start-round}" />
         <controls:ConfirmButton Name="EndRound" Text="{Loc administration-ui-round-tab-end-round}" />
         <controls:ConfirmButton Name="RestartRound" Text="{Loc administration-ui-round-tab-restart-round}" />

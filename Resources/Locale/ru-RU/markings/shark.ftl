@@ -1,0 +1,12 @@
+marking-LizardFrillsAquatic1 = Плафеим, Воротник (Водный)
+marking-LizardFrillsShort1 = Плафеим, Воротник (Короткий)
+marking-LizardFrillsSimple1 = Плафеим, Воротник (Простой)
+marking-LizardFrillsDivinity1 = Плафеим, Воротник (Божественный)
+marking-LizardFrillsBig1 = Плафеим, Воротник (Большой)
+marking-LizardFrillsAxolotl1 = Плафеим, Воротник (Аксолотль)
+marking-LizardFrillsHood1 = Плафеим, Воротник (Капюшон)
+marking-LizardHornsAngler1 = Плафеим, Рожки (Рыболов)
+marking-LizardHornsCurled1 = Плафеим, Рожки (Завитые)
+marking-LizardHornsRam1 = Плафеим, Рожки (Бараньи)
+marking-LizardHornsSimple1 = Плафеим, Рожки
+marking-LizardHornsDouble1 = Плафеим, Рожки (Двойные)

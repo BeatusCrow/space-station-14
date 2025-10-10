@@ -1,0 +1,183 @@
+# Necro ent
+ent-MobNecromant = иссушитель звездных душ
+    .desc = От него веет смертью и загадочностью.
+    .suffix = Некроморф, Призрачная роль
+ent-MobSlasher = расчленитель
+    .desc = Похож на мутировавший труп.
+    .suffix = Некроморф, Призрачная роль
+ent-MobPregnant = беременный
+    .desc = Похож на мутировавший труп.
+    .suffix = Некроморф, Призрачная роль
+ent-MobSlasherSmall = некроморф
+    .desc = Похож на мутировавший труп.
+    .suffix = Некроморф, Призрачная роль
+ent-MobBrute = зверь
+    .desc = Поистине гигантский некроморф.
+    .suffix = Некроморф, Призрачная роль
+ent-MobInfector = заразитель
+    .desc = Некроморф напоминающий своим внешним видом ската.
+    .suffix = Некроморф, Призрачная роль
+ent-MobDivader = разделитель
+    .desc = Похож на мутировавший труп.
+    .suffix = Некроморф, Призрачная роль
+ent-MobDivaderRH = рука разделителя
+    .desc = Рука некроморфа разделителя, похоже она живёт своей жизнью.
+    .suffix = Некроморф
+ent-MobDivaderLH = рука разделителя
+    .desc = Рука некроморфа разделителя, похоже она живёт своей жизнью.
+    .suffix = Некроморф
+ent-MobDivaderH = голова разделителя
+    .desc = Голова некроморфа разделителя, похоже она живёт своей жизнью.
+    .suffix = Некроморф
+ent-MobCorpseCollector = собиратель трупов
+    .desc = Какой же этот некроморф огромный!
+    .suffix = Некроморф, Призрачная роль
+ent-MobTwitcher = охотник
+    .desc = Похож на мутировавший труп.
+    .suffix = Некроморф, Призрачная роль
+ent-MobTwitcherlvl2 = возвышенный
+    .desc = Похож на мутировавший труп.
+    .suffix = Некроморф
+# Other ent
+ent-StructureObelisk = красный обелиск
+    .desc = От него веет смертью.
+ent-StructureBlackObelisk = чёрный обелиск
+    .desc = От него веет смертью.
+ent-StructureObelisk2 = красный обелиск
+    .desc = От него веет смертью.
+    .suffix = Без оповещения
+ent-StructureBlackObelisk2 = чёрный обелиск
+    .desc = От него веет смертью.
+    .suffix = Без оповещения
+ent-FloorNecroTileItemFlesh = некротический пол
+    .desc = От него дурно пахнет.
+ent-NecroKudzu = некроморфные волокна
+    .desc = Кажется они распространяются. Не опасны и уязвимы, но замедляют передвижение.
+ent-NecroTentacle = некро щупальца
+    .desc = Кажется они не распространяются. Выглядят очень опасными.
+
+# Stoper
+
+ent-ObeliskStoper = бета001
+    .desc = Прототип, созданный на основе ксеноартефактов. Останавливает пси-влияние некрообелиска на некоторое время. Одноразовый.
+ent-CrateObeliskStoper = ящик с бета001
+    .desc = Останавливает некрообелиск на некоторое время.
+
+# ZetaOne
+
+ent-CrateZetaOneMedipen = ящик с ZetaOne
+    .desc = Ящик с медипенами ZetaOne лечащими некроинфецию.
+ent-ZetaOneMedipen = медипен ZetaOne
+    .desc = Содержит в себе лекарство от некроинфеции.
+reagent-name-zetaone = ZetaOne
+reagent-desc-zetaone = На вкус как лекарство.
+reagent-effect-guidebook-cure-infection-dead =
+    { $chance ->
+        [1] Лечит
+       *[other] лечат
+    } некроинфецию
+
+# ZetaTwo
+
+ent-ZetaTwoMedipen = медипен ZetaTwo
+    .desc = Содержит в себе лекарство от некроинфеции и сильно действующий наркотик импердразин, восстанавливающий рассудок после пребывание возле обелиска.
+reagent-effect-guidebook-cure-sanity =
+    { $chance ->
+        [1] Восстанавливает
+       *[other] восстанавливает
+    } рассудок после пребывания возле некро-обелиска
+
+# Extract infector
+
+ent-SyringeExtractInfectorDead = шприц
+    .desc = { ent-BaseSyringe.desc }
+    .suffix = Экстракт заразителя, НЕ МАППИТЬ
+entity-name-extract-infector = экстракт заразителя
+reagent-desc-extract-infector = Густой и розовый, пахнет отвратительно. Пробовать не стану!
+reagent-effect-guidebook-cause-infection-dead =
+    { $chance ->
+        [1] Заражает
+       *[other] заражает
+    } некроинфецией вызывающей обращение в некроморфа после смерти
+
+# МУТАГЕН
+
+entity-name-stable-mutagen = стабильный мутаген
+reagent-effect-guidebook-mutate-infection-dead =
+    { $chance ->
+        [1] Стимулирует
+       *[other] стимулирует
+    } некроинфецию мутировать
+entity-name-stable-mutagen-infection-dead = стабильный мутаген некроинфекции
+entity-name-stable-not-mutagen-infection-dead = нестабильный мутаген некроинфекции
+reagent-desc-mutagen-infection-dead = Мощный мутаген, вызывающий некроинфекцию, стабилен и опасен.
+reagent-desc-not-mutagen-infection-dead = Мощный мутаген, вызывающий некроинфекцию, не стабилен и крайне опасен.
+
+# Serum enslaved
+
+ent-SyringeSerumEnslaved = шприц
+    .desc = { ent-BaseSyringe.desc }
+    .suffix = Сыворотка порабощения
+entity-name-serum-enslaved = сыворотка порабощения
+reagent-desc-serum-enslaved = Густой и чёрный, пахнет ужасно.
+reagent-effect-guidebook-cause-enslave =
+    { $chance ->
+        [1] Порабощает
+       *[other] порабощает
+    } жертву и делает её рабом юнитологов
+
+# Necromorph mutagen
+
+entity-name-necromorph-mutagen = мутаген некроморфа зверя
+reagent-desc-necromorph-mutagen = Густой и огненного цвета, пахнет отвратительно, действует только на животных.
+ent-SyringeNecromorphMutagenBrute = шприц
+    .desc = { ent-BaseSyringe.desc }
+reagent-effect-guidebook-necromorph-mutagen =
+    { $chance ->
+        [1] Запускает
+       *[other] запускает
+    } мутацию у существа, после заражения он станет определённым некроморфом.
+
+# Necromant store
+
+ent-ActionNecromantArmy = призыв расчленителя.
+    .desc = призыв расчленителя.
+ent-ActionNecromantPregnant = призыв беременного.
+    .desc = призыв беременного.
+ent-ActionNecromantTwitcher = призыв охотника.
+    .desc = призыв охотника.
+ent-ActionNecromantInfector = призыв заразителя.
+    .desc = призыв заразителя.
+ent-ActionNecromantBrute = призыв зверя.
+    .desc = призыв зверя.
+ent-ActionNecromantDivader = призыв раздетителя.
+    .desc = призыв раздетителя.
+action--slasher = Призыв расчленителя.
+action-description-pregnant = Призыв беременного.
+action-description-twitcher = Призыв охотника.
+action-description-infector = Призыв заразителя.
+action-description-brute = Призыв зверя.
+action-description-divader = Призыв раздетителя.
+list-name-slasher = некроморф
+list-name-pregnant = беременный
+list-name-twitcher = охотник
+list-name-infector = заразитель
+list-name-brute = зверь
+list-name-divader = разделитель
+list-description-slasher = Этой способностью вы сможете призвать рядового некроморфа.
+list-description-pregnant = Этой способностью вы сможете призвать беременного.
+list-description-twitcher = Этой способностью вы сможете призвать охотника.
+list-description-infector = Этой способностью вы сможете призвать заразителя.
+list-description-brute = Этой способностью вы сможете призвать зверя.
+list-description-divader = Этой способностью вы сможете призвать раздетителя.
+entity-name-shop-necromant = Магазин способностей.
+entity-description-shop-necromant = Открыть магазин способностей.
+
+# Technology
+
+research-technology-basic-necro-research = Некротехнологии
+
+# Actions
+
+ent-ActionUnitologObeliskActivate = Запустить схождение обелиска
+    .desc = Запустить схождение рядом стоящего обелиска.

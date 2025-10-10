@@ -213,7 +213,7 @@
       - id: BookMedicalReferenceBook
       - id: BookHowToSurvive
       - id: BookChemicalCompendium
-      - id: BookSpaceLaw
+      # - id: BookSpaceLaw
 
 - type: entity
   id: CrateServiceSodaDispenser
@@ -387,3 +387,14 @@
     contents:
     - id: BoxLightbulbColorfulMixed
     - id: BoxLighttubeColorfulMixed
+
+# DS14-start
+
+- type: entity
+  id: CrateServicePhotocopierToners
+  parent: CrateGenericSteel
+  components:
+  - type: StorageFill
+    contents:
+      - id: BoxPhotocopierToners
+        amount: 2

@@ -1,7 +1,7 @@
 {
     "version": 1,
     "license": "CC-BY-SA-3.0",
-    "copyright": "Drawn by Ubaser. Dog states modified from base states by Sparlight (GitHub).",
+    "copyright": "Taken from tgstation at https://github.com/tgstation/tgstation/commit/8337d99a131ce67fcb53dff18af957eefc06bc5e. Dog states modified from base states by Sparlight (GitHub).",
     "size": {
         "x": 32,
         "y": 32
@@ -59,6 +59,14 @@
         },
         {
             "name": "on-equipped-SUITSTORAGE-dog",
+            "directions": 4
+        },
+        {
+            "name": "equipped-BELT",
+            "directions": 4
+        },
+        {
+            "name": "on-equipped-BELT",
             "directions": 4
         }
     ]

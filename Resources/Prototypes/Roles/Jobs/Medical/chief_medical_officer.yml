@@ -8,13 +8,14 @@
   requirements:
     - !type:RoleTimeRequirement
       role: JobChemist
-      time: 2.5h
+      time: 36000 # 10 hours
     - !type:RoleTimeRequirement
       role: JobMedicalDoctor
-      time: 5h
-    - !type:DepartmentTimeRequirement
-      department: Medical
-      time: 10h
+      time: 72000 # 20 hours
+    - !type:OverallPlaytimeRequirement
+      time: 144000 # 40 hours
+    - !type:AgeRequirement
+      requiredAge: 24
   weight: 10
   startingGear: CMOGear
   icon: "JobIconChiefMedicalOfficer"
@@ -27,7 +28,15 @@
   - Chemistry
   - ChiefMedicalOfficer
   - Brig
+  - Coroner # DS14
+  - Paramedic # DS14
   - Cryogenics
+  #start-backmen: currency
+  minBankBalance: 400
+  maxBankBalance: 600
+  wageDepartment: Command
+  wage: 125
+  #end-backmen: currency
   special:
   - !type:AddImplantSpecial
     implants: [ MindShieldImplant ]
@@ -41,6 +50,7 @@
     id: CMOPDA
     ears: ClothingHeadsetCMO
     belt: ClothingBeltMedicalFilled
+    socks: ClothingUnderwearSocksCMO
   storage:
     back:
     - Flash

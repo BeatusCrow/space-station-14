@@ -3,11 +3,12 @@ using Content.Server.Shuttles.Systems;
 using Content.Shared.Damage;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
+using Content.Server.DeadSpace.ThrustersConfig;
 
 namespace Content.Server.Shuttles.Components
 {
     [RegisterComponent, NetworkedComponent, AutoGenerateComponentPause]
-    [Access(typeof(ThrusterSystem))]
+    [Access(typeof(ThrusterSystem), typeof(ThrustersConfigSystem))]
     public sealed partial class ThrusterComponent : Component
     {
         /// <summary>

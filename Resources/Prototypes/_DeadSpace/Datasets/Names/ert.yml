@@ -1,0 +1,17 @@
+- type: localizedDataset
+  id: NamesFirstERTLeader
+  values:
+    prefix: names-ert-first-leader-dataset-
+    count: 1
+
+- type: localizedDataset
+  id: NamesFirstERT
+  values:
+    prefix: names-ert-first-dataset-
+    count: 3
+
+- type: localizedDataset
+  id: NamesLastERT
+  values:
+    prefix: names-ert-last-dataset-
+    count: 55

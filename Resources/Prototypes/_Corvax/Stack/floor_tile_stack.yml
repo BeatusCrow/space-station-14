@@ -1,0 +1,101 @@
+- type: stack
+  id: FloorTileItemWoodBlack
+  name: stack-black-floor-tile
+  spawn: FloorTileItemWoodBlack
+  maxCount: 30
+
+- type: stack
+  id: FloorTileItemWoodDark
+  name: stack-dark-floor-tile
+  spawn: FloorTileItemWoodDark
+  maxCount: 30
+
+- type: stack
+  id: FloorTileItemWoodLight
+  name: stack-light-floor-tile
+  spawn: FloorTileItemWoodLight
+  maxCount: 30
+
+- type: stack
+  id: FloorTileItemWoodRed
+  name: stack-red-floor-tile
+  spawn: FloorTileItemWoodRed
+  maxCount: 30
+
+- type: stack
+  id: FloorTileItemWoodLargeBlack
+  name: stack-large-black-floor-tile
+  spawn: FloorTileItemWoodLargeBlack
+  maxCount: 30
+
+- type: stack
+  id: FloorTileItemWoodLargeDark
+  name: stack-large-dark-floor-tile
+  spawn: FloorTileItemWoodLargeDark
+  maxCount: 30
+
+- type: stack
+  id: FloorTileItemWoodLargeLight
+  name: stack-large-light-floor-tile
+  spawn: FloorTileItemWoodLargeLight
+  maxCount: 30
+
+- type: stack
+  id: FloorTileItemWoodLargeRed
+  name: stack-large-red-floor-tile
+  spawn: FloorTileItemWoodLargeRed
+  maxCount: 30
+
+- type: stack
+  id: FloorTileItemWoodParquetBlack
+  name: stack-parquet-black-floor-tile
+  spawn: FloorTileItemWoodParquetBlack
+  maxCount: 30
+
+- type: stack
+  id: FloorTileItemWoodParquetDark
+  name: stack-parquet-dark-floor-tile
+  spawn: FloorTileItemWoodParquetDark
+  maxCount: 30
+
+- type: stack
+  id: FloorTileItemWoodParquetLight
+  name: stack-parquet-light-floor-tile
+  spawn: FloorTileItemWoodParquetLight
+  maxCount: 30
+
+- type: stack
+  id: FloorTileItemWoodParquetRed
+  name: stack-parquet-red-floor-tile
+  spawn: FloorTileItemWoodParquetRed
+  maxCount: 30
+
+- type: stack
+  id: FloorTileItemWoodChess
+  name: stack-chess-floor-tile
+  spawn: FloorTileItemWoodChess
+  maxCount: 30
+
+- type: stack
+  id: FloorTileItemWoodChessBlack
+  name: stack-chess-black-floor-tile
+  spawn: FloorTileItemWoodChessBlack
+  maxCount: 30
+
+- type: stack
+  id: FloorTileItemWoodChessDark
+  name: stack-chess-dark-floor-tile
+  spawn: FloorTileItemWoodChessDark
+  maxCount: 30
+
+- type: stack
+  id: FloorTileItemWoodChessLight
+  name: stack-chess-light-floor-tile
+  spawn: FloorTileItemWoodChessLight
+  maxCount: 30
+
+- type: stack
+  id: FloorTileItemWoodChessRed
+  name: stack-chess-red-floor-tile
+  spawn: FloorTileItemWoodChessRed
+  maxCount: 30

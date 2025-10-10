@@ -32,6 +32,7 @@ public sealed class HolopadUserTypingChangedEvent : EntityEventArgs
     /// </summary>
     public readonly NetEntity User;
 
+    // Corvax-TypingIndicator-start
     /// <summary>
     /// The typing indicator state
     /// </summary>
@@ -42,4 +43,5 @@ public sealed class HolopadUserTypingChangedEvent : EntityEventArgs
         User = user;
         State = state;
     }
+    // Corvax-TypingIndicator-end
 }

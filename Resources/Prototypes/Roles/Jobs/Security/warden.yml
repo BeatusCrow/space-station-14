@@ -6,10 +6,7 @@
   requirements:
     - !type:RoleTimeRequirement
       role: JobSecurityOfficer
-      time: 5h
-    - !type:DepartmentTimeRequirement
-      department: Security
-      time: 10h
+      time: 36000 # 10 hours
   weight: 5
   startingGear: WardenGear
   icon: "JobIconWarden"
@@ -17,6 +14,7 @@
   canBeAntag: false
   access:
   - Security
+  - Brigmedic # DS14
   - Brig
   - Armory
   - Maintenance
@@ -24,6 +22,12 @@
   - External
   - Detective
   - Cryogenics
+  #start-backmen: currency
+  minBankBalance: 150
+  maxBankBalance: 250
+  wageDepartment: Security
+  wage: 80
+  #end-backmen: currency
   special:
   - !type:AddImplantSpecial
     implants: [ MindShieldImplant ]
@@ -34,11 +38,11 @@
     eyes: ClothingEyesGlassesSecurity
     id: WardenPDA
     ears: ClothingHeadsetSecurity
-    pocket1: WeaponPistolMk58
   storage:
     back:
     - Flash
-    - MagazinePistol
+    - HyperLinkBookCorporateLaw
+    - HyperLinkBookSOPSecurity
 
 - type: chameleonOutfit
   id: WardenChameleonOutfit

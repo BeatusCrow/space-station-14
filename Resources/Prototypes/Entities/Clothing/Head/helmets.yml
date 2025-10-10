@@ -191,7 +191,7 @@
 
 #Space Ninja Helmet
 - type: entity
-  parent: [ClothingHeadEVAHelmetBase, BaseHighlyIllegalContraband]
+  parent: [ClothingHeadEVAHelmetBase, BaseMajorContraband]
   id: ClothingHeadHelmetSpaceNinja
   name: space ninja helmet
   description: What may appear to be a simple black garment is in fact a highly sophisticated nano-weave helmet. Standard issue ninja gear.
@@ -226,6 +226,14 @@
   - type: HideLayerClothing
     layers:
       Hair: HEAD
+  - type: Armor # DS14
+    modifiers:
+      coefficients:
+        Blunt: 0.95
+        Slash: 0.9
+        Piercing: 0.95
+  - type: ExplosionResistance # DS14
+    damageCoefficient: 0.9
 
 #Thunderdome Helmet
 - type: entity
@@ -273,8 +281,8 @@
     quickEquip: true
   - type: IngestionBlocker
   - type: TemperatureProtection
-    heatingCoefficient: 0.5
-    coolingCoefficient: 0.8
+    heatingCoefficient: 0.01
+    coolingCoefficient: 0.2
   - type: FireProtection
     reduction: 0.15 # not fully sealed so less protection
   - type: IdentityBlocker
@@ -301,8 +309,8 @@
     quickEquip: true
   - type: IngestionBlocker
   - type: TemperatureProtection
-    heatingCoefficient: 0.3
-    coolingCoefficient: 0.8
+    heatingCoefficient: 0.01
+    coolingCoefficient: 0.2
   - type: FireProtection
     reduction: 0.2
   - type: PressureProtection
@@ -341,6 +349,19 @@
   - type: HideLayerClothing
     layers:
       Hair: HEAD
+  - type: IdentityBlocker # DS14
+
+
+- type: entity
+  parent: ClothingHeadHelmetBasic
+  id: ClothingHeadHelmetHelmet
+  name: ERT leader helmet
+  description: An in-atmosphere helmet worn by the leader of a Nanotrasen Emergency Response Team. Has blue highlights.
+  components:
+    - type: Sprite
+      sprite: Clothing/Head/Helmets/ert_leader.rsi
+    - type: Clothing
+      sprite: Clothing/Head/Helmets/ert_leader.rsi
 
 #ERT HELMETS
 #ERT Leader Helmet

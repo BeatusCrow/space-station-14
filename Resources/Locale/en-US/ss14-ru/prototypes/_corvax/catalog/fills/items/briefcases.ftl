@@ -1,0 +1,9 @@
+ent-BriefcaseIAAFilled = { ent-BriefcaseBrown }
+    .suffix = IAA
+    .desc = { ent-BriefcaseBrown.desc }
+ent-BriefcaseMagistratFilled = { ent-BriefcaseBrown }
+    .suffix = Magistrat
+    .desc = { ent-BriefcaseBrown.desc }
+ent-BriefcaseLawyerFilled = { ent-BriefcaseBrown }
+    .suffix = Lawyer
+    .desc = { ent-BriefcaseBrown.desc }

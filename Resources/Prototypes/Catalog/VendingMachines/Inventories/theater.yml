@@ -7,6 +7,7 @@
     ClothingUniformJumpsuitJesterAlt: 1
     ClothingShoesJester: 2
     ClothingOuterWinterClown: 1
+    ClothingOuterWinterClownDownjacket: 1
     ClothingOuterWinterMime: 1
     ClothingOuterWinterMusician: 1
     ClothingMaskJoy: 2
@@ -19,6 +20,9 @@
     ClothingOuterPoncho: 2
     ClothingHeadHatSantahat: 2
     ClothingOuterSanta: 2
+    ClothingHeadHatXmas: 2 # DS14
+    ClothingUniformJumpskirtXmas: 2 # DS14
+    ClothingUnderwearSocksThighXmas: 2 # DS14
     ClothingHeadHatSkub: 2
     ClothingOuterSkub: 2
     ClothingHeadHatBeretFrench: 2
@@ -43,6 +47,13 @@
     ClothingOuterClownPriest: 1
     ClothingMaskSadMime: 1
     ClothingMaskScaredMime: 1
+    ClothingOuterDragonSuitDragonFox: 1 # DS14
+    ClothingUniformHanfuRedMDragonFox: 1 # DS14
+    ClothingUniformHanfuBlackMDragonFox: 1 # DS14
+    ClothingUniformHanfuWhiteMDragonFox: 1 # DS14
+    ClothingUniformHanfuRedFDragonFox: 1 # DS14
+    ClothingUniformHanfuRedWhiteFDragonFox: 1 # DS14
+    ClothingUniformHanfuWhiteFDragonFox: 1 # DS14
     ClothingUniformJumpsuitKimono: 1
     ClothingHeadHatCasa: 1
     FoodPoppy: 1
@@ -55,6 +66,11 @@
     ClothingShoesBootsCowboyBrown: 1
     ClothingShoesBootsCowboyBlack: 1
     ClothingShoesBootsCowboyWhite: 1
+    ADTClothingUniformDruidLeaderDress: 1 # DS14
+    ClothingUniformJumpskirtSuitNurse: 1 # DS14
+    ClothingUniformJumpskirtJanimaid: 1 # DS14
+    ClothingUniformJumpskirtMaid: 1 # DS14
+    ClothingNeckMantleMaid: 2 # DS14
   contrabandInventory:
     ClothingHeadHatRichard: 1
     ToyFigurineBoxer: 1
@@ -65,3 +81,6 @@
     ClothingMaskBlushingClown: 1
     ClothingMaskBlushingMime: 1
     ClothingHeadHatCowboyBountyHunter: 1
+    ClothingUniformJumpskirtSchool: 1 # DS14
+    ClothingShoesSchoolBlack: 1 # DS14
+    ClothingShoesSchoolWhite: 1 # DS14

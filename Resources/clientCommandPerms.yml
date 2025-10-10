@@ -8,7 +8,7 @@
     - hardquit
     - svbind
     - bind
-    - exec # macro moment
+    # - exec # DS14
     - cls
     - vram
     - monitor
@@ -25,7 +25,7 @@
     - gc
     - gc_mode
     - cvar
-    - fuckrules
+    # - fuckrules # DS14
     - midipanic
     - replay_recording_start
     - replay_recording_stop
@@ -42,6 +42,7 @@
 
 - Flags: DEBUG
   Commands:
+    - fuckrules # DS14
     - atvrange
     - atvmode
     - atvcbm
@@ -78,9 +79,6 @@
 - Flags: MAPPING
   Commands:
     - mapping
-    - mappingclientsidesetup
-    - showsubfloor
-    - showsubfloorforever
     - toggleautosave
     - toggledecals
     - showaccessreaders
@@ -90,6 +88,7 @@
     - uploadfile
     - loadprototype
     - uploadfolder
+    - exec # DS14
 
 - Flags: ADMINCHAT
   Commands:

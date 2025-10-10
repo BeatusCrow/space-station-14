@@ -11,8 +11,9 @@
     - Snout
     - HeadTop
     - HeadSide
-    - Tail
-    undergarmentBottom: UndergarmentBottomBoxersReptilian
+    - Tail # DS14
+    - Hair # DS14, just in case
+    # undergarmentBottom: UndergarmentBottomBoxersReptilian
   - type: Hunger
   - type: Puller
     needsHands: false
@@ -78,27 +79,8 @@
           32:
             sprite: Mobs/Species/Human/displacement.rsi
             state: jumpsuit-female
-      head:
-        sizeMaps:
-          32:
-            sprite: Mobs/Species/Reptilian/displacement.rsi
-            state: head
-      mask:
-        sizeMaps:
-          32:
-            sprite: Mobs/Species/Reptilian/displacement.rsi
-            state: mask
-    displacements:
-      head:
-        sizeMaps:
-          32:
-            sprite: Mobs/Species/Reptilian/displacement.rsi
-            state: head
-      mask:
-        sizeMaps:
-          32:
-            sprite: Mobs/Species/Reptilian/displacement.rsi
-            state: mask
+  - type: Sanity # DS14
+
 
 - type: entity
   parent: BaseSpeciesDummy
@@ -112,35 +94,16 @@
     - Snout
     - HeadTop
     - HeadSide
-    undergarmentBottom: UndergarmentBottomBoxersReptilian
+    - Tail # DS14
+    - Hair # DS14, just in case
+    # undergarmentBottom: UndergarmentBottomBoxersReptilian
   - type: Inventory
     speciesId: reptilian
     femaleDisplacements:
       jumpsuit:
         sizeMaps:
           32:
-            sprite: Mobs/Species/Reptilian/displacement.rsi
+            sprite: Mobs/Species/Human/displacement.rsi
             state: jumpsuit-female
-      head:
-        sizeMaps:
-          32:
-            sprite: Mobs/Species/Reptilian/displacement.rsi
-            state: head
-      mask:
-        sizeMaps:
-          32:
-            sprite: Mobs/Species/Reptilian/displacement.rsi
-            state: mask
-    displacements:
-      head:
-        sizeMaps:
-          32:
-            sprite: Mobs/Species/Reptilian/displacement.rsi
-            state: head
-      mask:
-        sizeMaps:
-          32:
-            sprite: Mobs/Species/Reptilian/displacement.rsi
-            state: mask
 
 #Weh

@@ -21,7 +21,7 @@ public sealed class TraitorRuleTest
 {
     private const string TraitorGameRuleProtoId = "Traitor";
     private const string TraitorAntagRoleName = "Traitor";
-    private static readonly ProtoId<NpcFactionPrototype> SyndicateFaction = "Syndicate";
+    private static readonly ProtoId<NpcFactionPrototype> SyndicateFaction = "SyndicateAgent"; // DS14
     private static readonly ProtoId<NpcFactionPrototype> NanotrasenFaction = "NanoTrasen";
 
     [Test]

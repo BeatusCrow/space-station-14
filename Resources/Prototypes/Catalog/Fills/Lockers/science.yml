@@ -13,9 +13,11 @@
   table: !type:AllSelector
     children:
     - id: ClothingHandsGlovesLatex
+      amount: 2 # DS14
     - id: ClothingHeadsetScience
     - id: ClothingMaskSterile
     - id: ClothingOuterCoatRnd
+      amount: 2 # DS14
     - id: AnomalyScanner
     - id: NodeScanner
     - id: NetworkConfigurator

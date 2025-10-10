@@ -22,6 +22,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Utility;
 using Content.Shared.UserInterface;
 using Robust.Shared.Prototypes;
+using Content.Server.DeviceLinking.Systems;
 
 namespace Content.Server.Shuttles.Systems;
 
@@ -38,6 +39,7 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
     [Dependency] private readonly TagSystem _tags = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
     [Dependency] private readonly SharedContentEyeSystem _eyeSystem = default!;
+    [Dependency] private readonly DeviceLinkSystem _link = default!; // DS14
 
     private EntityQuery<MetaDataComponent> _metaQuery;
     private EntityQuery<TransformComponent> _xformQuery;
@@ -56,7 +58,8 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         SubscribeLocalEvent<ShuttleConsoleComponent, ComponentShutdown>(OnConsoleShutdown);
         SubscribeLocalEvent<ShuttleConsoleComponent, PowerChangedEvent>(OnConsolePowerChange);
         SubscribeLocalEvent<ShuttleConsoleComponent, AnchorStateChangedEvent>(OnConsoleAnchorChange);
-        SubscribeLocalEvent<ShuttleConsoleComponent, AfterActivatableUIOpenEvent>(OnConsoleUIOpenAttempt);
+        SubscribeLocalEvent<ShuttleConsoleComponent, ShuttleConsoleSignalButtonPressedMessage>(OnSignalButton);
+        SubscribeLocalEvent<ShuttleConsoleComponent, ActivatableUIOpenAttemptEvent>(OnConsoleUIOpenAttempt);
         Subs.BuiEvents<ShuttleConsoleComponent>(ShuttleConsoleUiKey.Key, subs =>
         {
             subs.Event<ShuttleConsoleFTLBeaconMessage>(OnBeaconFTLMessage);
@@ -150,9 +153,10 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
     }
 
     private void OnConsoleUIOpenAttempt(EntityUid uid, ShuttleConsoleComponent component,
-        AfterActivatableUIOpenEvent args)
+        ActivatableUIOpenAttemptEvent args)
     {
-        TryPilot(args.User, uid);
+        if (!TryPilot(args.User, uid))
+            args.Cancel();
     }
 
     private void OnConsoleAnchorChange(EntityUid uid, ShuttleConsoleComponent component,
@@ -445,4 +449,11 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
             beacons ?? new List<ShuttleBeaconObject>(),
             exclusions ?? new List<ShuttleExclusionObject>());
     }
+
+    // DS14-start
+    private void OnSignalButton(EntityUid uid, ShuttleConsoleComponent component, ShuttleConsoleSignalButtonPressedMessage args)
+    {
+        _link.InvokePort(uid, component.LinkingPort);
+    }
+    // DS14-end
 }

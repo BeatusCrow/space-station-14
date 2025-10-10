@@ -14,9 +14,6 @@ namespace Content.Client.Administration.UI.Notes;
 [GenerateTypedNameReferences]
 public sealed partial class AdminNotesLine : BoxContainer
 {
-    [Dependency] private readonly ILogManager _logManager = default!;
-
-    private readonly ISawmill _sawmill = default!;
     private readonly SpriteSystem _sprites;
 
     private const string AdminNotesTextureBase = "/Textures/Interface/AdminNotes/";
@@ -36,8 +33,6 @@ public sealed partial class AdminNotesLine : BoxContainer
     public AdminNotesLine(SpriteSystem sprites, SharedAdminNote note)
     {
         RobustXamlLoader.Load(this);
-
-        _sawmill = _logManager.GetSawmill("admin.notes");
         _sprites = sprites;
 
         Note = note;
@@ -66,7 +61,7 @@ public sealed partial class AdminNotesLine : BoxContainer
         if (iconPath is null)
         {
             SeverityRect.Visible = false;
-            _sawmill.Warning($"Could not find an icon for note ID {Note.Id}");
+            Logger.WarningS("admin.notes", $"Could not find an icon for note ID {Note.Id}");
         }
         else
         {
@@ -87,11 +82,7 @@ public sealed partial class AdminNotesLine : BoxContainer
 
         if (Note.UnbannedTime is not null)
         {
-            ExtraLabel.Text = Loc.GetString(
-                "admin-notes-unbanned",
-                ("admin", Note.UnbannedByName ?? "[error]"),
-                ("date", Note.UnbannedTime.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss"))
-            );
+            ExtraLabel.Text = Loc.GetString("admin-notes-unbanned", ("admin", Note.UnbannedByName ?? "[error]"), ("date", Note.UnbannedTime));
             ExtraLabel.Visible = true;
         }
         else if (Note.ExpiryTime is not null)
@@ -148,7 +139,7 @@ public sealed partial class AdminNotesLine : BoxContainer
 
     private string FormatRoleBanMessage()
     {
-        var banMessage = new StringBuilder($"{Loc.GetString("admin-notes-banned-from")} {string.Join(", ", Note.BannedRoles ?? new[] { "unknown" })} ");
+        var banMessage = new StringBuilder($"{Loc.GetString("admin-notes-banned-from")} {string.Join(", ", Note.BannedRoles ?? new []{"unknown"})} ");
         return FormatBanMessageCommon(banMessage);
     }
 

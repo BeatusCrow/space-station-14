@@ -10,6 +10,15 @@
     Steel: 50
     Glass: 50
 
+- type: latheRecipe
+  abstract: true
+  id: BaseFauxTileRecipe
+  categories:
+  - Faux # DS14
+  completetime: 1
+  materials:
+    Plastic: 100
+
 # Recipes
 
 ## Lights
@@ -179,6 +188,62 @@
     Plastic: 100
 
 - type: latheRecipe
+  parent: BaseFauxTileRecipe
+  id: FauxTileAstroGrass
+  result: FloorTileItemAstroGrass
+
+- type: latheRecipe
+  parent: BaseFauxTileRecipe
+  id: FauxTileMowedAstroGrass
+  result: FloorTileItemMowedAstroGrass
+
+- type: latheRecipe
+  parent: BaseFauxTileRecipe
+  id: FauxTileJungleAstroGrass
+  result: FloorTileItemJungleAstroGrass
+
+- type: latheRecipe
+  parent: BaseFauxTileRecipe
+  id: FauxTileAstroIce
+  result: FloorTileItemAstroIce
+
+- type: latheRecipe
+  parent: BaseFauxTileRecipe
+  id: FauxTileAstroSnow
+  result: FloorTileItemAstroSnow
+
+- type: latheRecipe
+  parent: BaseFauxTileRecipe
+  id: FauxTileAstroAsteroidSand
+  result: FloorTileItemAstroAsteroidSand
+
+- type: latheRecipe
+  parent: BaseFauxTileRecipe
+  id: FauxTileAstroAsteroidSandBorderless
+  result: FloorTileItemAstroAsteroidSandBorderless
+
+- type: latheRecipe
+  parent: BaseCircuitTileRecipe # DS14
+  id: FloorGreenCircuit
+  result: FloorTileItemGCircuit4
+  completetime: 2
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseCircuitTileRecipe # DS14
+  id: FloorBlueCircuit
+  result: FloorTileItemBCircuit4
+
+- type: latheRecipe
+  parent: BaseCircuitTileRecipe # DS14
+  id: FloorRedCircuit
+  result: FloorTileItemRCircuit4
+  completetime: 2
+  materials:
+    Steel: 100
+
+- type: latheRecipe
   id: HandheldStationMap
   result: HandheldStationMapEmpty
   completetime: 2
@@ -232,9 +297,25 @@
     Plastic: 100
     Steel: 25
 
+
+ # DS14-start
+
 - type: latheRecipe
-  id: TowelColorWhite
-  result: TowelColorWhite
+  id: CassetteTape
+  result: CassetteTape
+  categories:
+  - Tools
   completetime: 2
   materials:
-    Cloth: 300
+    Steel: 50
+    Plastic: 150
+
+- type: latheRecipe
+  id: TapeRecorder
+  result: TapeRecorder
+  categories:
+  - Tools
+  completetime: 3
+  materials:
+    Steel: 250
+    Plastic: 250

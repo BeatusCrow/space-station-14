@@ -51,9 +51,9 @@
         scaleByQuantity: true
         damage:
           types:
-            Blunt: 0.1
-            Slash: 0.1
-            Piercing: 0.15
+            Blunt: 1 # DS14-value
+            Slash: 1 # DS14-value
+            Piercing: 1.5 # DS14-value
       - !type:PopupMessage
         type: Local
         visualType: Large
@@ -66,7 +66,7 @@
         scaleByQuantity: true
         damage:
           types:
-            Poison: 0.25
+            Poison: 2.5 # DS14-value
       - !type:PopupMessage
         type: Local
         visualType: Large
@@ -113,6 +113,10 @@
             sprite: Mobs/Species/Human/displacement.rsi
             state: jumpsuit-female
   - type: Rootable
+  - type: ImmunitetInfectionDead # DS14
+  # - type: FootPrints # Backmen-footsteps
+    # leftBarePrint: "footprint-left-bare-diona"
+    # rightBarePrint: "footprint-right-bare-diona"
 
 - type: entity
   parent: BaseSpeciesDummy

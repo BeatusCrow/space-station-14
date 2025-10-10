@@ -1,0 +1,15 @@
+- type: construction
+  id: ToyDoubleSword
+  graph: ToyDoubleSword
+  startNode: start
+  targetNode: icon
+  category: construction-category-weapons
+  objectType: Item
+
+- type: construction
+  id: JetpackImprovised
+  graph: JetpackImprovised
+  startNode: start
+  targetNode: jetpack
+  category: construction-category-tools
+  objectType: Item

@@ -21,6 +21,7 @@ using Robust.Shared.Timing;
 using Content.Shared.DeviceNetwork.Components;
 using Content.Shared.Station.Components;
 using Timer = Robust.Shared.Timing.Timer;
+using Robust.Shared.Audio;
 
 namespace Content.Server.RoundEnd
 {
@@ -114,6 +115,16 @@ namespace Content.Server.RoundEnd
             return centcomm == null ? null : centcomm.MapEntity;
         }
 
+        /// <summary>
+        ///     Attempts to get centcomm's GridUid
+        /// </summary>
+        public EntityUid? GetCentcommGridEntity()
+        {
+            AllEntityQuery<StationCentcommComponent>().MoveNext(out var centcomm);
+
+            return centcomm == null ? null : centcomm.Entity;
+        }
+
         public bool CanCallOrRecall()
         {
             return _cooldownTokenSource == null;
@@ -187,7 +198,8 @@ namespace Content.Server.RoundEnd
                 null,
                 Color.Gold);
 
-            _audio.PlayGlobal("/Audio/Announcements/shuttlecalled.ogg", Filter.Broadcast(), true);
+            if (!_autoCalledBefore) _audio.PlayGlobal("/Audio/_DeadSpace/Announcements/emergency_s_called.ogg", Filter.Broadcast(), true, AudioParams.Default.AddVolume(-4)); // DS14-Announcements: Custom sound for auto-called
+            else _audio.PlayGlobal("/Audio/_DeadSpace/Announcements/crew_s_called.ogg", Filter.Broadcast(), true, AudioParams.Default.AddVolume(-2)); // DS14-Announcements
 
             LastCountdownStart = _gameTiming.CurTime;
             ExpectedCountdownEnd = _gameTiming.CurTime + countdownTime;
@@ -235,7 +247,7 @@ namespace Content.Server.RoundEnd
             _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("round-end-system-shuttle-recalled-announcement"),
                 Loc.GetString("round-end-system-shuttle-sender-announcement"), false, colorOverride: Color.Gold);
 
-            _audio.PlayGlobal("/Audio/Announcements/shuttlerecalled.ogg", Filter.Broadcast(), true);
+            _audio.PlayGlobal("/Audio/_DeadSpace/Announcements/emergency_s_recalled.ogg", Filter.Broadcast(), true, AudioParams.Default.AddVolume(-2)); // DS14-Announcements
 
             LastCountdownStart = null;
             ExpectedCountdownEnd = null;
@@ -289,6 +301,8 @@ namespace Content.Server.RoundEnd
                     ("time", time),
                     ("units", Loc.GetString(unitsLocString))));
             Timer.Spawn(countdownTime.Value, AfterEndRoundRestart, _countdownTokenSource.Token);
+
+            _chatManager.DispatchServerAnnouncement(Loc.GetString("round-end-system-rules-reminder-announcement")); // DS14
         }
 
         /// <summary>
@@ -357,8 +371,8 @@ namespace Content.Server.RoundEnd
             {
                 if (!_shuttle.EmergencyShuttleArrived && ExpectedCountdownEnd is null)
                 {
+                    _autoCalledBefore = true;  // Corvax-Announcements: Move before call RequestRoundEnd to play correct announcement sound type
                     RequestRoundEnd(null, false, "round-end-system-shuttle-auto-called-announcement");
-                    _autoCalledBefore = true;
                 }
 
                 // Always reset auto-call in case of a recall.

@@ -93,7 +93,7 @@
       flashOnMelee: false
       flashOnUse: false
     - type: LimitedCharges
-      maxCharges: 15
+      maxCharges: 5 # DS14-value
     - type: MeleeWeapon
       damage:
         types:

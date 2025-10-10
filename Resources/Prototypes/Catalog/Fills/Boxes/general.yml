@@ -7,7 +7,7 @@
   - type: Item
     size: Large
     shape:
-    - 0,0,2,2
+    - 0,0,2,1
   - type: Storage
     maxItemSize: Small
     grid:
@@ -184,6 +184,7 @@
     contents:
       - id: DrinkMREFlask
       - id: FoodSnackNutribrick
+      - id: FoodSnackFabricbrick
       - id: FoodSnackMREBrownie
       - id: FoodCondimentPacketKetchup
   - type: Sprite
@@ -408,7 +409,7 @@
   - type: Storage
     grid:
     - 0,0,5,3
-    whitelist: # TODO cardboard boxes shouldn't have whitelisting
+    whitelist:
       tags:
       - Candle
   - type: StorageFill

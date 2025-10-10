@@ -20,6 +20,7 @@ using Robust.Shared.Serialization.Manager;
 using Robust.Shared.Serialization.Markdown;
 using Robust.Shared.Utility;
 using YamlDotNet.RepresentationModel;
+using Content.Shared.Corvax.TTS;
 
 namespace Content.Shared.Humanoid;
 
@@ -40,9 +41,20 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
     [Dependency] private readonly ISerializationManager _serManager = default!;
     [Dependency] private readonly MarkingManager _markingManager = default!;
     [Dependency] private readonly GrammarSystem _grammarSystem = default!;
-    [Dependency] private readonly IdentitySystem _identity = default!;
+    [Dependency] private readonly SharedIdentitySystem _identity = default!;
 
     public static readonly ProtoId<SpeciesPrototype> DefaultSpecies = "Human";
+
+    // Corvax-TTS-Start
+    public const string DefaultVoice = "Noble";
+    public const string DefaultTapeRecorderVoice = "Barbas";
+    public static readonly Dictionary<Sex, string> DefaultSexVoice = new()
+    {
+        {Sex.Male, "Garithos"},
+        {Sex.Female, "Maiev"},
+        {Sex.Unsexed, "Myron"},
+    };
+    // Corvax-TTS-End
 
     public override void Initialize()
     {
@@ -64,7 +76,7 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
         return dataNode;
     }
 
-    public HumanoidCharacterProfile FromStream(Stream stream, ICommonSession session)
+    public HumanoidCharacterProfile FromStream(Stream stream, ICommonSession session, string[] sponsorMarkings) // DS14-sponsors
     {
         using var reader = new StreamReader(stream, EncodingHelpers.UTF8);
         var yamlStream = new YamlStream();
@@ -79,7 +91,7 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
 
         var profile = export.Profile;
         var collection = IoCManager.Instance;
-        profile.EnsureValid(session, collection!);
+        profile.EnsureValid(session, collection!, sponsorMarkings); // DS14-sponsors
         return profile;
     }
 
@@ -91,7 +103,7 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
         }
 
         if (string.IsNullOrEmpty(humanoid.Initial)
-            || !_proto.Resolve(humanoid.Initial, out HumanoidProfilePrototype? startingSet))
+            || !_proto.TryIndex(humanoid.Initial, out HumanoidProfilePrototype? startingSet))
         {
             LoadProfile(uid, HumanoidCharacterProfile.DefaultWithSpecies(humanoid.Species), humanoid);
             return;
@@ -155,6 +167,8 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
         targetHumanoid.Age = sourceHumanoid.Age;
         targetHumanoid.CustomBaseLayers = new(sourceHumanoid.CustomBaseLayers);
         targetHumanoid.MarkingSet = new(sourceHumanoid.MarkingSet);
+        SetTTSVoice(target, sourceHumanoid.Voice, targetHumanoid); // Corvax-TTS
+        targetHumanoid.SpeakerColor = sourceHumanoid.SpeakerColor; // Corvax-SpeakerColor
 
         SetSex(target, sourceHumanoid.Sex, false, targetHumanoid);
         SetGender((target, targetHumanoid), sourceHumanoid.Gender);
@@ -292,15 +306,14 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
         if (!Resolve(uid, ref humanoid))
             return;
 
-        if (!_proto.Resolve<SpeciesPrototype>(humanoid.Species, out var species))
+        if (!_proto.TryIndex<SpeciesPrototype>(humanoid.Species, out var species))
         {
             return;
         }
 
-        if (verify && _proto.Resolve(species.SkinColoration, out var index))
+        if (verify && !SkinColor.VerifySkinColor(species.SkinColoration, skinColor))
         {
-            var strategy = index.Strategy;
-            skinColor = strategy.EnsureVerified(skinColor);
+            skinColor = SkinColor.ValidSkinTone(species.SkinColoration, skinColor);
         }
 
         humanoid.SkinColor = skinColor;
@@ -452,6 +465,7 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
         }
 
         EnsureDefaultMarkings(uid, humanoid);
+        SetTTSVoice(uid, profile.Voice, humanoid); // Corvax-TTS
 
         humanoid.Gender = profile.Gender;
         if (TryComp<GrammarComponent>(uid, out var grammar))
@@ -530,6 +544,18 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
         if (sync)
             Dirty(uid, humanoid);
     }
+
+    // Corvax-TTS-Start
+    // ReSharper disable once InconsistentNaming
+    public void SetTTSVoice(EntityUid uid, string voiceId, HumanoidAppearanceComponent humanoid)
+    {
+        if (!TryComp<TTSComponent>(uid, out var comp))
+            return;
+
+        humanoid.Voice = voiceId;
+        comp.VoicePrototypeId = voiceId;
+    }
+    // Corvax-TTS-End
 
     /// <summary>
     /// Takes ID of the species prototype, returns UI-friendly name of the species.

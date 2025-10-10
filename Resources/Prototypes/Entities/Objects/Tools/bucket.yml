@@ -1,13 +1,21 @@
 - type: entity
-  parent: [ DrinkBaseMaterialStrongPlastic, DrinkBase, DrinkVisualsFill ]
+  parent: DrinkBase
   id: Bucket
   name: bucket
   description: It's a boring old bucket.
   components:
+  - type: Clickable
   - type: Edible
-    utensil: Spoon
+    edible: Drink
+    solution: bucket
+    destroyOnEmpty: false
   - type: Sprite
     sprite: Objects/Tools/bucket.rsi
+    layers:
+    - state: icon
+    - map: ["enum.SolutionContainerLayers.Fill"]
+      state: fill-1
+      visible: false
   - type: Item
     size: Normal
   - type: Clothing
@@ -17,23 +25,71 @@
     quickEquip: false
   - type: SolutionContainerManager
     solutions:
-      drink:
+      bucket:
         maxVol: 250
+  - type: MixableSolution
+    solution: bucket
   - type: SolutionTransfer
     transferAmount: 100
     maxTransferAmount: 100
     minTransferAmount: 10
+    canChangeTransferAmount: true
+  - type: UserInterface
+    interfaces:
+      enum.TransferAmountUiKey.Key:
+        type: TransferAmountBoundUserInterface
+  - type: MeleeWeapon
+    soundNoDamage:
+      path: "/Audio/Effects/Fluids/splat.ogg"
+    damage:
+      types:
+        Blunt: 0
+  - type: Spillable
+    solution: bucket
   - type: SpillWhenWorn
-    solution: drink
+    solution: bucket
+  - type: DrawableSolution
+    solution: bucket
+  - type: RefillableSolution
+    solution: bucket
+  - type: DrainableSolution
+    solution: bucket
+  - type: SolutionItemStatus
+    solution: bucket
+  - type: Appearance
   - type: SolutionContainerVisuals
     maxFillLevels: 3
-    inHandsFillBaseName: null
+    fillBaseName: fill-
+  - type: ExaminableSolution
+    solution: bucket
   - type: Tag
     tags:
       - Bucket
   - type: PhysicalComposition
     materialComposition:
       Plastic: 50
+  - type: DnaSubstanceTrace
+  # DS14-start
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 25
+      behaviors:
+      - !type:SpillBehavior { }
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          ScrapBucket:
+            min: 1
+            max: 1
+  # DS14-end
 
 - type: entity
   parent: Bucket
@@ -43,5 +99,5 @@
   components:
   - type: SolutionContainerManager
     solutions:
-      drink:
+      bucket:
         maxVol: 500

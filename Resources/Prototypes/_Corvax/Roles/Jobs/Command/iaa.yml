@@ -1,0 +1,57 @@
+- type: job
+  id: IAA
+  name: job-name-iaa
+  description: job-description-iaa
+  playTimeTracker: JobIAA
+  requirements:
+    - !type:DepartmentTimeRequirement
+      department: Command
+      time: 28800 # 8 hours
+    - !type:DepartmentTimeRequirement
+      department: Law
+      time: 28800 # 8 hours
+    - !type:DepartmentTimeRequirement
+      department: Security
+      time: 36000 # 10 hours
+    - !type:OverallPlaytimeRequirement
+      time: 144000 # 40 hours
+    - !type:AgeRequirement
+      requiredAge: 24
+  startingGear: IAAGear
+  icon: "JobIconIAA"
+  supervisors: job-supervisors-centcom
+  canBeAntag: false
+  access:
+    - Command
+    - Security
+    - Service
+    - Lawyer
+    - Brig
+    - Maintenance
+  #start-backmen: currency
+  minBankBalance: 800
+  maxBankBalance: 1200
+  wageDepartment: Specific
+  wage: 145
+  #end-backmen: currency
+  special:
+  - !type:AddImplantSpecial
+    implants: [ MindShieldImplant ]
+
+- type: startingGear
+  id: IAAGear
+  equipment:
+    shoes: ClothingShoesBootsLaceup
+    id: IAAPDA
+    eyes: ClothingEyesGlassesSunglasses
+    ears: ClothingHeadsetIAA
+    pocket1: ADTtelescopicBaton
+  inhand:
+    - BriefcaseIAAFilled
+
+- type: chameleonOutfit
+  id: IAAChameleonOutfit
+  job: IAA
+  equipment:
+    shoes: ClothingShoesBootsLaceup
+    eyes: ClothingEyesGlassesSunglasses

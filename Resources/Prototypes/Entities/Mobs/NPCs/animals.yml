@@ -1,6 +1,6 @@
 - type: entity
   name: bat
-  parent: [ SimpleMobBase, FlyingMobBase, MobCombat ]
+  parent: [ SimpleMobBase, FlyingMobBase ] # DS14
   id: MobBat
   description: Some cultures find them terrifying, others crunchy on the teeth.
   components:
@@ -78,6 +78,7 @@
   - type: Tag
     tags:
     - VimPilot
+  - type: NightVision # DS14 
 
 - type: entity
   name: bee
@@ -341,7 +342,7 @@
   - type: TimedDespawn #delete the egg after the chicken spawns
     lifetime: 21
 
-- type: entity
+- type: entity # TODO: figure out how to make these guys gib when stepped on
   name: cockroach
   parent: SimpleMobBase
   id: MobCockroach
@@ -426,13 +427,8 @@
       - !type:GibBehavior
         recursive: false
   - type: NonSpreaderZombie
-  - type: StepTrigger
-    requiredTriggeredSpeed: 1
-  - type: TriggerOnStepTrigger
-  - type: RandomChanceTriggerCondition
-    successChance: 0.2
-  - type: GibOnTrigger
-  - type: ProtectedFromStepTriggers
+  - type: SentienceTarget
+    flavorKind: station-event-random-sentience-flavor-organic
   - type: MeleeWeapon
     soundHit:
       path: /Audio/Effects/bite.ogg
@@ -441,11 +437,12 @@
     damage:
       types:
         Piercing: 0
+  - type: NecromorfAfterInfection # DS14
+    necroPrototype: NecroSmall
 
 - type: entity
   name: glockroach
   parent: MobCockroach
-  suffix: Admeme
   id: MobGlockroach
   description: This station is just crawling with bu- OH GOD THAT COCKROACH HAS A GUN!!!
   components:
@@ -462,7 +459,7 @@
     soundGunshot: /Audio/Weapons/Guns/Gunshots/pistol.ogg
   - type: BallisticAmmoProvider
     proto: CartridgeCaselessRifle
-    capacity: 500
+    capacity: 30 # DS14
   - type: CombatMode
   - type: HTN
     rootTask:
@@ -473,6 +470,11 @@
   - type: Butcherable
     spawned:
     - id: FoodMeatSlime
+  - type: MovementSpeedModifier # DS14
+    baseWalkSpeed : 3
+    baseSprintSpeed : 5.1
+  - type: TTS # DS14
+    voice: Bandit
 
 - type: entity
   name: mothroach
@@ -845,7 +847,6 @@
       behaviors:
       - !type:GibBehavior
         recursive: false
-  - type: ZombieImmune
 
 - type: entity
   name: cow
@@ -931,6 +932,10 @@
     guides:
     - Chef
     - FoodRecipes
+  - type: ReplacementAccent # DS14
+    accent: cow
+  - type: TTS # DS14
+    voice: Thrud
 
 - type: entity
   name: crab
@@ -1215,8 +1220,6 @@
         true
       NavSmash: !type:Bool
         true
-  - type: Puller
-    needsHands: false
   - type: Prying
     pryPowered: true
     force: true
@@ -1228,6 +1231,8 @@
       0: Alive
       200: Critical
       250: Dead
+  - type: NecromorfAfterInfection
+    necroPrototype: NecroBrute
 
 - type: entity
   name: kangaroo
@@ -1312,6 +1317,9 @@
   - type: HTN
     rootTask:
       task: SimpleHostileCompound
+  - type: Sanity # DS14
+  - type: TTS # DS14
+    voice: Ycf
 
 - type: entity
   name: boxing kangaroo
@@ -1366,8 +1374,8 @@
       state: body-overlay-2
       visible: false
     - map: [ "ears" ]
-    - map: [ "id" ]
     - map: [ "outerClothing" ]
+    - map: [ "id" ]
     - map: [ "mask" ]
     - map: [ "head" ]
     - map: [ "clownedon" ]
@@ -1832,6 +1840,7 @@
     - ChefPilot
     - Mouse
     - Meat
+    - FelinidFood # DS14
   - type: Respirator
     damage:
       types:
@@ -1883,6 +1892,8 @@
       behaviors:
       - !type:GibBehavior
         recursive: false
+  - type: NecromorfAfterInfection
+    necroPrototype: NecroSmall
 
 - type: entity
   parent: MobMouse
@@ -1980,12 +1991,6 @@
   parent: MobMouse
   id: MobMouseCancer
   components:
-  - type: GhostRole
-    name: ghost-role-information-cancer-mouse-name
-    description: ghost-role-information-cancer-mouse-description
-    rules: ghost-role-information-freeagent-rules
-    mindRoles:
-    - MindRoleGhostRoleFreeAgent
   - type: Sprite
     color: LightGreen
   - type: PointLight
@@ -2185,6 +2190,8 @@
       behaviors:
       - !type:GibBehavior
         recursive: false
+  - type: NecromorfAfterInfection
+    necroPrototype: NecroSmall
 
 # Would be cool to have some functionality for the parrot to be able to sit on stuff
 - type: entity
@@ -2455,6 +2462,8 @@
   - type: Damageable
     damageContainer: Biological
     damageModifierSet: Scale
+  - type: NecromorfAfterInfection # DS14
+    necroPrototype: NecroSmall
 
 # Code unique spider prototypes or combine them all into one spider and get a
 # random sprite state when you spawn it.
@@ -2508,8 +2517,6 @@
     interactSuccessSpawn: EffectHearts
     interactSuccessSound:
       path: /Audio/Animals/snake_hiss.ogg
-  - type: Puller
-    needsHands: false
   - type: NoSlip
   - type: Spider
   - type: IgnoreSpiderWeb
@@ -2942,6 +2949,8 @@
       amount: 2
   - type: ReplacementAccent
     accent: dog
+  - type: SentienceTarget
+    flavorKind: station-event-random-sentience-flavor-corgi
   - type: Tag
     tags:
     - VimPilot
@@ -3131,6 +3140,9 @@
   parent: MobCatSpace
   description: Explosive kitten.
   components:
+  - type: Item # DS14
+    size: Huge
+  - type: MultiHandedItem # DS14
   - type: Sprite
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]
@@ -3531,6 +3543,8 @@
       behaviors:
       - !type:GibBehavior
         recursive: false
+  - type: NecromorfAfterInfection # DS14
+    necroPrototype: NecroSmall
 
 - type: entity
   name: pig

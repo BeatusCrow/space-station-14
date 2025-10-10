@@ -181,3 +181,14 @@
   targetNode: bagPet
   category: construction-category-clothing
   objectType: Item
+
+
+# DS14-start
+
+- type: construction
+  id: BaseBallBatSteel
+  graph: BaseBallBatSteel
+  startNode: start
+  targetNode: baseballbatsteel
+  category: construction-category-weapons
+  objectType: Item

@@ -1,0 +1,171 @@
+# Pets
+- type: entity
+  parent: IDCardStandard
+  id: MukhtarIDCard
+  name: mukhtar ID card
+  components:
+  - type: Sprite
+    layers:
+    - state: default
+    - state: idsecurityofficer
+  - type: PresetIdCard
+    job: SecurityOfficer
+    name: Мухтар
+
+- type: entity
+  parent: IDCardStandard
+  id: LargoIDCard
+  name: largo ID card
+  components:
+  - type: Sprite
+    layers:
+    - state: default
+    - state: idcargotechnician
+  - type: PresetIdCard
+    job: CargoTechnician
+    name: Ларго
+
+# Typan
+- type: entity
+  parent: IDCardStandard
+  id: TaipanIDCardCargo
+  name: ID-карта
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Misc/taipancargo.rsi
+    layers:
+    - state: taipancardcargo
+  - type: PresetIdCard
+    job: TaipanCargotech
+  - type: Access
+    tags:
+    - SyndicateAgent
+    - NuclearOperative
+
+
+- type: entity
+  parent: IDCardStandard
+  id: TaipanIDCardCom
+  name: ID-карта
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Misc/taipansec.rsi
+    layers:
+    - state: taipancardcom
+  - type: Access
+    tags:
+    - Armory
+    - Cargo
+    - Medical
+    - Engineering
+    - Research
+    - Service
+    - SyndicateAgent
+    - Quartermaster
+    - ResearchDirector
+    - NuclearOperative
+
+- type: entity
+  parent: IDCardStandard
+  id: TaipanIDCardEng
+  name: ID-карта
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Misc/taipaneng.rsi
+    layers:
+    - state: taipancardeng
+  - type: Access
+    tags:
+    - Engineering
+    - SyndicateAgent
+    - NuclearOperative
+    groups:
+    - AllAccess
+
+- type: entity
+  parent: IDCardStandard
+  id: TaipanIDCardMed
+  name: ID-карта
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Misc/taipanmed.rsi
+    layers:
+    - state: taipancardmed
+  - type: Access
+    tags:
+    - SyndicateAgent
+    - NuclearOperative
+    groups:
+    - AllAccess
+
+- type: entity
+  parent: IDCardStandard
+  id: TaipanIDCardRd
+  name: ID-карта
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Misc/taipanrd.rsi
+    layers:
+    - state: taipancardrd
+  - type: PresetIdCard
+    job: TaipanRD
+  - type: Access
+    tags:
+    - SyndicateAgent
+    - NuclearOperative
+    groups:
+    - AllAccess
+
+- type: entity
+  parent: IDCardStandard
+  id: TaipanIDCardScience
+  name: ID-карта
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Misc/taipanscien.rsi
+    layers:
+    - state: taipancardscience
+  - type: PresetIdCard
+    job: TaipanScience
+  - type: Access
+    tags:
+    - SyndicateAgent
+    - NuclearOperative
+    groups:
+    - AllAccess
+
+- type: entity
+  parent: IDCardStandard
+  id: TaipanIDCardBotanist
+  name: ID-карта
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Misc/taipanbotan.rsi
+    layers:
+    - state: taipancardbotanist
+  - type: PresetIdCard
+    job: TaipanBotanist
+  - type: Access
+    tags:
+    - SyndicateAgent
+    - NuclearOperative
+    groups:
+    - AllAccess
+
+- type: entity
+  parent: IDCardStandard
+  id: TaipanIDCardChef
+  name: ID-карта
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Misc/taipanchef.rsi
+    layers:
+    - state: taipancardchef
+  - type: PresetIdCard
+    job: TaipanChef
+  - type: Access
+    tags:
+    - SyndicateAgent
+    - NuclearOperative
+    groups:
+    - AllAccess

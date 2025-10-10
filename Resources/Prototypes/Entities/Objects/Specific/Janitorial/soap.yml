@@ -9,6 +9,7 @@
     - Soap
   - type: Sprite
     sprite: Objects/Specific/Janitorial/soap.rsi
+    scale: "0.8, 0.8" # DS14-resize
     layers:
     - state: soap-4
       map: ["enum.SolutionContainerLayers.Fill"]
@@ -144,6 +145,10 @@
     residueColor: residue-red
   - type: StaticPrice
     price: 500
+  - type: Tag # DS14
+    tags:
+    - Soap
+    - SoapSyndie
 
 - type: entity
   name: soaplet

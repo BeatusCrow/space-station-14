@@ -1,12 +1,3 @@
-- type: loadoutEffectGroup
-  id: SeniorBar
-  effects:
-  - !type:JobRequirementLoadoutEffect
-    requirement:
-      !type:RoleTimeRequirement
-      role: JobBartender
-      time: 52h # 1 hour per week for 1 year
-
 # Head
 - type: loadout
   id: BartenderHead
@@ -34,6 +25,26 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitBartenderPurple
 
+- type: loadout
+  id: BartenderJumpsuitNew
+  equipment:
+    jumpsuit: ADTClothingUniformNewBarmanSuit
+
+- type: loadout
+  id: BartenderJumpskirtNew
+  equipment:
+    jumpsuit: ADTClothingUniformNewBarmanSkirt
+
+- type: loadout
+  id: ServiceJumpsuitNew
+  equipment:
+    jumpsuit: ADTClothingUniformNewServiceSuit
+
+- type: loadout
+  id: ServiceJumpskirtNew
+  equipment:
+    jumpsuit: ADTClothingUniformNewServiceSuit
+
 # Outer clothing
 - type: loadout
   id: BartenderApron
@@ -50,12 +61,27 @@
   equipment:
     outerClothing: ClothingOuterWinterBar
 
-# Misc
+# Underwear
 - type: loadout
-  id: BartenderGoldenShaker
+  id: UnderwearBottomBoxersBartender
   effects:
   - !type:GroupLoadoutEffect
-    proto: SeniorBar
-  storage:
-    back:
-    - DrinkShakerGold
+    proto: MaleUnderwear
+  equipment:
+    underwearb: ClothingUnderwearBottomBoxersBartender
+
+- type: loadout
+  id: UnderwearBottomPantiesBartender
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: FemaleUnderwear
+  equipment:
+    underwearb: ClothingUnderwearBottomPantiesBartender
+
+- type: loadout
+  id: UnderwearTopBraBartender
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: FemaleUnderwear
+  equipment:
+    underweart: ClothingUnderwearTopBraBartender

@@ -446,17 +446,18 @@
     - type: Loadout
       prototypes: [ VisitorLawyerAltA, VisitorLawyerAltB, VisitorLawyerAltC, VisitorLawyerAltD, VisitorLawyerAltE ]
       roleLoadout: [ RoleSurvivalStandard ]
+    - type: LawyerStampProvider
 
-- type: randomHumanoidSettings
-  id: VisitorLawyerCentcom
-  parent: VisitorCivilian
-  components:
-    - type: GhostRole
-      name: ghost-role-information-civilian-centcom-lawyer-name
-      description: ghost-role-information-civilian-centcom-lawyer-description
-    - type: Loadout
-      prototypes: [ VisitorLawyerCentcom ]
-      roleLoadout: [ RoleSurvivalStandard ]
+# - type: randomHumanoidSettings
+#   id: VisitorLawyerCentcom
+#   parent: VisitorCivilian
+#   components:
+#     - type: GhostRole
+#       name: ghost-role-information-civilian-centcom-lawyer-name
+#       description: ghost-role-information-civilian-centcom-lawyer-description
+#     - type: Loadout
+#       prototypes: [ VisitorLawyerCentcom ]
+#       roleLoadout: [ RoleSurvivalStandard ]
 
 - type: randomHumanoidSettings
   id: VisitorLibrarian
@@ -561,7 +562,7 @@
 - type: randomHumanoidSettings
   id: ChallengeVictimCaptain
   parent: EventHumanoidMindShielded
-  randomizeName: false
+  # randomizeName: false
   components:
     - type: GhostRole
       name: ghost-role-information-lost-challenge-commander-name
@@ -573,16 +574,16 @@
     - type: Loadout
       prototypes: [ ChallengeVictimCaptain, ChallengeVictimCaptainAlt ] #!! This is supposed to be for challenge events. Its intentionally missing QOL gear to make interesting scenarios.
       roleLoadout: [ RoleSurvivalVoxSupport ]
-    - type: RandomMetadata
-      nameSegments:
-      - NamesFirst
-      - NamesLast
-      nameFormat: name-format-standard
+    # - type: RandomMetadata
+    #   nameSegments:
+    #   - NamesFirst
+    #   - NamesLast
+    #   nameFormat: name-format-standard
 
 - type: randomHumanoidSettings
   id: ChallengeVictimChiefEngineer
   parent: EventHumanoidMindShielded
-  randomizeName: false
+  # randomizeName: false
   components:
     - type: GhostRole
       name: ghost-role-information-lost-challenge-commander-name
@@ -594,16 +595,16 @@
     - type: Loadout
       prototypes: [ ChallengeVictimCE, ChallengeVictimCEAlt ] #!! This is supposed to be for challenge events. Its intentionally missing QOL gear to make interesting scenarios.
       roleLoadout: [ RoleSurvivalVoxSupport ]
-    - type: RandomMetadata
-      nameSegments:
-      - NamesFirst
-      - NamesLast
-      nameFormat: name-format-standard
+    # - type: RandomMetadata
+    #   nameSegments:
+    #   - NamesFirst
+    #   - NamesLast
+    #   nameFormat: name-format-standard
 
 - type: randomHumanoidSettings
   id: ChallengeVictimCMO
   parent: EventHumanoidMindShielded
-  randomizeName: false
+  # randomizeName: false
   components:
     - type: GhostRole
       name: ghost-role-information-lost-challenge-commander-name
@@ -615,16 +616,16 @@
     - type: Loadout
       prototypes: [ ChallengeVictimCMO, ChallengeVictimCMOAlt ] #!! This is supposed to be for challenge events. Its intentionally missing QOL gear to make interesting scenarios.
       roleLoadout: [ RoleSurvivalVoxSupport ]
-    - type: RandomMetadata
-      nameSegments:
-      - NamesFirst
-      - NamesLast
-      nameFormat: name-format-standard
+    # - type: RandomMetadata
+    #   nameSegments:
+    #   - NamesFirst
+    #   - NamesLast
+    #   nameFormat: name-format-standard
 
 - type: randomHumanoidSettings
   id: ChallengeVictimHeadOfPersonnel
   parent: EventHumanoidMindShielded
-  randomizeName: false
+  # randomizeName: false
   components:
     - type: GhostRole
       name: ghost-role-information-lost-challenge-commander-name
@@ -636,16 +637,16 @@
     - type: Loadout
       prototypes: [ ChallengeVictimHOP, ChallengeVictimHOPAlt ] #!! This is supposed to be for challenge events. Its intentionally missing QOL gear to make interesting scenarios.
       roleLoadout: [ RoleSurvivalVoxSupport ]
-    - type: RandomMetadata
-      nameSegments:
-      - NamesFirst
-      - NamesLast
-      nameFormat: name-format-standard
+    # - type: RandomMetadata
+    #   nameSegments:
+    #   - NamesFirst
+    #   - NamesLast
+    #   nameFormat: name-format-standard
 
 - type: randomHumanoidSettings
   id: ChallengeVictimHeadOfSecurity
   parent: EventHumanoidMindShielded
-  randomizeName: false
+  # randomizeName: false
   components:
     - type: GhostRole
       name: ghost-role-information-lost-challenge-commander-name
@@ -657,16 +658,16 @@
     - type: Loadout
       prototypes: [ ChallengeVictimHOS, ChallengeVictimHOSAlt ] #!! This is supposed to be for challenge events. Its intentionally missing QOL gear to make interesting scenarios.
       roleLoadout: [ RoleSurvivalVoxSupport ]
-    - type: RandomMetadata
-      nameSegments:
-      - NamesFirst
-      - NamesLast
-      nameFormat: name-format-standard
+    # - type: RandomMetadata
+    #   nameSegments:
+    #   - NamesFirst
+    #   - NamesLast
+    #   nameFormat: name-format-standard
 
 - type: randomHumanoidSettings
   id: ChallengeVictimResearchDirector
   parent: EventHumanoidMindShielded
-  randomizeName: false
+  # randomizeName: false
   components:
     - type: GhostRole
       name: ghost-role-information-lost-challenge-commander-name
@@ -678,16 +679,16 @@
     - type: Loadout
       prototypes: [ ChallengeVictimRD, ChallengeVictimRDAlt ] #!! This is supposed to be for challenge events. Its intentionally missing QOL gear to make interesting scenarios.
       roleLoadout: [ RoleSurvivalVoxSupport ]
-    - type: RandomMetadata
-      nameSegments:
-      - NamesFirst
-      - NamesLast
-      nameFormat: name-format-standard
+    # - type: RandomMetadata
+    #   nameSegments:
+    #   - NamesFirst
+    #   - NamesLast
+    #   nameFormat: name-format-standard
 
 - type: randomHumanoidSettings
   id: ChallengeVictimQuartermaster
   parent: EventHumanoidMindShielded
-  randomizeName: false
+  # randomizeName: false
   components:
     - type: GhostRole
       name: ghost-role-information-lost-challenge-commander-name
@@ -699,11 +700,11 @@
     - type: Loadout
       prototypes: [ ChallengeVictimQM, ChallengeVictimQMAlt ] #!! This is supposed to be for challenge events. Its intentionally missing QOL gear to make interesting scenarios.
       roleLoadout: [ RoleSurvivalVoxSupport ]
-    - type: RandomMetadata
-      nameSegments:
-      - NamesFirst
-      - NamesLast
-      nameFormat: name-format-standard
+    # - type: RandomMetadata
+    #   nameSegments:
+    #   - NamesFirst
+    #   - NamesLast
+    #   nameFormat: name-format-standard
 
 # Security
 # Following use EventHumanoidMindShielded since they are heads and probably should have mindshields
@@ -712,7 +713,7 @@
 
 - type: randomHumanoidSettings
   id: ChallengeCargoTechnician
-  randomizeName: false
+  # randomizeName: false
   components:
     - type: GhostRole
       name: ghost-role-information-lost-challenge-cargo-technican-name
@@ -724,11 +725,11 @@
     - type: Loadout
       prototypes: [ ChallengeCargoTechGearSuit, ChallengeCargoTechGearCoat ] #!! This is supposed to be for challenge events. Its intentionally missing QOL gear to make interesting scenarios.
       roleLoadout: [ RoleSurvivalVoxSupport ]
-    - type: RandomMetadata
-      nameSegments:
-      - NamesFirst
-      - NamesLast
-      nameFormat: name-format-standard
+    # - type: RandomMetadata
+    #   nameSegments:
+    #   - NamesFirst
+    #   - NamesLast
+    #   nameFormat: name-format-standard
 
 # Engineering
 
@@ -814,6 +815,10 @@
       rules: ghost-role-information-rules-team-antagonist
       mindRoles:
       - MindRoleGhostRoleTeamAntagonist
+      requirements:
+      - !type:DepartmentTimeRequirement
+        department: Security
+        time: 36000 # 10 hours
       raffle:
         settings: default
     - type: Loadout
@@ -833,6 +838,13 @@
       rules: ghost-role-information-rules-team-antagonist
       mindRoles:
       - MindRoleGhostRoleTeamAntagonist
+      requirements:
+      - !type:DepartmentTimeRequirement
+        department: Security
+        time: 36000 # 10 hours
+      - !type:DepartmentTimeRequirement
+        department: Command
+        time: 36000 # 10 hours
       raffle:
         settings: default
     - type: Loadout

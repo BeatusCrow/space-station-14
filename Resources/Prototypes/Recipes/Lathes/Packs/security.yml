@@ -49,6 +49,9 @@
   - MagazinePistolSubMachineGunTopMountedEmpty
   - MagazineRifle
   - MagazineRifleEmpty
+  - MagazineShotgun
+  - MagazineShotgunEmpty
+  - MagazineShotgunSlug
   - SpeedLoaderMagnum
   - SpeedLoaderMagnumEmpty
 
@@ -59,6 +62,14 @@
   - Stunbaton
   - CombatKnife
   - RiotShield
+
+# DS14-start
+- type: latheRecipePack
+  id: SecurityBorgModulesStatic
+  recipes:
+  - BorgModuleArrestSecurity
+  - BorgModulEnergySecurity
+# DS14-end
 
 ## Dynamic recipes
 
@@ -74,6 +85,13 @@
   - TelescopicShield
   - ClothingBackpackHarmpack
 
+# DS14-start
+- type: latheRecipePack
+  id: NightVisionTech
+  recipes:
+  - ClothingEyesPNV
+# DS14-end
+
 - type: latheRecipePack
   id: SecurityBoards
   recipes:
@@ -87,8 +105,6 @@
   - ScienceExplosives # sec gets everything for modular grenade making that sci does
   id: SecurityExplosives
   recipes:
-  - CableDetStack1
-  - EmptyDetonator
   - ExplosivePayload
   - GrenadeBlast
   - GrenadeEMP
@@ -123,6 +139,7 @@
   - MagazineShotgunIncendiary
   - SpeedLoaderMagnumIncendiary
   - SpeedLoaderMagnumUranium
+  - MagazineBox357Incendiary # ADT
 
 - type: latheRecipePack
   id: SecurityWeapons
@@ -133,6 +150,8 @@
   - WeaponLaserCarbine
   - WeaponXrayCannon
   - WeaponTemperatureGun
+  - WeaponLaserRifle # DS14
+  - WeaponIonRifle # DS14
 
 - type: latheRecipePack
   id: SecurityDisablers

@@ -1,0 +1,40 @@
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleSpiderTerror
+  name: Роль Паука Ужаса
+  components:
+  - type: MindRole
+    roleType: TeamAntagonist
+    antagPrototype: SpiderTerror
+    subtype: role-subtype-spider-terror
+  - type: SpiderTerrorRole
+
+- type: entity
+  parent: MindRoleSpiderTerror
+  id: MindRoleSpiderTettorQueen
+  name: Роль Паука Ужаса Королевы
+  components:
+  - type: MindRole
+    roleType: TeamAntagonist
+    antagPrototype: SpiderTerrorQueen
+    subtype: role-subtype-spider-terror-queen
+
+- type: entity
+  parent: MindRoleSpiderTerror
+  id: MindRoleSpiderTettorKing
+  name: Роль Паука Ужаса Короля
+  components:
+  - type: MindRole
+    roleType: TeamAntagonist
+    antagPrototype: SpiderTerrorKing
+    subtype: role-subtype-spider-terror-king
+
+- type: entity
+  parent: MindRoleSpiderTerror
+  id: MindRoleSpiderTettorKingBlood
+  name: Роль Королевского Паука Ужаса
+  components:
+  - type: MindRole
+    roleType: TeamAntagonist
+    antagPrototype: SpiderTerrorKingBlood
+    subtype: role-subtype-spider-terror-kingblood

@@ -108,7 +108,7 @@
   parent: [ ClothingShoesBase, BaseJanitorContraband ]
   id: ClothingShoesGaloshes
   name: galoshes
-  description: Specialised non-slip rubber boots, designed to reduce janitorial workplace accidents; a tider's treasure.
+  description: Rubber boots.
   components:
   - type: Sprite
     sprite: Clothing/Shoes/Specific/galoshes.rsi
@@ -117,12 +117,18 @@
   - type: NoSlip
   - type: SlowedOverSlippery
     slowdownModifier: 0.7
-  - type: SpeedModifierContactCapClothing
-    maxContactSprintSlowdown: 0.7
-    maxContactWalkSlowdown: 0.7
+  - type: SpeedModifierContactCapClothing # DS14
+    maxContactSprintSlowdown: 0.9
+    maxContactWalkSlowdown: 0.9
+  - type: ClothingSpeedModifier # DS14
+    walkModifier: 0.8
+    sprintModifier: 0.8
+  - type: FootstepModifier # DS14
+    footstepSoundCollection:
+      collection: SquidFootsteps 
 
 - type: entity
-  parent: [ClothingShoesBaseButcherable, BaseHighlyIllegalContraband]
+  parent: [ClothingShoesBaseButcherable, BaseMajorContraband]
   id: ClothingShoesSpaceNinja
   name: space ninja shoes
   description: A pair of nano-enhanced boots with built-in magnetic suction cups.

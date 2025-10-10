@@ -59,6 +59,15 @@ public sealed partial class FaxMachineComponent : Component
     [DataField]
     public bool ReceiveNukeCodes { get; set; } = false;
 
+    // StationGoal-start
+    /// <summary>
+    /// Should that fax receive station goal info
+    /// </summary>
+    [ViewVariables(VVAccess.ReadWrite)]
+    [DataField("receiveStationGoal")]
+    public bool ReceiveStationGoal { get; set; } = false;
+    // StationGoal-end
+
     /// <summary>
     /// Sound to play when fax printing new message
     /// </summary>
@@ -146,6 +155,9 @@ public sealed partial class FaxPrintout
     [DataField]
     public string? Label { get; private set; }
 
+    [DataField]
+    public List<string>? Signatures = new List<string>(); // DS14-signatures
+
     [DataField(required: true)]
     public string Content { get; private set; } = default!;
 
@@ -165,7 +177,7 @@ public sealed partial class FaxPrintout
     {
     }
 
-    public FaxPrintout(string content, string name, string? label = null, string? prototypeId = null, string? stampState = null, List<StampDisplayInfo>? stampedBy = null, bool locked = false)
+    public FaxPrintout(string content, string name, string? label = null, string? prototypeId = null, string? stampState = null, List<StampDisplayInfo>? stampedBy = null, bool locked = false, List<string>? signatures = null) // DS14-Signatures
     {
         Content = content;
         Name = name;
@@ -174,5 +186,6 @@ public sealed partial class FaxPrintout
         StampState = stampState;
         StampedBy = stampedBy ?? new List<StampDisplayInfo>();
         Locked = locked;
+        Signatures = signatures; // DS14-Signatures
     }
 }

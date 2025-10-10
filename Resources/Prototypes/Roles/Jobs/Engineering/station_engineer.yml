@@ -6,7 +6,7 @@
   requirements:
     - !type:DepartmentTimeRequirement
       department: Engineering
-      time: 2.5h
+      time: 14400 # 4 hours
   startingGear: StationEngineerGear
   icon: "JobIconStationEngineer"
   supervisors: job-supervisors-ce
@@ -16,6 +16,12 @@
   - External
   extendedAccess:
   - Atmospherics
+  #start-backmen: currency
+  minBankBalance: 150
+  maxBankBalance: 250
+  wageDepartment: Engineering
+  wage: 50
+  #end-backmen: currency
 
 - type: startingGear
   id: StationEngineerGear
@@ -23,6 +29,7 @@
     eyes: ClothingEyesGlassesMeson
     belt: ClothingBeltUtilityEngineering
     ears: ClothingHeadsetEngineering
+    socks: ClothingUnderwearSocksEngineer
   #storage:
     #back:
     #- Stuff

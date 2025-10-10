@@ -6,7 +6,7 @@
   requirements:
     - !type:DepartmentTimeRequirement
       department: Civilian
-      time: 0.5h
+      time: 3600 # 1 hour
   startingGear: BartenderGear
   icon: "JobIconBartender"
   supervisors: job-supervisors-hop
@@ -17,6 +17,12 @@
   extendedAccess:
   - Kitchen
   - Hydroponics
+  #start-backmen: currency
+  minBankBalance: 150
+  maxBankBalance: 250
+  wageDepartment: Civilian
+  wage: 60
+  #end-backmen: currency
 
 - type: startingGear
   id: BartenderGear
@@ -24,6 +30,7 @@
     shoes: ClothingShoesColorBlack
     id: BartenderPDA
     ears: ClothingHeadsetService
+    socks: ClothingUnderwearSocksBartender
   #storage:
     #back:
     #- Stuff

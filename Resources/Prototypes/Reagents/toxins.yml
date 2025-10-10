@@ -6,7 +6,6 @@
   flavor: bitter
   color: "#cf3600"
   physicalDesc: reagent-physical-desc-opaque
-  contrabandSeverity: Minor
   plantMetabolism:
   - !type:PlantAdjustToxins
     amount: 10
@@ -28,8 +27,6 @@
   flavor: bitter
   color: "#e2a38c"
   physicalDesc: reagent-physical-desc-exotic-smelling
-  allowedDepartments:
-  - Medical
   plantMetabolism:
   - !type:PlantAdjustToxins
     amount: 10
@@ -56,10 +53,6 @@
   flavor: bitter
   color: "#000067"
   physicalDesc: reagent-physical-desc-nondescript
-  allowedDepartments:
-  - Medical
-  allowedJobs:
-  - Zookeeper
   metabolisms:
     Poison:
       effects:
@@ -74,6 +67,7 @@
         effectProto: StatusEffectDrowsiness
         time: 4
         type: Add
+        refresh: false
       - !type:HealthChange
         conditions:
         - !type:ReagentThreshold
@@ -127,7 +121,6 @@
   group: Toxins
   desc: reagent-desc-polytrinic-acid
   physicalDesc: reagent-physical-desc-strong-smelling
-  contrabandSeverity: Major
   flavor: acid
   color: "#a1000b"
   boilingPoint: 78.2 # This isn't a real chemical...
@@ -160,14 +153,39 @@
         damage:
           types:
             Caustic: 11.0
+# DS14-start
+        conditions:
+        - !type:OrganType
+          type: Xenomorph
+          shouldHave: false
+# DS14-end
       - !type:PopupMessage
         type: Local
         visualType: Large
         messages: [ "generic-reagent-effect-burning-insides" ]
         probability: 0.33
+# DS14-start
+        conditions:
+        - !type:OrganType
+          type: Xenomorph
+          shouldHave: false
+# DS14-end
       - !type:Emote
         emote: Scream
         probability: 0.3
+# DS14-start
+        conditions:
+        - !type:OrganType
+          type: Xenomorph
+          shouldHave: false
+    Drink:
+      effects:
+      - !type:ModifyBloodLevel
+        amount: 7
+        conditions:
+        - !type:OrganType
+          type: Xenomorph
+# DS14-end
 
 - type: reagent
   id: FerrochromicAcid
@@ -189,6 +207,17 @@
           types:
             Heat: 2.5
             Caustic: 1
+# DS14-start
+        conditions:
+        - !type:OrganType
+          type: Xenomorph
+          shouldHave: false
+      - !type:ModifyBloodLevel
+        amount: 3
+        conditions:
+        - !type:OrganType
+          type: Xenomorph
+# DS14-end
 
 - type: reagent
   id: FluorosulfuricAcid
@@ -196,7 +225,6 @@
   group: Toxins
   desc: reagent-desc-fluorosulfuric-acid
   physicalDesc: reagent-physical-desc-strong-smelling
-  contrabandSeverity: Minor
   flavor: acid
   color: "#5050ff"
   boilingPoint: 165
@@ -222,14 +250,39 @@
         damage:
           types:
             Caustic: 8
+# DS14-start
+        conditions:
+        - !type:OrganType
+          type: Xenomorph
+          shouldHave: false
+# DS14-end
       - !type:PopupMessage
         type: Local
         visualType: Large
         messages: [ "generic-reagent-effect-burning-insides" ]
         probability: 0.33
+# DS14-start
+        conditions:
+        - !type:OrganType
+          type: Xenomorph
+          shouldHave: false
+# DS14-end
       - !type:Emote
         emote: Scream
         probability: 0.25
+# DS14-start
+        conditions:
+        - !type:OrganType
+          type: Xenomorph
+          shouldHave: false
+    Drink:
+      effects:
+      - !type:ModifyBloodLevel
+        amount: 9
+        conditions:
+        - !type:OrganType
+          type: Xenomorph
+# DS14-end
 
 - type: reagent
   id: SulfuricAcid
@@ -237,8 +290,6 @@
   group: Toxins
   desc: reagent-desc-sulfuric-acid
   physicalDesc: reagent-physical-desc-oily
-  allowedJobs:
-  - Chemist
   flavor: acid
   color: "#BF8C00"
   recognizable: true
@@ -272,14 +323,39 @@
         damage:
           types:
             Caustic: 5
+# DS14-start
+        conditions:
+        - !type:OrganType
+          type: Xenomorph
+          shouldHave: false
+# DS14-end
       - !type:PopupMessage
         type: Local
         visualType: Large
         messages: [ "generic-reagent-effect-burning-insides" ]
         probability: 0.33
+# DS14-start
+        conditions:
+        - !type:OrganType
+          type: Xenomorph
+          shouldHave: false
+# DS14-end
       - !type:Emote
         emote: Scream
         probability: 0.2
+# DS14-start
+        conditions:
+        - !type:OrganType
+          type: Xenomorph
+          shouldHave: false
+    Drink:
+      effects:
+      - !type:ModifyBloodLevel
+        amount: 5
+        conditions:
+        - !type:OrganType
+          type: Xenomorph
+# DS14-end
 
 - type: reagent
   id: UnstableMutagen
@@ -287,9 +363,6 @@
   group: Toxins
   desc: reagent-desc-unstable-mutagen
   physicalDesc: reagent-physical-desc-glowing
-  allowedJobs:
-  - Chemist
-  - Botanist
   flavor: bitter
   color: "#00ff5f"
   boilingPoint: 340282300000000000000000000000000000000 # Ethidium bromide, which doesn't boil.
@@ -311,7 +384,6 @@
   group: Toxins
   desc: reagent-desc-heartbreaker-toxin
   physicalDesc: reagent-physical-desc-strong-smelling
-  contrabandSeverity: Major
   color: "#5f959c"
   metabolisms:
     Poison:
@@ -330,7 +402,6 @@
   group: Toxins
   desc: reagent-desc-lexorin
   physicalDesc: reagent-physical-desc-pungent
-  contrabandSeverity: Syndicate
   color: "#6b0007"
   metabolisms:
     Poison:
@@ -358,6 +429,7 @@
         effectProto: StatusEffectSeeingRainbow
         type: Add
         time: 10
+        refresh: false
   # TODO: PROPER hallucinations
 
 - type: reagent
@@ -431,7 +503,6 @@
   group: Toxins
   desc: reagent-desc-amatoxin
   physicalDesc: reagent-physical-desc-nondescript
-  contrabandSeverity: Major
   color: "#D6CE7B"
   metabolisms:
     Poison:
@@ -464,7 +535,6 @@
   group: Toxins
   desc: reagent-desc-romerol
   physicalDesc: reagent-physical-desc-necrotic
-  contrabandSeverity: Syndicate
   flavor: bitter
   color: "#7e916e"
   worksOnTheDead: true
@@ -495,6 +565,11 @@
           - !type:OrganType
             type: Vox
             shouldHave: false
+# DS14-start
+          - !type:OrganType
+            type: Xenomorph
+            shouldHave: false
+# DS14-end
         type: Local
         visualType: MediumCaution
         messages: [ "generic-reagent-effect-sick" ]
@@ -508,6 +583,11 @@
           - !type:OrganType
             type: Vox
             shouldHave: false
+# DS14-start
+          - !type:OrganType
+            type: Xenomorph
+            shouldHave: false
+# DS14-end
       - !type:HealthChange
         conditions:
         - !type:OrganType
@@ -516,6 +596,11 @@
         - !type:OrganType
           type: Vox
           shouldHave: false
+# DS14-start
+        - !type:OrganType
+          type: Xenomorph
+          shouldHave: false
+# DS14-end
         damage:
           types:
             Poison: 1
@@ -531,6 +616,14 @@
           type: Vox
         reagent: Protein
         amount: 0.25
+# DS14-start
+      - !type:AdjustReagent
+        conditions:
+        - !type:OrganType
+          type: Xenomorph
+        reagent: Protein
+        amount: 0.3
+# DS14-end
 
 - type: reagent
   id: Allicin
@@ -560,11 +653,6 @@
   group: Narcotics
   desc: reagent-desc-pax
   physicalDesc: reagent-physical-desc-soothing
-  allowedDepartments:
-  - Security
-  - Medical
-  allowedJobs:
-  - Zookeeper
   color: "#AAAAAA"
   metabolisms:
     Poison:
@@ -610,7 +698,6 @@
   group: Toxins
   desc: reagent-desc-lead
   physicalDesc: reagent-physical-desc-metallic
-  contrabandSeverity: Major
   color: "#5C6274"
   metabolisms:
     Poison:
@@ -627,7 +714,6 @@
   group: Toxins
   desc: reagent-desc-bungotoxin
   physicalDesc: reagent-physical-desc-nondescript
-  contrabandSeverity: Major
   color: "#EBFF8E"
   metabolisms:
     Poison:
@@ -644,7 +730,6 @@
   group: Toxins
   desc: reagent-desc-vestine
   physicalDesc: reagent-physical-desc-shiny
-  contrabandSeverity: Syndicate
   flavor: medicine
   color: "#435166"
   metabolisms:
@@ -668,7 +753,6 @@
   group: Toxins
   desc: reagent-desc-tazinide
   physicalDesc: reagent-physical-desc-metallic
-  contrabandSeverity: Syndicate
   flavor: shocking
   color: "#FDD023"
   metabolisms:
@@ -683,8 +767,6 @@
   group: Toxins
   desc: reagent-desc-lipolicide
   physicalDesc: reagent-physical-desc-strong-smelling
-  allowedDepartments:
-  - Medical
   flavor: mothballs #why does weightloss juice taste like mothballs
   color: "#F0FFF0"
   metabolisms:

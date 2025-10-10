@@ -6,13 +6,17 @@
   requirements:
     - !type:RoleTimeRequirement
       role: JobAtmosphericTechnician
-      time: 2.5h
+      time: 21600 #6 hrs
     - !type:RoleTimeRequirement
       role: JobStationEngineer
-      time: 5h
+      time: 21600 #6 hrs
     - !type:DepartmentTimeRequirement
       department: Engineering
-      time: 10h
+      time: 36000 #10 hrs
+    - !type:OverallPlaytimeRequirement
+      time: 144000 #40 hrs
+    - !type:AgeRequirement
+      requiredAge: 24
   weight: 10
   startingGear: ChiefEngineerGear
   icon: "JobIconChiefEngineer"
@@ -27,6 +31,12 @@
   - Atmospherics
   - Brig
   - Cryogenics
+  #start-backmen: currency
+  minBankBalance: 400
+  maxBankBalance: 600
+  wageDepartment: Command
+  wage: 125
+  #end-backmen: currency
   special:
   - !type:AddImplantSpecial
     implants: [ MindShieldImplant ]
@@ -38,9 +48,10 @@
   id: ChiefEngineerGear
   equipment:
     id: CEPDA
-    eyes: ClothingEyesGlassesMeson
+    eyes: ClothingEyesGlassesMesonCE # DS14 chief engineer meson glasses
     ears: ClothingHeadsetCE
     belt: ClothingBeltUtilityEngineering
+    socks: ClothingUnderwearSocksChiefEngineer
   storage:
     back:
     - Flash

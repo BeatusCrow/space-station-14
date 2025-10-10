@@ -317,7 +317,6 @@ public sealed partial class CriminalRecordsConsoleWindow : FancyWindow
     {
         return status switch
         {
-            SecurityStatus.Paroled => "hud_paroled",
             SecurityStatus.Wanted => "hud_wanted",
             SecurityStatus.Detained => "hud_incarcerated",
             SecurityStatus.Discharged => "hud_discharged",

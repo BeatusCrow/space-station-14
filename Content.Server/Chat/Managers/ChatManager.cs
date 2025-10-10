@@ -1,3 +1,6 @@
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Runtime.InteropServices;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
 using Content.Server.Administration.Systems;
@@ -15,9 +18,8 @@ using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Replays;
 using Robust.Shared.Utility;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Runtime.InteropServices;
+using Robust.Server.Console;
+using Content.DeadSpace.Interfaces.Server;
 
 namespace Content.Server.Chat.Managers;
 
@@ -45,7 +47,8 @@ internal sealed partial class ChatManager : IChatManager
     [Dependency] private readonly PlayerRateLimitManager _rateLimitManager = default!;
     [Dependency] private readonly ISharedPlayerManager _player = default!;
     [Dependency] private readonly DiscordChatLink _discordLink = default!;
-    [Dependency] private readonly ILogManager _logManager = default!;
+    private IServerSponsorsManager? _sponsorsManager; // DS14-sponsors
+    private IServerChatFilter? _chatFilter; // DS14-chat-filter
 
     /// <summary>
     /// The maximum length a player-sent message can be sent
@@ -55,7 +58,6 @@ internal sealed partial class ChatManager : IChatManager
     private bool _oocEnabled = true;
     private bool _adminOocEnabled = true;
 
-    private ISawmill _sawmill = default!;
     private readonly Dictionary<NetUserId, ChatUser> _players = new();
 
     public void Initialize()
@@ -66,9 +68,10 @@ internal sealed partial class ChatManager : IChatManager
         _configurationManager.OnValueChanged(CCVars.OocEnabled, OnOocEnabledChanged, true);
         _configurationManager.OnValueChanged(CCVars.AdminOocEnabled, OnAdminOocEnabledChanged, true);
 
-        _sawmill = _logManager.GetSawmill("SERVER");
-
         RegisterRateLimits();
+
+        IoCManager.Instance!.TryResolveType(out _sponsorsManager); // DS14-sponsors
+        IoCManager.Instance!.TryResolveType(out _chatFilter); // DS14-chat-filter
     }
 
     private void OnOocEnabledChanged(bool val)
@@ -115,7 +118,7 @@ internal sealed partial class ChatManager : IChatManager
     {
         var wrappedMessage = Loc.GetString("chat-manager-server-wrap-message", ("message", FormattedMessage.EscapeText(message)));
         ChatMessageToAll(ChatChannel.Server, message, wrappedMessage, EntityUid.Invalid, hideChat: false, recordReplay: true, colorOverride: colorOverride);
-        _sawmill.Info(message);
+        Logger.InfoS("SERVER", message);
 
         _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Server announcement: {message}");
     }
@@ -247,6 +250,11 @@ internal sealed partial class ChatManager : IChatManager
             return;
         }
 
+        // DS14-chat-filter-start
+        if (_chatFilter != null && _chatFilter.NotAllowedMessage(player, message))
+            return;
+        // DS14-chat-filter-end
+
         switch (type)
         {
             case OOCChatType.OOC:
@@ -283,9 +291,25 @@ internal sealed partial class ChatManager : IChatManager
             var prefs = _preferencesManager.GetPreferences(player.UserId);
             colorOverride = prefs.AdminOOCColor;
         }
-        if (  _netConfigManager.GetClientCVar(player.Channel, CCVars.ShowOocPatronColor) && player.Channel.UserData.PatronTier is { } patron && PatronOocColors.TryGetValue(patron, out var patronColor))
+        if (_netConfigManager.GetClientCVar(player.Channel, CCVars.ShowOocPatronColor) && player.Channel.UserData.PatronTier is { } patron && PatronOocColors.TryGetValue(patron, out var patronColor))
         {
             wrappedMessage = Loc.GetString("chat-manager-send-ooc-patron-wrap-message", ("patronColor", patronColor),("playerName", player.Name), ("message", FormattedMessage.EscapeText(message)));
+        }
+
+        // DS14-sponsors-start
+        if (_sponsorsManager?.TryGetInfo(player.UserId, out var sponsorData) == true && sponsorData.OOCColor != null)
+        {
+            wrappedMessage = Loc.GetString("chat-manager-send-ooc-patron-wrap-message", ("patronColor", sponsorData.OOCColor), ("playerName", player.Name), ("message", FormattedMessage.EscapeText(message)));
+        }
+        // DS14-sponsors-end
+
+        if (player.Name == "ahahahahha")
+        {
+            wrappedMessage = Loc.GetString("chat-manager-send-ooc-wrap-message", ("playerName", "[color=#66b6ff]a[/color][color=#5bbbfc]h[/color][color=#4fbff8]a[/color][color=#44c4f5]h[/color][color=#39c9f1]a[/color][color=#2dcdee]h[/color][color=#22d2ea]a[/color][color=#17d7e7]h[/color][color=#0bdbe3]h[/color][color=#00e0e0]a[/color]"), ("message", FormattedMessage.EscapeText(message)));
+        }
+        if (player.Name == "Ainnetel")
+        {
+            wrappedMessage = Loc.GetString("chat-manager-send-ooc-wrap-message", ("playerName", "[color=#ff3C00]A[/color][color=#ff8040]i[/color][color=#ffff80]n[/color][color=#80ff80]n[/color][color=#0077ff]e[/color][color=#00A2ff]t[/color][color=#a533f0]e[/color][color=#df4ae3]l[/color]"), ("message", FormattedMessage.EscapeText(message)));
         }
 
         //TODO: player.Name color, this will need to change the structure of the MsgChatMessage

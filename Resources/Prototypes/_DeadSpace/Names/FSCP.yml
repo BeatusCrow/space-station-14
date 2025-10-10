@@ -1,0 +1,17 @@
+- type: localizedDataset
+  id: NamesFirstFSCPRecruit
+  values:
+    prefix: names-first-fscp-recruit-dataset-
+    count: 1
+
+- type: localizedDataset
+  id: NamesFirstFSCPCorporal
+  values:
+    prefix: names-first-fscp-corporal-dataset-
+    count: 1
+
+- type: localizedDataset
+  id: NamesFirstFSCPSergeant
+  values:
+    prefix: names-first-fscp-sergeant-dataset-
+    count: 1

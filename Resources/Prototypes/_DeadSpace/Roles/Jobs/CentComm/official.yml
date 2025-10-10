@@ -1,0 +1,53 @@
+- type: job
+  id: CentralCommandOfficial
+  name: job-name-centcomoff
+  description: job-description-centcomoff
+  playTimeTracker: JobCentralCommandOfficial
+  setPreference: false
+  startingGear: CentcomGear
+  icon: "JobIconNanotrasen"
+  supervisors: job-supervisors-centcom-administrator
+  canBeAntag: false
+  accessGroups:
+  - AllAccess
+  access:
+  - CentralCommand
+  special:
+  - !type:AddImplantSpecial
+    implants: [ MindShieldImplant, TrackingImplant, DeathRattleImplantCentcomm ]
+  - !type:AddComponentSpecial
+    components:
+    - type: AntagImmune
+    - type: ZombieImmune
+
+- type: startingGear
+  id: CentcomGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCentcomOfficial
+    # back: ClothingBackpackSatchelOfficial
+    shoes: ClothingShoesBootsLaceup
+    # head: ClothingHeadHatCentcom
+    # eyes: ClothingEyesGlassesSunglasses
+    gloves: ClothingHandsGlovesColorBlack
+    outerClothing: ClothingOuterVestWeb
+    id: CentcomOfficialPDA
+    ears: ClothingHeadsetAltCentCom
+    belt: WeaponPistolN1984
+    pocket1: RubberStampCentcom
+    pocket2: ClothingMaskGasCentcom
+
+- type: entity
+  parent: ClothingBackpackSatchelHoS
+  id: ClothingBackpackSatchelOfficial
+  name: чёрная сумка
+  description: Стильная чёрная кожаная сумка.
+
+- type: chameleonOutfit
+  id: CentcomGearChameleonOutfit
+  job: CentralCommandOfficial
+  equipment:
+    shoes: ClothingShoesBootsLaceup
+    head: ClothingHeadHatCentcom
+    eyes: ClothingEyesGlassesSunglasses
+    gloves: ClothingHandsGlovesColorBlack
+    outerClothing: ClothingOuterVestWeb

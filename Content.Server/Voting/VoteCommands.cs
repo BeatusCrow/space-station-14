@@ -23,7 +23,8 @@ namespace Content.Server.Voting
 
         public override void Execute(IConsoleShell shell, string argStr, string[] args)
         {
-            if (args.Length != 1 && args[0] != StandardVoteType.Votekick.ToString())
+            if (args.Length != 1 && args[0] != StandardVoteType.Votekick.ToString()
+                && args[0] != StandardVoteType.Preset.ToString())
             {
                 shell.WriteError(Loc.GetString("shell-need-exactly-one-argument"));
                 return;
@@ -33,7 +34,6 @@ namespace Content.Server.Voting
                 shell.WriteError(Loc.GetString("shell-wrong-arguments-number-need-specific", ("properAmount", 3), ("currentAmount", args.Length)));
                 return;
             }
-
 
             if (!Enum.TryParse<StandardVoteType>(args[0], ignoreCase: true, out var type))
             {

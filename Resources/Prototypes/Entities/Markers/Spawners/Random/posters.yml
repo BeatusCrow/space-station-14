@@ -95,6 +95,8 @@
       - PosterContrabandExoAcid
       - PosterContrabandExoRun
       - PosterContrabandExoChomp
+      - PosterMeow
+      - PosterDiesLiberatis
     chance: 1
 
 - type: entity
@@ -138,7 +140,7 @@
       - PosterLegit50thAnniversaryVintageReprint
       - PosterLegitFruitBowl
       - PosterLegitPDAAd
-      - PosterLegitEnlist
+      # - PosterLegitEnlist
       - PosterLegitNanomichiAd
       - PosterLegit12Gauge
       - PosterLegitHighClassMartini
@@ -161,4 +163,7 @@
       - PosterLegitOppenhopper
       - PosterLegitTyrone
       - PosterLegitHelio
+      - PosterMeow # DS14
+      - PosterABSK # DS14
+      - PosterDiesLiberatis # DS14
     chance: 1

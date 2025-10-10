@@ -191,9 +191,9 @@ binds:
 - function: OpenCharacterMenu
   type: State
   key: U
-- function: OpenEmotesMenu
-  type: State
-  key: Y
+# - function: OpenEmotesMenu
+#   type: State
+#   key: Y
 - function: TextCursorSelect
   # TextCursorSelect HAS to be above ExamineEntity
   # So that LineEdit receives it correctly.
@@ -254,18 +254,6 @@ binds:
 - function: SmartEquipBelt
   type: State
   key: E
-  mod1: Shift
-- function: SmartEquipPocket1
-  type: State
-  key: F
-  mod1: Shift
-- function: SmartEquipPocket2
-  type: State
-  key: G
-  mod1: Shift
-- function: SmartEquipSuitStorage
-  type: State
-  key: H
   mod1: Shift
 - function: OpenBackpack
   type: State

@@ -5,7 +5,7 @@
     requirement:
       !type:RoleTimeRequirement
       role: JobJanitor
-      time: 52h # 1 hour per week for 1 year
+      time: 187200 #52 hrs (1 hour per week for 1 year)
 
 # Head
 - type: loadout
@@ -46,6 +46,22 @@
   equipment:
     outerClothing: ClothingOuterWinterJani
 
+- type: loadout
+  id: JanitorHazardVest
+  equipment:
+    outerClothing: ClothingOuterVestHazard
+
+# Shoes
+- type: loadout
+  id: PurpleShoes
+  equipment:
+    shoes: ClothingShoesColorPurple
+
+- type: loadout
+  id: GaloshesShoes
+  equipment:
+    shoes: ClothingShoesGaloshes
+
 # Misc
 - type: loadout
   id: JanitorGoldenPlunger
@@ -55,3 +71,28 @@
   storage:
     back:
     - GoldenPlunger
+
+# Underwear
+- type: loadout
+  id: UnderwearBottomBoxersJanitor
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: MaleUnderwear
+  equipment:
+    underwearb: ClothingUnderwearBottomBoxersJanitor
+
+- type: loadout
+  id: UnderwearBottomPantiesJanitor
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: FemaleUnderwear
+  equipment:
+    underwearb: ClothingUnderwearBottomPantiesJanitor
+
+- type: loadout
+  id: UnderwearTopBraJanitor
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: FemaleUnderwear
+  equipment:
+    underweart: ClothingUnderwearTopBraJanitor

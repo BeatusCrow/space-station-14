@@ -1,0 +1,28 @@
+- type: entity
+  id: EatMouseAction
+  name: Съесть мышь
+  description: Съесть мышь, чтобы получить заряд энергии. При этом шерсть может застрять в вашем горле.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    checkCanInteract: false
+    icon: _DeadSpace/Icons/verbiconfangs.png
+  - type: InstantAction
+    event: !type:EatMouseActionEvent
+
+- type: entity
+  id: HairballAction
+  name: Откашляться
+  description: Откашляться, чтобы получить комок волос, застрявший в горле.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: LimitedCharges
+    maxCharges: 1
+  - type: Action
+    checkCanInteract: false
+    icon:
+      sprite: _DeadSpace/Objects/Specific/Species/felinid.rsi
+      state: icon
+    useDelay: 30
+  - type: InstantAction
+    event: !type:HairballActionEvent

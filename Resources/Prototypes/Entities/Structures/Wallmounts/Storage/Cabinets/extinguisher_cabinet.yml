@@ -6,7 +6,6 @@
   components:
     - type: Sprite
       sprite: Structures/Wallmounts/extinguisher_cabinet.rsi
-      snapCardinals: true
       layers:
       - state: frame
       - state: extinguisher

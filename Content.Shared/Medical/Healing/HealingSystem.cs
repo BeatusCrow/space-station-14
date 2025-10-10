@@ -15,6 +15,8 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Stacks;
 using Robust.Shared.Audio.Systems;
+using Content.Shared.Eye.Blinding.Components;
+using Content.Shared.Eye.Blinding.Systems;
 
 namespace Content.Shared.Medical.Healing;
 
@@ -30,6 +32,7 @@ public sealed class HealingSystem : EntitySystem
     [Dependency] private readonly MobThresholdSystem _mobThresholdSystem = default!;
     [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
+    [Dependency] private readonly BlindableSystem _blindableSystem= default!; // DS14
 
     public override void Initialize()
     {
@@ -107,6 +110,20 @@ public sealed class HealingSystem : EntitySystem
             _adminLogger.Add(LogType.Healed,
                 $"{ToPrettyString(args.User):user} healed themselves for {total:damage} damage");
         }
+
+        // DS14-heal-IPC-and-IPS-start TODO: FIX THAT SHIT SOMEHOW
+        var robot = false;
+        if (healing.DamageContainers is not null
+        && healing.DamageContainers.Contains("StructuralInorganic"))
+        {
+            robot = true;
+        }
+
+        if (TryComp<BlindableComponent>(target.Owner, out var blindable) && robot)
+        {
+            _blindableSystem.AdjustEyeDamage((target.Owner, blindable), -blindable.EyeDamage);
+        }
+        // DS14-heal-IPC-and-IPS-end
 
         _audio.PlayPredicted(healing.HealingEndSound, target.Owner, args.User);
 

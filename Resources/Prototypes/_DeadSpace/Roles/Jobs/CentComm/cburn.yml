@@ -1,0 +1,122 @@
+# DS14 CBURN GEAR
+
+# Leader
+## CBURN
+- type: job
+  id: CBURNLeader
+  name: job-name-cburn-leader
+  description: job-description-cburnleader
+  playTimeTracker: JobCBURNLeader
+  setPreference: false
+  startingGear: CBURNLeaderGear
+  icon: "JobIconERTLeader"
+  supervisors: job-supervisors-centcom
+  canBeAntag: false
+  accessGroups:
+  - AllAccess
+  access:
+  - CentralCommand
+  special:
+  - !type:AddImplantSpecial
+    implants: [ MindShieldImplant, TrackingImplant ]
+
+- type: startingGear
+  id: CBURNLeaderGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitColorBrown
+    back: ClothingMilitaryBackpack
+    mask: ClothingMaskGasExplorer
+    eyes: ClothingEyesHudAdvanced
+    ears: ClothingHeadsetCentCom
+    neck: ClothingNeckMantleCBURNLeaderShoulder
+    gloves: ClothingHandsGlovesCombat
+    outerClothing: ClothingOuterHardsuitCBURNLeader
+    shoes: ClothingShoesBootsCombatFilled
+    id: CBURNLeaderPDA
+    belt: ClothingBeltMilitaryWebbing
+    pocket1: DoubleEmergencyOxygenTankFilled
+  storage:
+    back:
+    - GrenadeIncendiary
+    - PillCanisterCBURN
+    - CrowbarRed
+    - WeaponFlareGun
+    - BoxShotgunFlare
+    - Flash
+    - DoorRemoteAll
+    - EmergencyMedipen
+    - BoxMRE
+    - PinpointerNuclear
+    - ERTloadoutCBURNPrimary
+    - ERTloadoutCBURNSecondary
+
+# Agent
+
+## CBURN 
+- type: job
+  id: CBURNAgent
+  name: job-name-cburn-agent
+  description: job-description-cburnagent
+  playTimeTracker: JobCBURNAgent
+  setPreference: false
+  startingGear: CBURNAgentGear
+  icon: "JobIconERT"
+  supervisors: job-supervisors-centcom
+  canBeAntag: false
+  accessGroups:
+  - AllAccess
+  access:
+  - CentralCommand
+  special:
+  - !type:AddImplantSpecial
+    implants: [ MindShieldImplant, TrackingImplant ]
+
+- type: startingGear
+  id: CBURNAgentGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitColorBrown
+    back: ClothingMilitaryBackpack
+    mask: ClothingMaskGasExplorer
+    eyes: ClothingEyesHudAdvanced
+    ears: ClothingHeadsetCentCom
+    gloves: ClothingHandsGlovesCombat
+    outerClothing: ClothingOuterHardsuitCBURN
+    shoes: ClothingShoesBootsCombatFilled
+    id: CBURNPDA
+    belt: ClothingBeltMilitaryWebbing
+    pocket1: DoubleEmergencyOxygenTankFilled
+  storage:
+    back:
+    - GrenadeIncendiary
+    - CrowbarRed
+    - WeaponFlareGun
+    - BoxShotgunFlare
+    - EmergencyMedipen
+    - BoxMRE
+    - WeaponDisabler
+    - ERTloadoutCBURNPrimary
+    - ERTloadoutCBURNSecondary
+
+# Other
+- type: entity
+  parent: ClothingNeckMantleHOSShoulder
+  id: ClothingNeckMantleCBURNLeaderShoulder
+  name: наплечная мантия командира РХБЗЗ
+  description: Мантия отличающая командира РХБЗЗ от его подчинённых.
+  components:
+  - type: Sprite
+    sprite: Clothing/Neck/mantles/hosmantle_shoulder.rsi
+  - type: Clothing
+    sprite: Clothing/Neck/mantles/hosmantle_shoulder.rsi
+
+- type: entity
+  parent: PillCanister
+  id: PillCanisterCBURN
+  name: баночка для таблеток
+  description: Содержит пять таблеток амбузола. Часть стандартного снаряжения члена РХБЗЗ.
+  suffix: Амбузол, РХБЗЗ
+  components:
+  - type: StorageFill
+    contents:
+    - id: PillAmbuzol
+      amount: 5

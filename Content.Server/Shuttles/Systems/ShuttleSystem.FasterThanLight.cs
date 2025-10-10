@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
+using Content.Server.DeadSpace.NoShuttleFTL;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Events;
 using Content.Server.Station.Events;
@@ -26,6 +27,7 @@ using Robust.Shared.Physics.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
 using FTLMapComponent = Content.Shared.Shuttles.Components.FTLMapComponent;
+using Content.Server.DeadSpace.Taipan.Components;
 
 namespace Content.Server.Shuttles.Systems;
 
@@ -100,6 +102,13 @@ public sealed partial class ShuttleSystem
 
     private void OnStationPostInit(ref StationPostInitEvent ev)
     {
+        // DS14-prevent-ftl-to-taipan-station-start
+        if (HasComp<StationTaipanComponent>(ev.Station))
+        {
+            return;
+        }
+        // DS14-prevent-ftl-to-taipan-station-end
+
         // Add all grid maps as ftl destinations that anyone can FTL to.
         foreach (var gridUid in ev.Station.Comp.Grids)
         {
@@ -241,6 +250,14 @@ public sealed partial class ShuttleSystem
             reason = Loc.GetString("shuttle-console-prevent");
             return false;
         }
+
+        // DS14-start
+        if (HasComp<NoShuttleFTLComponent>(shuttleUid))
+        {
+            reason = Loc.GetString("shuttle-console-noftl");
+            return false;
+        }
+        // DS14-end
 
         var ev = new ConsoleFTLAttemptEvent(shuttleUid, false, string.Empty);
         RaiseLocalEvent(shuttleUid, ref ev, true);

@@ -6,7 +6,7 @@
   requirements:
   - !type:DepartmentTimeRequirement
     department: Engineering
-    time: 2.5h
+    time: 54000 # 15 hrs
   startingGear: AtmosphericTechnicianGear
   icon: "JobIconAtmosphericTechnician"
   supervisors: job-supervisors-ce
@@ -19,6 +19,12 @@
   - !type:GiveItemOnHolidaySpecial
     holiday: FirefighterDay
     prototype: FireAxe
+  #start-backmen: currency
+  minBankBalance: 150
+  maxBankBalance: 250
+  wageDepartment: Engineering
+  wage: 60
+  #end-backmen: currency
 
 - type: startingGear
   id: AtmosphericTechnicianGear
@@ -27,6 +33,7 @@
     id: AtmosPDA
     belt: ClothingBeltUtilityEngineering
     ears: ClothingHeadsetEngineering
+    socks: ClothingUnderwearSocksAtmos
   #storage:
     #back:
     #- Stuff

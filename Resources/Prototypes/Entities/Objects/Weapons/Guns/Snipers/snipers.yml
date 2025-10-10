@@ -103,6 +103,11 @@
     sprite: Objects/Weapons/Guns/Snipers/heavy_sniper.rsi
   - type: Clothing
     sprite: Objects/Weapons/Guns/Snipers/heavy_sniper.rsi
+  # DS14-start
+    slots:
+    - Back
+    quickEquip: false
+  # DS14-end
   - type: GunRequiresWield
   - type: Gun
     fireRate: 0.4
@@ -115,7 +120,7 @@
     whitelist:
       tags:
       - CartridgeAntiMateriel
-    capacity: 5
+    capacity: 10 # DS14-value
     proto: CartridgeAntiMateriel
   - type: SpeedModifiedOnWield
     walkModifier: 0.25

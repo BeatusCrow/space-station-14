@@ -11,12 +11,14 @@ using Content.Server.Emp;
 using Content.Server.Explosion.EntitySystems;
 using Content.Server.Fluids.EntitySystems;
 using Content.Server.Ghost.Roles.Components;
+using Content.Server.Medical;
 using Content.Server.Polymorph.Components;
 using Content.Server.Polymorph.Systems;
 using Content.Server.Speech.Components;
 using Content.Server.Spreader;
 using Content.Server.Temperature.Components;
 using Content.Server.Temperature.Systems;
+using Content.Server.Traits.Assorted;
 using Content.Server.Zombies;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
@@ -28,11 +30,9 @@ using Content.Shared.EntityEffects.Effects;
 using Content.Shared.EntityEffects;
 using Content.Shared.Flash;
 using Content.Shared.Maps;
-using Content.Shared.Medical;
 using Content.Shared.Mind.Components;
 using Content.Shared.Popups;
 using Content.Shared.Random;
-using Content.Shared.Traits.Assorted;
 using Content.Shared.Zombies;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
@@ -40,6 +40,11 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using Content.Server.DeadSpace.Necromorphs.InfectionDead;
+using Content.Shared.Mobs.Systems;
+using Content.Shared.DeadSpace.Abilities.Egg.Components;
+using Content.Shared.DeadSpace.Abilities.Egg;
+using Content.Shared.DeadSpace.Necromorphs.InfectionDead.Components;
 
 using TemperatureCondition = Content.Shared.EntityEffects.EffectConditions.Temperature; // disambiguate the namespace
 using PolymorphEffect = Content.Shared.EntityEffects.Effects.Polymorph;
@@ -75,6 +80,10 @@ public sealed class EntityEffectSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _xform = default!;
     [Dependency] private readonly VomitSystem _vomit = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
+    // DS14-start
+    [Dependency] private readonly NecromorfSystem _necromorf = default!;
+    [Dependency] private readonly InfectionDeadSystem _infectionDead = default!;
+    // DS14-end
 
     public override void Initialize()
     {
@@ -126,6 +135,11 @@ public sealed class EntityEffectSystem : EntitySystem
         SubscribeLocalEvent<ExecuteEntityEffectEvent<PlantSpeciesChange>>(OnExecutePlantSpeciesChange);
         SubscribeLocalEvent<ExecuteEntityEffectEvent<PolymorphEffect>>(OnExecutePolymorph);
         SubscribeLocalEvent<ExecuteEntityEffectEvent<ResetNarcolepsy>>(OnExecuteResetNarcolepsy);
+        // DS14-start
+        SubscribeLocalEvent<ExecuteEntityEffectEvent<CauseInfectionDead>>(OnExecuteCauseInfectionDead);
+        SubscribeLocalEvent<ExecuteEntityEffectEvent<CureInfectionDead>>(OnExecuteCureInfectionDead);
+        SubscribeLocalEvent<ExecuteEntityEffectEvent<InfectiodDeadMutation>>(OnExecuteInfectiodDeadMutation);
+        // DS14-end
     }
 
     private void OnCheckTemperature(ref CheckEntityEffectConditionEvent<TemperatureCondition> args)
@@ -949,7 +963,9 @@ public sealed class EntityEffectSystem : EntitySystem
             return;
 
         var targetProto = _random.Pick(plantholder.Seed.MutationPrototypes);
-        if (!_protoManager.TryIndex(targetProto, out SeedPrototype? protoSeed))
+        _protoManager.TryIndex(targetProto, out SeedPrototype? protoSeed);
+
+        if (protoSeed == null)
         {
             Log.Error($"Seed prototype could not be found: {targetProto}!");
             return;
@@ -973,4 +989,52 @@ public sealed class EntityEffectSystem : EntitySystem
 
         _narcolepsy.AdjustNarcolepsyTimer(args.Args.TargetEntity, args.Effect.TimerReset);
     }
+
+    // DS14-start
+    private void OnExecuteCauseInfectionDead(ref ExecuteEntityEffectEvent<CauseInfectionDead> args)
+    {
+        if (!_infectionDead.IsInfectionPossible(args.Args.TargetEntity))
+            return;
+
+        InfectionDeadStrainData? infectionData = null;
+
+        if (args.Args is EntityEffectReagentArgs reagentArgs)
+        {
+            var solution = reagentArgs.Source;
+
+            if (solution == null)
+                return;
+
+            var contents = solution.Contents;
+
+            foreach (var reagent in contents)
+            {
+                var dataList = reagent.Reagent.Data;
+                if (dataList == null)
+                    continue;
+
+                infectionData = dataList.OfType<InfectionDeadStrainData>().FirstOrDefault();
+            }
+        }
+
+        InfectionDeadComponent component = new InfectionDeadComponent(args.Effect.StrainData);
+
+        if (infectionData != null)
+        {
+            component.StrainData = infectionData;
+        }
+
+        AddComp(args.Args.TargetEntity, component);
+    }
+
+    private void OnExecuteCureInfectionDead(ref ExecuteEntityEffectEvent<CureInfectionDead> args)
+    {
+        _infectionDead.TryCure(args.Args.TargetEntity);
+    }
+
+    private void OnExecuteInfectiodDeadMutation(ref ExecuteEntityEffectEvent<InfectiodDeadMutation> args)
+    {
+        _necromorf.MutateVirus(args.Args.TargetEntity, args.Effect.MutationStrength, args.Effect.IsStableMutation);
+    }
+    // DS14-end
 }

@@ -102,7 +102,6 @@
       - CannotSuicide
       - FootstepSound
   - type: NoSlip
-  - type: Rummager
   - type: RatKing
     hungerPerArmyUse: 25
     hungerPerDomainUse: 50
@@ -127,6 +126,10 @@
     attributes:
       gender: male
   - type: Sharp
+  - type: TTS
+    voice: DrSezavo
+  - type: NightVision # DS14
+  - type: ZombieImmune # DS14
 
 - type: entity
   id: MobRatKingBuff
@@ -204,7 +207,7 @@
     - map: [ "enum.DamageStateVisualLayers.BaseUnshaded"]
       state: eyes
       shader: unshaded
-
+  - type: NightVision # DS14
   - type: SpriteMovement
     movementLayers:
       movement:
@@ -293,6 +296,7 @@
     tags:
       - CannotSuicide
       - FootstepSound
+      - FelinidFood
   - type: NoSlip
   - type: MobPrice
     price: 500 # rat wealth
@@ -306,17 +310,15 @@
   - type: FireVisuals
     sprite: Mobs/Effects/onfire.rsi
     normalState: Mouse_burning
+  - type: NecromorfAfterInfection
+    necroPrototype: NecroSmall
 
-- type: entityTable
+- type: weightedRandomEntity
   id: RatKingLoot
-  table: !type:GroupSelector
-    children:
-    - id: RandomSpawner100
-      weight: 66
-    - id: FoodCheese
-      weight: 28
-    - id: IngotGold1
-      weight: 5
+  weights:
+    RandomSpawner100: 66 #garbage
+    FoodCheese: 28 #food
+    IngotGold1: 5 #loot
 
 - type: entity
   parent: BaseAction

@@ -1,6 +1,5 @@
 using Content.Shared.Access.Systems;
 using Content.Shared.Containers.ItemSlots;
-using Content.Shared.Roles;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
@@ -26,9 +25,9 @@ public sealed partial class IdCardConsoleComponent : Component
         public readonly string FullName;
         public readonly string JobTitle;
         public readonly List<ProtoId<AccessLevelPrototype>> AccessList;
-        public readonly ProtoId<JobPrototype> JobPrototype;
+        public readonly ProtoId<AccessLevelPrototype> JobPrototype;
 
-        public WriteToTargetIdMessage(string fullName, string jobTitle, List<ProtoId<AccessLevelPrototype>> accessList, ProtoId<JobPrototype> jobPrototype)
+        public WriteToTargetIdMessage(string fullName, string jobTitle, List<ProtoId<AccessLevelPrototype>> accessList, ProtoId<AccessLevelPrototype> jobPrototype)
         {
             FullName = fullName;
             JobTitle = jobTitle;
@@ -40,38 +39,42 @@ public sealed partial class IdCardConsoleComponent : Component
     // Put this on shared so we just send the state once in PVS range rather than every time the UI updates.
 
     [DataField, AutoNetworkedField]
-    public List<ProtoId<AccessLevelPrototype>> AccessLevels = new()
+    public List<ProtoId<AccessLevelPrototype>> AccessLevels = new() // DS14 access levels sort
     {
-        "Armory",
-        "Atmospherics",
-        "Bar",
-        "Brig",
-        "Detective",
         "Captain",
-        "Cargo",
-        "Chapel",
-        "Chemistry",
-        "ChiefEngineer",
-        "ChiefMedicalOfficer",
-        "Command",
-        "Cryogenics",
-        "Engineering",
-        "External",
         "HeadOfPersonnel",
         "HeadOfSecurity",
+        "ChiefEngineer",
+        "ResearchDirector",
+        "ChiefMedicalOfficer",
+        "Quartermaster",
+        "Command",
+        "Cryogenics",
+        "Lawyer",
+        "Armory",
+        "Detective",
+        "Brigmedic",
+        "Security",
+        "Brig",
+        "Chemistry",
+        "Paramedic",
+        "Coroner",
+        "Medical",
+        "Research",
+        "Atmospherics",
+        "Engineering",
+        "SeniorSalvage",
+        "Salvage",
+        "Cargo",
+        "Service",
+        "Bar",
+        "Chapel",
         "Hydroponics",
         "Janitor",
         "Kitchen",
-        "Lawyer",
-        "Maintenance",
-        "Medical",
-        "Quartermaster",
-        "Research",
-        "ResearchDirector",
-        "Salvage",
-        "Security",
-        "Service",
         "Theatre",
+        "Maintenance",
+        "External",
     };
 
     [Serializable, NetSerializable]
@@ -86,7 +89,7 @@ public sealed partial class IdCardConsoleComponent : Component
         public readonly string? TargetIdJobTitle;
         public readonly List<ProtoId<AccessLevelPrototype>>? TargetIdAccessList;
         public readonly List<ProtoId<AccessLevelPrototype>>? AllowedModifyAccessList;
-        public readonly ProtoId<JobPrototype> TargetIdJobPrototype;
+        public readonly ProtoId<AccessLevelPrototype> TargetIdJobPrototype;
 
         public IdCardConsoleBoundUserInterfaceState(bool isPrivilegedIdPresent,
             bool isPrivilegedIdAuthorized,
@@ -95,7 +98,7 @@ public sealed partial class IdCardConsoleComponent : Component
             string? targetIdJobTitle,
             List<ProtoId<AccessLevelPrototype>>? targetIdAccessList,
             List<ProtoId<AccessLevelPrototype>>? allowedModifyAccessList,
-            ProtoId<JobPrototype> targetIdJobPrototype,
+            ProtoId<AccessLevelPrototype> targetIdJobPrototype,
             string privilegedIdName,
             string targetIdName)
         {

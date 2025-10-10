@@ -70,6 +70,21 @@
     - PetWearable
     - WhitelistChameleon
 
+# DS14-start
+- type: entity
+  parent: ClothingEyesBase
+  id: ClothingEyesGlassesMesonCE
+  name: chief engineer super goggles
+  description: Green-tinted goggles using a proprietary polymer that provides protection from eye damage of all types.
+  components:
+  - type: Sprite
+    sprite: Clothing/Eyes/Glasses/mesonce.rsi
+  - type: Clothing
+    sprite: Clothing/Eyes/Glasses/mesonce.rsi
+  - type: EyeProtection
+  - type: FlashImmunity
+# DS14-end
+
 - type: entity
   parent: ClothingEyesBase
   id: ClothingEyesGlasses
@@ -84,6 +99,7 @@
   - type: Tag
     tags:
     - HamsterWearable
+    - MukhtarWearable # DS14
     - WhitelistChameleon
 
 - type: entity
@@ -114,6 +130,7 @@
   - type: Tag
     tags:
     - HamsterWearable
+    - MukhtarWearable # DS14
     - WhitelistChameleon
 
 - type: entity
@@ -130,6 +147,9 @@
   - type: IdentityBlocker
   - type: StaticPrice
     price: 500
+  - type: Tag
+    tags:
+    - MukhtarWearable # DS14
 
 - type: entity
   parent: ClothingEyesBase
@@ -145,6 +165,7 @@
     tags:
     - HamsterWearable
     - PetWearable
+    - MukhtarWearable # DS14
     - WhitelistChameleon
   - type: IdentityBlocker
     coverage: EYES
@@ -163,6 +184,7 @@
     - Sunglasses
     - PetWearable
     - HamsterWearable
+    - MukhtarWearable # DS14
     - WhitelistChameleon
 
 - type: entity
@@ -185,6 +207,7 @@
     tags:
     - HamsterWearable
     - PetWearable
+    - MukhtarWearable # DS14
     - WhitelistChameleon
   - type: GuideHelp
     guides:
@@ -210,6 +233,7 @@
     tags:
     - HamsterWearable
     - PetWearable
+    - MukhtarWearable # DS14
     - WhitelistChameleon
   - type: IdentityBlocker
     coverage: EYES
@@ -230,6 +254,9 @@
     protectionTime: 5
   - type: IdentityBlocker
     coverage: EYES
+  - type: Tag
+    tags:
+    - MukhtarWearable # DS14
 
 #Make a scanner category when these actually function and we get the trayson
 - type: entity
@@ -269,7 +296,7 @@
       - WhitelistChameleon
 
 - type: entity
-  parent: [ClothingEyesBase, BaseHighlyIllegalContraband]
+  parent: [ClothingEyesBase, BaseMajorContraband]
   id: ClothingEyesVisorNinja
   name: ninja visor
   description: An advanced visor protecting a ninja's eyes from flashing lights.
@@ -279,9 +306,11 @@
   - type: Clothing
     sprite: Clothing/Eyes/Glasses/ninjavisor.rsi
   - type: FlashImmunity
+  - type: NightVisionClothing # DS14
+    color: "#41af0e"
 
 - type: entity
-  parent: [ClothingEyesBase, ShowSecurityIcons, BaseSecurityContraband]
+  parent: ClothingEyesBase
   id: ClothingEyesGlassesNoir
   name: noir-tech glasses
   description: A pair of glasses that simulate what the world looked like before the invention of color.

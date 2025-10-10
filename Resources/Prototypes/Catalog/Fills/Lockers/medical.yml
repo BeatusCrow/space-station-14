@@ -4,6 +4,8 @@
     children:
     - id: BoxSyringe
     - id: ChemistryBottleEpinephrine
+      amount: !type:ConstantNumberSelector
+        value: 2
     - id: Brutepack
       amount: !type:ConstantNumberSelector
         value: 2
@@ -41,7 +43,7 @@
   table: !type:AllSelector
     children:
     - id: HandheldHealthAnalyzer
-      prob: 0.6
+      # prob: 0.6 # DS14
     - id: ClothingHeadMirror
       prob: 0.1
     - id: ClothingHandsGlovesLatex
@@ -126,12 +128,14 @@
     - id: ClothingUniformJumpsuitParamedic
     - id: ClothingUniformJumpskirtParamedic
     - id: ClothingEyesHudMedical
+    - id: Defibrillator # DS14
     - id: ClothingHandsGlovesLatex
     - id: ClothingHeadsetMedical
     - id: ClothingMaskSterile
     - id: HandheldGPSBasic
     - id: MedkitFilled
       prob: 0.3
+    - id: MedkitAdvancedFilled
 
 - type: entity
   parent: LockerParamedic
@@ -142,3 +146,37 @@
     containers:
       entity_storage: !type:NestedSelector
         tableId: LockerFillParamedic
+
+# DS14-start
+
+- type: entityTable
+  id: LockerFillCoroner
+  table: !type:AllSelector
+    children:
+    - id: ClothingHeadHatCoroner
+    - id: ClothingNeckApronCoroner
+    - id: ClothingOuterWinterCoroner
+    - id: ClothingOuterCoroner
+    - id: ClothingUniformJumpsuitCoroner
+    - id: ClothingUniformJumpskirtCoroner
+    - id: ClothingUniformJumpsuitCoronerAlt
+    - id: ClothingShoesBootsJackCoroner
+    - id: RubberStampCoroner
+    - id: HandheldAutopsyScanner
+    - id: BoxBodyBag
+      amount: !type:ConstantNumberSelector
+        value: 2
+    - id: ClothingHandsGlovesLatex
+      amount: !type:ConstantNumberSelector
+        value: 2
+    - id: ClothingMaskSterile
+
+- type: entity
+  parent: LockerCoroner
+  id: LockerCoronerFilled
+  suffix: Filled
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:NestedSelector
+        tableId: LockerFillCoroner

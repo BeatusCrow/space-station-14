@@ -83,13 +83,17 @@
       - map: [ "enum.HumanoidVisualLayers.LArm" ]
       - map: [ "enum.HumanoidVisualLayers.RLeg" ]
       - map: [ "enum.HumanoidVisualLayers.LLeg" ]
-      - map: [ "enum.HumanoidVisualLayers.UndergarmentBottom" ]
-      - map: [ "enum.HumanoidVisualLayers.UndergarmentTop" ]
-      - map: [ "jumpsuit" ]
+      - map: [ "underwearb" ] # Sirena-Underwear
+      - map: [ "underweart" ] # Sirena-Underwear
+      # - map: [ "enum.HumanoidVisualLayers.UndergarmentBottom" ]
+      # - map: [ "enum.HumanoidVisualLayers.UndergarmentTop" ]
+      # - map: [ "jumpsuit" ]
       - map: [ "enum.HumanoidVisualLayers.LHand" ]
       - map: [ "enum.HumanoidVisualLayers.RHand" ]
       - map: [ "enum.HumanoidVisualLayers.LFoot" ]
       - map: [ "enum.HumanoidVisualLayers.RFoot" ]
+      - map: [ "socks" ] # Sirena-Underwear
+      - map: ["jumpsuit"]
       - map: [ "enum.HumanoidVisualLayers.Handcuffs" ]
         color: "#ffffff"
         sprite: Objects/Misc/handcuffs.rsi
@@ -98,10 +102,11 @@
       - map: [ "gloves" ]
       - map: [ "shoes" ]
       - map: [ "ears" ]
+      - map: [ "outerClothing" ]
       - map: [ "eyes" ]
       - map: [ "belt" ]
       - map: [ "id" ]
-      - map: [ "outerClothing" ]
+      # - map: [ "outerClothing" ]
       - map: [ "enum.HumanoidVisualLayers.Tail" ] #in the utopian future we should probably have a wings enum inserted here so everyhting doesn't break
       - map: [ "back" ]
       - map: [ "neck" ]
@@ -172,6 +177,20 @@
           32:
             sprite: Mobs/Species/Moth/displacement.rsi
             state: shoes
+  - type: Sanity # DS14
+  # DS14-start
+  - type: Reactive
+    reactions:
+    - reagents: [ PestKiller ]
+      methods: [ Touch ]
+      effects:
+      - !type:HealthChange
+        scaleByQuantity: true
+        damage:
+          types:
+            Caustic: 2
+  # DS14-end
+  # - type: FootPrints # Backmen-footsteps
 
 - type: entity
   parent: BaseSpeciesDummy

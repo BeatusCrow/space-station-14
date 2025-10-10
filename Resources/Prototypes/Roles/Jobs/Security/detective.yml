@@ -6,7 +6,7 @@
   requirements:
   - !type:RoleTimeRequirement
     role: JobSecurityOfficer
-    time: 5h
+    time: 18000 #5 hrs
   startingGear: DetectiveGear
   icon: "JobIconDetective"
   supervisors: job-supervisors-hos
@@ -16,9 +16,15 @@
   - Brig
   - Maintenance
   - Service
-  - Detective
-  - Cryogenics
   - External
+  - Cryogenics
+  - Detective
+  #start-backmen: currency
+  minBankBalance: 150
+  maxBankBalance: 250
+  wageDepartment: Security
+  wage: 55
+  #end-backmen: currency
   special:
   - !type:AddImplantSpecial
     implants: [ MindShieldImplant ]

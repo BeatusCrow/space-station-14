@@ -20,16 +20,13 @@
     definitions:
     - prefRoles: [ Thief ]
       max: 3
-      playerRatio: 20
+      playerRatio: 20 # DS14
       lateJoinAdditional: true
       allowNonHumans: true
       multiAntagSetting: NotExclusive
       startingGear: ThiefGear
-      components:
-      - type: Pacified
-      - type: Thieving
-        stripTimeReduction: 2
-        stealthy: true
+      # components:
+      # - type: Pacified # DS14 no pacified thiefs
       mindRoles:
       - MindRoleThief
       briefing:

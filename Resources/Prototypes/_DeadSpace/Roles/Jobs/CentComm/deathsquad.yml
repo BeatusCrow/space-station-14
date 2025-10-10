@@ -1,0 +1,43 @@
+- type: startingGear
+  id: DeathSquadGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitDeathSquad
+    back: ClothingDeathSquadronBackpack
+    mask: ClothingMaskGasDeathSquad
+    eyes: ClothingEyesHudAdvanced
+    ears: ClothingHeadsetDeathSquad
+    gloves: ClothingHandsGlovesCombat
+    outerClothing: ClothingOuterHardsuitDeathsquad
+    suitstorage: JetpackVoidFilled
+    shoes: ClothingShoesBootsMagAdv
+    id: DeathsquadPDA
+    pocket1: EnergySword
+    pocket2: DoubleEmergencyOxygenTankFilled
+    belt: ClothingBeltDeathSquadWebbingFilled
+    underwearb: ClothingUnderwearBottomBoxersDeathSquad # DS14-Underwear
+  storage:
+    back:
+    - ERTloadoutDeathSquadPrimary
+    - ERTloadoutDeathSquadSecondary
+    - EnergyShield
+    - X4
+    - X4
+    - SpeedLoaderMagnumAP
+    - SpeedLoaderMagnumAP
+    - SpeedLoaderMagnumAP
+    - SpeedLoaderMagnumAP
+    - JawsOfLife
+    - PinpointerNuclear
+    - WeaponRevolverMatebaAP
+    - ClothingEyesPNVAdv
+    - CombatMedipen
+    - CombatMedipen
+    - DesoxyephedrineMedipen
+    - DesoxyephedrineMedipen
+    - NukeCodePaper
+
+- type: entity
+  parent: ClothingBeltSecurityWebbing
+  id: ClothingBeltDeathSquadWebbingFilled
+  name: РПС эскадрона смерти
+  description: РПС члена отряда элитной эвакуации.

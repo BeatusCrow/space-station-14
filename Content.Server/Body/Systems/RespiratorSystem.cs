@@ -3,7 +3,6 @@ using Content.Server.Atmos.EntitySystems;
 using Content.Server.Body.Components;
 using Content.Server.Chat.Systems;
 using Content.Server.EntityEffects;
-using Content.Shared.Body.Systems;
 using Content.Shared.Alert;
 using Content.Shared.Atmos;
 using Content.Shared.Body.Components;
@@ -96,6 +95,18 @@ public sealed class RespiratorSystem : EntitySystem
                 }
             }
 
+            // start-backmen: blob zombie
+            if (respirator.HasImmunity)
+            {
+                if (respirator.SuffocationCycles > 0)
+                {
+                    StopSuffocation((uid, respirator));
+                    respirator.SuffocationCycles = 0;
+                }
+                continue;
+            }
+            else
+            // end-backmen: blob zombie
             if (respirator.Saturation < respirator.SuffocationThreshold)
             {
                 if (_gameTiming.CurTime >= respirator.LastGaspEmoteTime + respirator.GaspEmoteCooldown)
@@ -195,7 +206,7 @@ public sealed class RespiratorSystem : EntitySystem
     /// <returns>Returns true only if the air is not toxic, and it wouldn't suffocate.</returns>
     public bool CanMetabolizeInhaledAir(Entity<RespiratorComponent?> ent)
     {
-        if (!Resolve(ent, ref ent.Comp))
+        if (!Resolve(ent, ref ent.Comp, logMissing: false))
             return false;
 
         // Get the gas at our location but don't actually remove it from the gas mixture.
@@ -391,7 +402,7 @@ public sealed class RespiratorSystem : EntitySystem
         var organs = _bodySystem.GetBodyOrganEntityComps<LungComponent>((ent, null));
         foreach (var entity in organs)
         {
-            _alertsSystem.ShowAlert(ent.Owner, entity.Comp1.Alert);
+            _alertsSystem.ShowAlert(ent, entity.Comp1.Alert);
         }
     }
 
@@ -401,7 +412,7 @@ public sealed class RespiratorSystem : EntitySystem
         var organs = _bodySystem.GetBodyOrganEntityComps<LungComponent>((ent, null));
         foreach (var entity in organs)
         {
-            _alertsSystem.ClearAlert(ent.Owner, entity.Comp1.Alert);
+            _alertsSystem.ClearAlert(ent, entity.Comp1.Alert);
         }
     }
 

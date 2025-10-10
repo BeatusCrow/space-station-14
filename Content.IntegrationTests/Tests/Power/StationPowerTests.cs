@@ -5,7 +5,6 @@ using Content.Server.Maps;
 using Content.Server.Power.Components;
 using Content.Server.Power.NodeGroups;
 using Content.Server.Power.Pow3r;
-using Content.Shared.Power.Components;
 using Content.Shared.NodeContainer;
 using Robust.Shared.EntitySerialization;
 
@@ -21,25 +20,38 @@ public sealed class StationPowerTests
 
     private static readonly string[] GameMaps =
     [
-        "Fland",
-        "Meta",
-        "Packed",
-        "Omega",
-        "Bagel",
-        "Box",
-        "Core",
-        "Marathon",
-        "Saltern",
-        "Reach",
-        "Train",
-        "Oasis",
-        "Gate",
+        // "DSTaipan", // remap in progress
         "Amber",
-        "Loop",
-        "Plasma",
-        "Elkridge",
+        // "Aspid", // remap in progress
+        "Bagel",
+        "Barratry",
+        "Box",
+        "Cluster",
+        "Cog",
         "Convex",
-        "Relic",
+        "Core",
+        "CorvaxAstra",
+        "CorvaxAvrite",
+        "CorvaxDelta",
+        "CorvaxPaper",
+        "CorvaxSilly",
+        "CorvaxSpectrum",
+        "Elkridge",
+        "Fland",
+        "Gate",
+        "Gemini",
+        "Loop",
+        "Loop",
+        "Marathon",
+        "Meta",
+        "Oasis",
+        "Omega",
+        "Origin",
+        "Packed",
+        "Plasma",
+        "Reach",
+        "Saltern",
+        "Train",
     ];
 
     [Test, TestCaseSource(nameof(GameMaps))]

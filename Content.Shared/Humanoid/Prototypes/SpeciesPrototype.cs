@@ -34,6 +34,12 @@ public sealed partial class SpeciesPrototype : IPrototype
     [DataField(required: true)]
     public bool RoundStart { get; private set; } = false;
 
+    /// <summary>
+    /// Whether the species is available to non sponsors (In the character editor)
+    /// </summary>
+    [DataField]
+    public bool SponsorOnly { get; private set; } = false;
+
     // The below two are to avoid fetching information about the species from the entity
     // prototype.
 
@@ -81,7 +87,7 @@ public sealed partial class SpeciesPrototype : IPrototype
     /// Method of skin coloration used by the species.
     /// </summary>
     [DataField(required: true)]
-    public ProtoId<SkinColorationPrototype> SkinColoration { get; private set; }
+    public HumanoidSkinColor SkinColoration { get; private set; }
 
     [DataField]
     public ProtoId<LocalizedDatasetPrototype> MaleFirstNames { get; private set; } = "NamesFirstMale";
@@ -89,8 +95,13 @@ public sealed partial class SpeciesPrototype : IPrototype
     [DataField]
     public ProtoId<LocalizedDatasetPrototype> FemaleFirstNames { get; private set; } = "NamesFirstFemale";
 
+    // Corvax-LastnameGender-Start: Split lastname field by gender
     [DataField]
-    public ProtoId<LocalizedDatasetPrototype> LastNames { get; private set; } = "NamesLast";
+    public ProtoId<LocalizedDatasetPrototype> MaleLastNames { get; private set; } = "NamesLastMale";
+
+    [DataField]
+    public ProtoId<LocalizedDatasetPrototype> FemaleLastNames { get; private set; } = "NamesLastFemale";
+    // Corvax-LastnameGender-End
 
     [DataField]
     public SpeciesNaming Naming { get; private set; } = SpeciesNaming.FirstLast;
@@ -102,7 +113,7 @@ public sealed partial class SpeciesPrototype : IPrototype
     ///     Characters younger than this are too young to be hired by Nanotrasen.
     /// </summary>
     [DataField]
-    public int MinAge = 18;
+    public int MinAge = 20;
 
     /// <summary>
     ///     Characters younger than this appear young.
@@ -121,7 +132,7 @@ public sealed partial class SpeciesPrototype : IPrototype
     ///     although imagine if ghosts could age people WYCI...
     /// </summary>
     [DataField]
-    public int MaxAge = 120;
+    public int MaxAge = 140;
 }
 
 public enum SpeciesNaming : byte

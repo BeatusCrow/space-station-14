@@ -46,6 +46,10 @@
     - id: ZombieOutbreak
     - id: LoneOpsSpawn
     - id: WizardSpawn
+    - id: RenegadeSpawn # DS14
+    - id: ShadowDemonInvasion # DS14
+    - id: DemonsInvasion # DS14
+    - id: BlobSpawn # DS14-Backmen
     - !type:NestedSelector
       tableId: DerelictBorgEventTable
 
@@ -103,9 +107,12 @@
   - type: StationEvent
     startAnnouncementColor: "#18abf5"
     startAudio:
-      path: /Audio/Announcements/announce.ogg
+      path: /Audio/_DeadSpace/Announcements/flux.ogg # DS14-Announcements
+      params:
+        volume: -2
     weight: 8
     duration: 35
+    minimumPlayers: 10 # DS14
   - type: AnomalySpawnRule
 
 - type: entity
@@ -119,7 +126,9 @@
   - type: StationEvent
     startAnnouncementColor: "#18abf5"
     startAudio:
-      path: /Audio/Announcements/announce.ogg
+      path: /Audio/_DeadSpace/Announcements/blusp_anomalies.ogg # DS14-Announcements
+      params:
+        volume: -2
     weight: 8
     duration: 35
   - type: BluespaceArtifactRule
@@ -129,7 +138,7 @@
   parent: BaseGameRule
   components:
   - type: StationEvent
-    weight: 2
+    weight: 4 # DS14
     reoccurrenceDelay: 5
     earliestStart: 1
     duration: 1
@@ -140,7 +149,11 @@
   parent: BaseGameRule
   components:
   - type: StationEvent
-    weight: 7
+    startAudio:
+      path: /Audio/_DeadSpace/Announcements/announce.ogg # DS14-Announcements
+      params:
+        volume: -2
+    weight: 8
     duration: 1
     minimumPlayers: 15
   - type: BreakerFlipRule
@@ -151,16 +164,17 @@
   components:
   - type: StationEvent
     startAnnouncement: station-event-bureaucratic-error-announcement
+    startAudio:
+      path: /Audio/_DeadSpace/Announcements/announce.ogg # DS14-Announcements
+      params:
+        volume: -2
     minimumPlayers: 25
     weight: 3
     duration: 1
+    maxOccurrences: 1 # DS14
   - type: BureaucraticErrorRule
     ignoredJobs:
     - StationAi
-    - ResearchAssistant
-    - MedicalIntern
-    - SecurityCadet
-    - TechnicalAssistant
 
 - type: entity
   id: ClericalError
@@ -168,9 +182,14 @@
   components:
   - type: StationEvent
     startAnnouncement: station-event-clerical-error-announcement
+    startAudio:
+      path: /Audio/_DeadSpace/Announcements/announce.ogg # DS14-Announcements
+      params:
+        volume: -2
     minimumPlayers: 15
-    weight: 5
+    weight: 3
     duration: 1
+    maxOccurrences: 1 # DS14
   - type: ClericalErrorRule
 
 - type: entity
@@ -178,7 +197,7 @@
   id: ClosetSkeleton
   components:
   - type: StationEvent
-    weight: 5
+    weight: 8 # DS14
     duration: 1
     minimumPlayers: 10
   - type: RandomEntityStorageSpawnRule
@@ -189,10 +208,15 @@
   id: DragonSpawn
   components:
   - type: StationEvent
+    startAnnouncement: station-event-dragon-spawn-announcement
+    startAudio:
+      path: /Audio/_DeadSpace/Announcements/carps.ogg # DS14-Announcements
+      params:
+        volume: -2
     weight: 6.5
     earliestStart: 40
     reoccurrenceDelay: 20
-    minimumPlayers: 20
+    minimumPlayers: 25 # DS14
     duration: null
   - type: SpaceSpawnRule
     spawnDistance: 0
@@ -220,21 +244,43 @@
   id: NinjaSpawn
   components:
   - type: StationEvent
-    weight: 6
+    weight: 3 # DS14
     duration: null
     earliestStart: 30
-    reoccurrenceDelay: 20
+    reoccurrenceDelay: 30 # DS14
     minimumPlayers: 30
   - type: SpaceSpawnRule
   - type: AntagLoadProfileRule
+  # DS14-start
+    speciesOverride: Human
+    speciesOverrideBlacklist:
+    - Arachnid
+    - Diona
+    - Dwarf
+    # - Human
+    - Moth
+    - Reptilian
+    - SlimePerson
+    - Vox
+    - Demon
+    - Shark
+    - Tajaran
+    - Vulpkanin
+    - Felinid
+    - Kobolt
+    - Xenomorph
+    - IPC
+    - IPS
+  # DS14-end
   - type: AntagObjectives
     objectives:
     - StealResearchObjective
-    - DoorjackObjective
+    # - DoorjackObjective # DS14 ninja balance
     - SpiderChargeObjective
     - TerrorObjective
     - MassArrestObjective
     - NinjaSurviveObjective
+    - NinjaKillRandomPersonObjective # DS14 ninja balance
   - type: AntagSelection
     agentName: ninja-round-end-agent-name
     definitions:
@@ -324,9 +370,9 @@
   - type: StationEvent
     weight: 1 # rare
     duration: 1
-    earliestStart: 30
+    earliestStart: 50 # DS14
     reoccurrenceDelay: 60
-    minimumPlayers: 30
+    minimumPlayers: 35 # DS14
   - type: AntagSelection
     agentName: wizard-round-end-name
     definitions:
@@ -373,8 +419,14 @@
   - type: StationEvent
     startAnnouncement: station-event-gas-leak-start-announcement
     startAudio:
-      path: /Audio/Announcements/attention.ogg
+      path: /Audio/_DeadSpace/Announcements/gasleak_start.ogg # DS14-Announcements
+      params:
+        volume: -2
     endAnnouncement: station-event-gas-leak-end-announcement
+    endAudio:
+      path: /Audio/_DeadSpace/Announcements/gasleak_end.ogg # DS14-Announcements
+      params:
+        volume: -2
     weight: 8
   - type: GasLeakRule
 
@@ -394,13 +446,13 @@
   parent: BaseStationEventShortDelay
   components:
   - type: StationEvent
-    weight: 5
+    weight: 8 # DS14
     startAnnouncement: station-event-power-grid-check-start-announcement
     endAnnouncement: station-event-power-grid-check-end-announcement
     startAudio:
-      path: /Audio/Announcements/power_off.ogg
+      path: /Audio/_DeadSpace/Announcements/poweroff2.ogg # DS14-Announcements
       params:
-        volume: -4
+       volume: -2
     duration: 60
     maxDuration: 120
   - type: PowerGridCheckRule
@@ -414,7 +466,9 @@
     startAnnouncement: station-event-solar-flare-start-announcement
     endAnnouncement: station-event-solar-flare-end-announcement
     startAudio:
-      path: /Audio/Announcements/attention.ogg
+      path: /Audio/_DeadSpace/Announcements/comms_blackout.ogg # DS14-Announcements
+      params:
+        volume: -2
     duration: 120
     maxDuration: 240
   - type: SolarFlareRule
@@ -429,6 +483,7 @@
     - Security
     - Service
     - Supply
+    - Law # DS14
     extraCount: 2
     lightBreakChancePerSecond: 0.0003
     doorToggleChancePerSecond: 0.001
@@ -440,7 +495,9 @@
   - type: StationEvent
     startAnnouncement: station-event-vent-clog-start-announcement
     startAudio:
-      path: /Audio/Announcements/attention.ogg
+      path: /Audio/_DeadSpace/Announcements/ventclog.ogg # DS14-Announcements
+      params:
+        volume: -2
     earliestStart: 15
     minimumPlayers: 15
     weight: 5
@@ -454,7 +511,9 @@
   - type: StationEvent
     startAnnouncement: station-event-vent-creatures-start-announcement
     startAudio:
-      path: /Audio/Announcements/attention.ogg
+      path: /Audio/_DeadSpace/Announcements/lifesigns.ogg # DS14-Announcements
+      params:
+        volume: -2
     earliestStart: 20
     minimumPlayers: 15
     weight: 5
@@ -475,7 +534,9 @@
   - type: StationEvent
     startAnnouncement: station-event-vent-creatures-start-announcement
     startAudio:
-      path: /Audio/Announcements/attention.ogg
+      path: /Audio/_DeadSpace/Announcements/lifesigns.ogg # DS14-Announcements
+      params:
+        volume: -2
     earliestStart: 20
     minimumPlayers: 15
     weight: 5
@@ -496,7 +557,9 @@
   - type: StationEvent
     startAnnouncement: station-event-vent-creatures-start-announcement
     startAudio:
-      path: /Audio/Announcements/attention.ogg
+      path: /Audio/_DeadSpace/Announcements/lifesigns.ogg # DS14-Announcements
+      params:
+        volume: -2
     earliestStart: 20
     minimumPlayers: 15
     weight: 5
@@ -513,7 +576,9 @@
   - type: StationEvent
     startAnnouncement: station-event-vent-creatures-start-announcement
     startAudio:
-      path: /Audio/Announcements/attention.ogg
+      path: /Audio/_DeadSpace/Announcements/lifesigns.ogg # DS14-Announcements
+      params:
+        volume: -2
     earliestStart: 20
     minimumPlayers: 20
     weight: 1.5
@@ -529,7 +594,7 @@
   components:
   - type: StationEvent
     earliestStart: 90
-    minimumPlayers: 40
+    minimumPlayers: 30 # DS14
     weight: 1 # Zombies was happening basically every single survival round, so now it's super rare
     duration: 1
   - type: ZombieRule
@@ -564,8 +629,8 @@
   components:
   - type: StationEvent
     earliestStart: 35
-    weight: 5.5
-    minimumPlayers: 20
+    weight: 3
+    minimumPlayers: 40
     duration: null # LoneOpsSpawn needs an infinite duration so that it inherits the NukeOpsRule things of an actually appropriate end screen (not always "Neutral outcome!") and... ending the game if the station is nuked.
   - type: RuleGrids
   - type: LoadMapRule
@@ -603,11 +668,13 @@
   - type: StationEvent
     earliestStart: 30
     weight: 8
-    minimumPlayers: 15
+    minimumPlayers: 20
     maxOccurrences: 1 # can only happen once per round
     startAnnouncement: station-event-communication-interception
     startAudio:
-      path: /Audio/Announcements/intercept.ogg
+      path: /Audio/_DeadSpace/Announcements/ionstorm.ogg # DS14-Announcements
+      params:
+        volume: -3
     duration: null # the rule has to last the whole round not 1 second
     occursDuringRoundEnd: false
   - type: AlertLevelInterceptionRule
@@ -647,6 +714,11 @@
   - type: StationEvent
     weight: 8
     reoccurrenceDelay: 20
+    startAnnouncement: station-event-ion-storm-start-announcement
+    startAudio:
+      path: /Audio/_DeadSpace/Announcements/i-storm3.ogg # DS14-Announcements
+      params:
+        volume: -2
     duration: 1
   - type: IonStormRule
 
@@ -667,7 +739,7 @@
   components:
   - type: StationEvent
     startAudio:
-      path: /Audio/Announcements/attention.ogg
+      path: /Audio/_DeadSpace/Announcements/attention.ogg # DS14-Announcements
     weight: 5
     minimumPlayers: 25
     reoccurrenceDelay: 20

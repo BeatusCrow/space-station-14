@@ -1,0 +1,77 @@
+- type: job
+  id: CentralCommandSpecialOperationsOfficer
+  name: job-name-soo
+  description: job-description-soo
+  playTimeTracker: JobCentralCommandSpecialOperationsOfficer
+  setPreference: false
+  startingGear: CentcomSpecialOperationsOfficerGear
+  icon: "JobIconNanotrasenRed"
+  supervisors: job-supervisors-no-one
+  canBeAntag: false
+  accessGroups:
+  - AllAccess
+  access:
+  - CentralCommand
+  special:
+  - !type:AddImplantSpecial
+    implants: [ MindShieldImplant, TrackingImplant, DeathRattleImplantCentcomm, MacroBombImplant ]
+  - !type:AddComponentSpecial
+    components:
+    - type: AntagImmune
+    - type: ZombieImmune
+
+- type: startingGear
+  id: CentcomSpecialOperationsOfficerGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCentcomOfficerBlack
+    # back: ClothingBackpackERTLeaderFilledSOO
+    shoes: ClothingShoesCentcomBlack
+    head: ClothingHeadCapCentcomBlack
+    eyes: ClothingEyesGlassesSecurity
+    gloves: ClothingHandsGlovesCombat
+    outerClothing: ClothingOuterVestWeb
+    neck: ClothingNeckCloakCentcomBlack
+    id: CentcomSpecialOperationsOfficerPDA
+    ears: ClothingHeadsetDeathSquad
+
+- type: entity
+  parent: ClothingBackpackERTLeader
+  id: ClothingBackpackERTLeaderFilledSOO
+  name: рюкзак офицера специальных операций
+  description: Вместительный рюкзак с множеством карманов. Ради вашей же безопасности, вам не следует знать что внутри него.
+  components:
+    - type: StorageFill
+      contents:
+        - id: RubberStampCentcom
+        - id: RubberStampCentcomSpecialOperationOfficer
+        - id: BoxFolderBlueFilled
+
+- type: entity
+  parent: BoxFolderBase
+  id: BoxFolderBlueFilled
+  name: папка с секретными документами
+  description: Вам точно не следует знать что там написано. В любом случае, текст написан особыми невидимыми чернилами.
+  suffix: СОБСТВЕННОСТЬ ОСО
+  categories: [ DoNotMap ]
+  components:
+    - type: StorageFill
+      contents:
+      - id: Paper
+        amount: 8
+    - type: Sprite
+      sprite: Objects/Misc/folders.rsi
+      layers:
+      - state: folder-colormap
+        color: "#2365FF"
+      - state: folder-base
+
+- type: chameleonOutfit
+  id: CentcomSpecialOperationsOfficerChameleonOutfit
+  job: CentralCommandSpecialOperationsOfficer
+  equipment:
+    shoes: ClothingShoesCentcomBlack
+    head: ClothingHeadCapCentcomBlack
+    eyes: ClothingEyesGlassesSecurity
+    gloves: ClothingHandsGlovesCombat
+    outerClothing: ClothingOuterVestWeb
+    neck: ClothingNeckCloakCentcomBlack

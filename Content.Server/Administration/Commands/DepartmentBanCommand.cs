@@ -6,6 +6,7 @@ using Content.Shared.Roles;
 using Robust.Shared.Configuration;
 using Robust.Shared.Console;
 using Robust.Shared.Prototypes;
+using Content.DeadSpace.Interfaces.Server;
 
 namespace Content.Server.Administration.Commands;
 
@@ -17,6 +18,7 @@ public sealed class DepartmentBanCommand : IConsoleCommand
     [Dependency] private readonly IBanManager _banManager = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly ILogManager _log = default!;
+    private IServerBanWebhooksManager? _banWebhooksManager; // DS14-bans-weebhook
 
     private ISawmill? _sawmill;
 
@@ -103,6 +105,12 @@ public sealed class DepartmentBanCommand : IConsoleCommand
         {
             _banManager.CreateRoleBan(targetUid, located.Username, shell.Player?.UserId, null, targetHWid, job, minutes, severity, reason, now);
         }
+
+        // DS14-bans-weebhook-start
+        IoCManager.Instance!.TryResolveType(out _banWebhooksManager);
+        if (_banWebhooksManager != null)
+            await _banWebhooksManager.SendDepartmentBan(target, shell.Player, department, reason, minutes);
+        // DS14-bans-weebhook-end
     }
 
     public CompletionResult GetCompletion(IConsoleShell shell, string[] args)

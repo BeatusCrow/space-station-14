@@ -780,7 +780,7 @@
   itemDrop: FloorTileItemMiningLight
   heatCapacity: 10000
 
-# Departmental
+# Departamental
 - type: tile
   id: FloorFreezer
   name: tiles-freezer
@@ -1463,6 +1463,12 @@
   id: FloorGrass
   name: tiles-planet-grass-floor
   sprite: /Textures/Tiles/grass.png
+  variants: 4 #Corvax
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
   baseTurf: FloorDirt
   isSubfloor: true
   footstepSounds:
@@ -1475,6 +1481,12 @@
   id: FloorGrassJungle
   name: tiles-jungle-grass-floor
   sprite: /Textures/Tiles/grassjungle.png
+  variants: 4 #Corvax
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
   baseTurf: FloorDirt
   isSubfloor: true
   footstepSounds:
@@ -1985,6 +1997,13 @@
   id: FloorMowedAstroGrass
   name: tiles-mowed-astro-grass
   parent: FloorGrass
+  sprite: /Textures/_Corvax/Tiles/mowed_grass.png #Corvax
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
   baseTurf: Plating
   isSubfloor: false
   deconstructTools: [ Cutting ]
@@ -1998,24 +2017,6 @@
   isSubfloor: false
   deconstructTools: [ Cutting ]
   itemDrop: FloorTileItemJungleAstroGrass
-
-- type: tile
-  parent: FloorGrassDark
-  id: FloorDarkAstroGrass
-  name: tiles-dark-astro-grass
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Cutting ]
-  itemDrop: FloorTileItemDarkAstroGrass
-
-- type: tile
-  parent: FloorGrassLight
-  id: FloorLightAstroGrass
-  name: tiles-light-astro-grass
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Cutting ]
-  itemDrop: FloorTileItemLightAstroGrass
 
 # Ice
 - type: tile
@@ -2059,16 +2060,6 @@
   isSubfloor: false
   deconstructTools: [ Prying ]
   itemDrop: FloorTileItemAstroAsteroidSand
-  weather: false
-
-- type: tile
-  parent: FloorDesert
-  id: FloorDesertAstroSand
-  name: tiles-desert-astro-sand
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Prying ]
-  itemDrop: FloorTileItemDesertAstroSand
   weather: false
 
 - type: tile

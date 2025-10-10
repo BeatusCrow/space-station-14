@@ -39,6 +39,9 @@
         Slash: 0.95
         Piercing: 0.95
         Heat: 0.95
+  - type: Tag
+    tags:
+    - HamsterWearable
 
 - type: entity
   parent: [ClothingMaskGas, BaseSyndicateContraband]
@@ -462,6 +465,8 @@
         Slash: 0.80
         Piercing: 0.90
         Heat: 0.90
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
   parent: ClothingMaskBase
@@ -721,6 +726,8 @@
   - type: Tag
     tags:
     - WhitelistChameleon
+    - WeldingMask # DS14
+    - WeldingMaskWhite # DS14
 
 # Entity tables
 - type: entityTable

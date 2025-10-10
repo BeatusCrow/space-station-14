@@ -1,4 +1,4 @@
-﻿using Robust.Shared.Configuration;
+using Robust.Shared.Configuration;
 
 namespace Content.Shared.CCVar;
 
@@ -38,13 +38,19 @@ public sealed partial class CCVars
         CVarDef.Create("outline.enabled", true, CVar.CLIENTONLY);
 
     /// <summary>
+    /// Determines the color to use when highlighting search results in the admin log browser.
+    /// </summary>
+    public static readonly CVarDef<string> AdminLogsHighlightColor =
+        CVarDef.Create("ui.admin_logs_highlight_color", Color.Red.ToHex(), CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
     /// Determines how antagonist status/roletype is displayed. Based on AdminOverlayAntagFormats enum
     /// Binary: Roletypes of interest get an "ANTAG" label
     /// Roletype: Roletypes of interest will have their roletype name displayed in their specific color
     /// Subtype: Roletypes of interest will have their subtype displayed. if subtype is not set, roletype will be shown.
     /// </summary>
     public static readonly CVarDef<string> AdminOverlayAntagFormat =
-        CVarDef.Create("ui.admin_overlay_antag_format", "Subtype", CVar.CLIENTONLY | CVar.ARCHIVE);
+        CVarDef.Create("ui.admin_overlay_antag_format", "Binary", CVar.CLIENTONLY | CVar.ARCHIVE);
 
     /// <summary>
     /// If true, the admin overlay will display the total time of the players

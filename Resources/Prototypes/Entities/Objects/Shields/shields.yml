@@ -6,12 +6,12 @@
   abstract: true
   components:
     - type: Sprite
-      sprite: Objects/Weapons/Melee/shields.rsi
-      state: riot-icon
+      sprite: Objects/Weapons/Melee/riot-shield.rsi
+      state: icon
     - type: Item
-      sprite: Objects/Weapons/Melee/shields.rsi
+      sprite: Objects/Weapons/Melee/riot-shield.rsi
+      heldPrefix: icon
       size: Ginormous
-      heldPrefix: riot
     - type: Blocking
       passiveBlockModifier:
         coefficients:
@@ -70,6 +70,11 @@
   components:
     - type: StaticPrice
       price: 90
+    - type: Clothing
+      sprite: Objects/Weapons/Melee/riot-shield.rsi
+      quickEquip: false
+      slots:
+      - suitStorage
     - type: Blocking
       passiveBlockModifier:
         coefficients:
@@ -90,9 +95,16 @@
   description: A shield built for withstanding lasers, but not much else.
   components:
     - type: Sprite
-      state: riot_laser-icon
+      sprite: Objects/Weapons/Melee/riot_laser-shield.rsi
+      state: icon
     - type: Item
-      heldPrefix: riot_laser
+      sprite: Objects/Weapons/Melee/riot_laser-shield.rsi
+      heldPrefix: icon
+    - type: Clothing
+      sprite: Objects/Weapons/Melee/riot_laser-shield.rsi
+      quickEquip: false
+      slots:
+      - suitStorage
     - type: Blocking
       passiveBlockModifier:
         coefficients:
@@ -110,9 +122,16 @@
   description: A shield built for protecting against ballistics, but not much else.
   components:
     - type: Sprite
-      state: riot_bullet-icon
+      sprite: Objects/Weapons/Melee/riot_bullet-shield.rsi
+      state: icon
     - type: Item
-      heldPrefix: riot_bullet
+      sprite: Objects/Weapons/Melee/riot_bullet-shield.rsi
+      heldPrefix: icon
+    - type: Clothing
+      sprite: Objects/Weapons/Melee/riot_bullet-shield.rsi
+      quickEquip: false
+      slots:
+      - suitStorage
     - type: Blocking
       passiveBlockModifier:
         coefficients:
@@ -132,9 +151,16 @@
   description: A small round wooden makeshift shield.
   components:
     - type: Sprite
-      state: buckler-icon
+      sprite: Objects/Weapons/Melee/buckler-shield.rsi
+      state: icon
     - type: Item
-      heldPrefix: buckler
+      sprite: Objects/Weapons/Melee/buckler-shield.rsi
+      heldPrefix: icon
+    - type: Clothing
+      sprite: Objects/Weapons/Melee/buckler-shield.rsi
+      quickEquip: false
+      slots:
+      - suitStorage
     - type: Blocking
       passiveBlockModifier:
         coefficients:
@@ -187,6 +213,7 @@
   description: A shield made of cardboard. Won't protect you from much.
   components:
     - type: Sprite
+      sprite: Objects/Weapons/Melee/shields.rsi
       state: cardshield-icon
     - type: Item
       heldPrefix: cardshield
@@ -239,8 +266,10 @@
   description: A rundown looking shield, not good for much.
   components:
     - type: Sprite
+      sprite: Objects/Weapons/Melee/shields.rsi
       state: makeshift-icon
     - type: Item
+      sprite: Objects/Weapons/Melee/shields.rsi
       heldPrefix: metal
     - type: Blocking
       passiveBlockModifier:
@@ -348,9 +377,16 @@
   description: Ratvar oyrffrf lbh jvgu uvf cebgrpgvba.
   components:
     - type: Sprite
-      state: ratvarian-icon
+      sprite: Objects/Weapons/Melee/ratvarian-shield.rsi
+      state: icon
     - type: Item
-      heldPrefix: ratvarian
+      sprite: Objects/Weapons/Melee/ratvarian-shield.rsi
+      heldPrefix: icon
+    - type: Clothing
+      sprite: Objects/Weapons/Melee/ratvarian-shield.rsi
+      quickEquip: false
+      slots:
+      - suitStorage
     - type: Blocking
       passiveBlockModifier:
         coefficients:
@@ -377,8 +413,10 @@
   description: Eerily glows red... you hear the geometer whispering
   components:
     - type: Sprite
+      sprite: Objects/Weapons/Melee/shields.rsi
       state: mirror-icon
     - type: Item
+      sprite: Objects/Weapons/Melee/shields.rsi
       heldPrefix: mirror
     - type: Reflect
       reflectProb: 0.95
@@ -425,6 +463,7 @@
   description: Exotic energy shield, when folded, can even fit in your pocket.
   components:
     - type: ItemToggle
+      onActivate: false # DS14
       soundActivate:
         path: /Audio/Weapons/ebladeon.ogg
       soundDeactivate:
@@ -470,7 +509,7 @@
       color: blue
     - type: ItemTogglePointLight
     - type: Reflect
-      reflectProb: 0.95
+      reflectProb: 0.55 # DS14-value
       reflects:
         - Energy
     - type: Blocking
@@ -538,6 +577,7 @@
   description: An advanced riot shield made of lightweight materials that collapses for easy storage.
   components:
     - type: ItemToggle
+      onActivate: false # DS14
       soundActivate:
         path: /Audio/Weapons/telescopicon.ogg
         params:

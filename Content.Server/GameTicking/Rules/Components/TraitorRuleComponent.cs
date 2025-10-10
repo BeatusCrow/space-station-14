@@ -25,7 +25,7 @@ public sealed partial class TraitorRuleComponent : Component
     public ProtoId<NpcFactionPrototype> NanoTrasenFaction = "NanoTrasen";
 
     [DataField]
-    public ProtoId<NpcFactionPrototype> SyndicateFaction = "Syndicate";
+    public ProtoId<NpcFactionPrototype> SyndicateFaction = "SyndicateAgent"; // DS14-agents-faction
 
     [DataField]
     public ProtoId<LocalizedDatasetPrototype> ObjectiveIssuers = "TraitorCorporations";

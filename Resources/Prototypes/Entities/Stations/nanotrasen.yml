@@ -21,6 +21,7 @@
     - BaseStationEvacuation
     - BaseStationAlertLevels
     - BaseStationMagnet
+    - BaseStationERTCall # DS14
     - BaseStationExpeditions
     - BaseStationSalvageJobs
     - BaseStationSiliconLawCrewsimov
@@ -30,6 +31,7 @@
   categories: [ HideSpawnMenu ]
   components:
     - type: Transform
+    - type: StationTaipanLoader # DS14
 
 - type: entity
   id: NanotrasenCentralCommand

@@ -19,20 +19,25 @@
     - map: [ "enum.HumanoidVisualLayers.LArm" ]
     - map: [ "enum.HumanoidVisualLayers.RLeg" ]
     - map: [ "enum.HumanoidVisualLayers.LLeg" ]
-    - map: [ "enum.HumanoidVisualLayers.UndergarmentBottom" ]
-    - map: [ "enum.HumanoidVisualLayers.UndergarmentTop" ]
-    - map: ["jumpsuit"]
+    - map: [ "underwearb" ] # Sirena-Underwear
+    - map: [ "underweart" ] # Sirena-Underwear
+    # - map: [ "enum.HumanoidVisualLayers.UndergarmentBottom" ]
+    # - map: [ "enum.HumanoidVisualLayers.UndergarmentTop" ]
+    # - map: ["jumpsuit"]
     - map: ["enum.HumanoidVisualLayers.LFoot"]
     - map: ["enum.HumanoidVisualLayers.RFoot"]
+    - map: [ "socks" ] # Sirena-Underwear
+    - map: ["jumpsuit"]
     - map: ["enum.HumanoidVisualLayers.LHand"]
     - map: ["enum.HumanoidVisualLayers.RHand"]
     - map: [ "gloves" ]
     - map: [ "shoes" ]
     - map: [ "ears" ]
+    - map: [ "outerClothing" ]
     - map: [ "eyes" ]
     - map: [ "belt" ]
     - map: [ "id" ]
-    - map: [ "outerClothing" ]
+    # - map: [ "outerClothing" ]
     - map: [ "back" ]
     - map: [ "neck" ]
     - map: [ "enum.HumanoidVisualLayers.SnoutCover" ]
@@ -160,6 +165,7 @@
         Blunt: 5
   - type: SleepEmitSound
   - type: SSDIndicator
+  # - type: SleepOnSSD # DS14
   - type: StandingState
   - type: Crawler
   - type: Dna
@@ -207,6 +213,8 @@
     - FootstepSound
     - DoorBumpOpener
     - AnomalyHost
+  - type: EmoteAnimation # ADT-Emotes
+  - type: EmotePanel # DS14-Emote-panel
 
 - type: entity
   save: false
@@ -273,9 +281,16 @@
     damageRecovery:
       types:
         Asphyxiation: -1.0
+  - type: EmoteOnDamage # DS14: scream on damage
+    withChat: true
+    hiddenFromChatWindow: false
+    emotes:
+    - ScreamOnDamage
   - type: FireVisuals
     alternateState: Standing
   - type: StunVisuals
+  - type: ExamineBlood # DS14
+  - type: HumanoidDamageSequence # DS14: for coroner job
 
 - type: entity
   save: false
@@ -302,11 +317,15 @@
     - map: [ "enum.HumanoidVisualLayers.LArm" ]
     - map: [ "enum.HumanoidVisualLayers.RLeg" ]
     - map: [ "enum.HumanoidVisualLayers.LLeg" ]
-    - map: [ "enum.HumanoidVisualLayers.UndergarmentBottom" ]
-    - map: [ "enum.HumanoidVisualLayers.UndergarmentTop" ]
-    - map: ["jumpsuit"]
+    - map: ["underwearb"] # Sirena-Underwear
+    - map: ["underweart"] # Sirena-Underwear
+    # - map: [ "enum.HumanoidVisualLayers.UndergarmentBottom" ]
+    # - map: [ "enum.HumanoidVisualLayers.UndergarmentTop" ]
+    # - map: ["jumpsuit"]
     - map: ["enum.HumanoidVisualLayers.LFoot"]
     - map: ["enum.HumanoidVisualLayers.RFoot"]
+    - map: ["socks"] # Sirena-Underwear
+    - map: ["jumpsuit"]
     - map: ["enum.HumanoidVisualLayers.LHand"]
     - map: ["enum.HumanoidVisualLayers.RHand"]
     - map: ["enum.HumanoidVisualLayers.Handcuffs"]
@@ -317,10 +336,11 @@
     - map: [ "gloves" ]
     - map: [ "shoes" ]
     - map: [ "ears" ]
+    - map: [ "outerClothing" ]
     - map: [ "eyes" ]
     - map: [ "belt" ]
     - map: [ "id" ]
-    - map: [ "outerClothing" ]
+    # - map: [ "outerClothing" ]
     - map: [ "back" ]
     - map: [ "neck" ]
     - map: [ "enum.HumanoidVisualLayers.SnoutCover" ]

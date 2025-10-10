@@ -1,0 +1,23 @@
+- type: playTimeTracker
+  id: TaipanAtmosTech
+
+- type: playTimeTracker
+  id: TaipanBotanist
+
+- type: playTimeTracker
+  id: TaipanCargotech
+
+- type: playTimeTracker
+  id: TaipanChef
+
+- type: playTimeTracker
+  id: TaipanMedic
+
+- type: playTimeTracker
+  id: TaipanRD
+
+- type: playTimeTracker
+  id: TaipanScience
+
+- type: playTimeTracker
+  id: TaipanTelecommunicationsOfficer

@@ -16,6 +16,11 @@
       Glass: 100
   - type: StaticPrice
     price: 50
+  - type: Armor # DS14
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
   - type: Tag
     tags:
     - WhitelistChameleon
@@ -39,6 +44,7 @@
     - HamsterWearable
     - WhitelistChameleon
     - WeldingMask
+    - WeldingMaskGray # DS14
 
 - type: entity
   parent: WeldingMaskBase
@@ -50,6 +56,14 @@
     sprite: Clothing/Head/Welding/flame_welding_mask.rsi
   - type: Clothing
     sprite: Clothing/Head/Welding/flame_welding_mask.rsi
+  # DS14-start
+  - type: Tag
+    tags:
+    - HamsterWearable
+    - WhitelistChameleon
+    - WeldingMask
+    - WeldingMaskFlame
+  # DS14-end
 
 - type: entity
   parent: WeldingMaskBase
@@ -61,6 +75,14 @@
     sprite: Clothing/Head/Welding/blue_flame_welding_mask.rsi
   - type: Clothing
     sprite: Clothing/Head/Welding/blue_flame_welding_mask.rsi
+  # DS14-start
+  - type: Tag
+    tags:
+    - HamsterWearable
+    - WhitelistChameleon
+    - WeldingMask
+    - WeldingMaskFlameBlue
+  # DS14-end
 
 - type: entity
   parent: WeldingMaskBase
@@ -72,3 +94,11 @@
     sprite: Clothing/Head/Welding/paintedwelding.rsi
   - type: Clothing
     sprite: Clothing/Head/Welding/paintedwelding.rsi
+  # DS14-start
+  - type: Tag
+    tags:
+    - HamsterWearable
+    - WhitelistChameleon
+    - WeldingMask
+    - WeldingMaskPainted
+  # DS14-end

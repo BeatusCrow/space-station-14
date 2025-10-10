@@ -20,7 +20,6 @@
   id: Status
   name: signal-port-name-status-transmitter
   description: signal-port-description-status-transmitter
-  defaultLinks: [ Toggle ]
 
 - type: sourcePort
   id: Left
@@ -74,6 +73,14 @@
   name: signal-port-name-artifact-analyzer-sender
   description: signal-port-description-artifact-analyzer-sender
   defaultLinks: [ ArtifactAnalyzerReceiver ]
+
+  # DS14-start
+- type: sourcePort
+  id: ShuttleConsoleSender
+  name: signal-port-name-artifact-analyzer-sender
+  description: signal-port-description-artifact-analyzer-sender
+  defaultLinks: [ ShuttleConsoleReceiver ]
+  # DS14-end
 
 - type: sourcePort
   id: Timer

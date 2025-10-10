@@ -313,10 +313,22 @@
     - id: PlushieMoth
       prob: 0.01
       orGroup: Plushies
-    - id: PlushieVulp
+    - id: PlushieArachind
       prob: 0.01
       orGroup: Plushies
-    - id: PlushieArachind
+    - id: PlushieJokerge
+      prob: 0.01
+      orGroup: Plushies
+    - id: PlushieFloran
+      prob: 0.01
+      orGroup: Plushies
+    - id: PlushieJuggernaut
+      prob: 0.01
+      orGroup: Plushies
+    - id: PlushieLieutenant
+      prob: 0.01
+      orGroup: Plushies
+    - id: PlushieIps
       prob: 0.01
       orGroup: Plushies
     - id: PlushieThrongler #hehe

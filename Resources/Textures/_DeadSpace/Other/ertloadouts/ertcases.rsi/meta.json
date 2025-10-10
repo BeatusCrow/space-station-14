@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Created by cyberboich (discord) for Space Station 14 server Мёртвый Космос, resprited into DeathSquad and ERT versions by Annsanla",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "amber" 
+    },
+    {
+      "name": "red"
+    },
+    {
+      "name": "gamma"
+    },
+    {
+      "name": "cburn"
+    },
+    {
+      "name": "deathsquad"
+    }
+  ]
+}

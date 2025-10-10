@@ -98,12 +98,10 @@
   - FauxTileAstroGrass
   - FauxTileMowedAstroGrass
   - FauxTileJungleAstroGrass
-  - FauxTileDarkAstroGrass
-  - FauxTileLightAstroGrass
+  - FauxTileFairyAstroGrass # DS14
   - FauxTileAstroIce
   - FauxTileAstroSnow
   - FauxTileAstroAsteroidSand
-  - FauxTileDesertAstroSand
 
 - type: technology
   id: BiochemicalStasis
@@ -145,6 +143,7 @@
   - AdvMopItem
   - MegaSprayBottle
   - BorgModuleAdvancedCleaning
+  - BagOfSummoningGarbage # DS14
 
 - type: technology
   id: HONKMech

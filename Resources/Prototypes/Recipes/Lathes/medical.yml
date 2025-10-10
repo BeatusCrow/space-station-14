@@ -73,6 +73,17 @@
     Cloth: 100 # lathe more efficient than handcrafting
 
 - type: latheRecipe
+  id: HandheldCrewMonitor
+  result: HandheldCrewMonitorEmpty
+  categories:
+  - Tools
+  completetime: 2
+  materials:
+    Glass: 1200
+    Steel: 1000
+    Plastic: 1400
+
+- type: latheRecipe
   id: HandheldHealthAnalyzer
   result: HandheldHealthAnalyzerEmpty
   categories:

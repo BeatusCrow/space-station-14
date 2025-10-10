@@ -2,7 +2,15 @@
   id: Sneeze
   name: chat-emote-name-sneeze
   category: Vocal
+  whitelist:
+    components:
+    - Vocal
+  blacklist:
+    tags:
+    - SiliconEmotes
   chatMessages: ["chat-emote-msg-sneeze"]
+  chatTriggers:
+    - чихает
 
 - type: emote
   id: Cough
@@ -21,11 +29,6 @@
     - coughs
     - coughed 
     - cough.
-    - coughs.
-    - coughed.
-    - cough!
-    - coughs!
-    - coughed!
 
 - type: emote
   id: CatMeow

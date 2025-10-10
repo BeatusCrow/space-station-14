@@ -10,7 +10,7 @@
     - Wall
   components:
   - type: Anchorable
-    flags: 
+    flags:
     - Anchorable
   - type: Rotatable
   - type: RangedDamageSound
@@ -657,6 +657,7 @@
 - type: entity
   parent: WallReinforced
   id: WallReinforcedRust
+  name: reinforced wall
   suffix: rusted
   components:
   - type: Sprite
@@ -670,28 +671,6 @@
   - type: IconSmooth
     key: walls
     base: reinf_over
-  - type: Destructible
-    thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 500
-      behaviors:
-      - !type:DoActsBehavior
-        acts: ["Destruction"]
-      - !type:PlaySoundBehavior
-        sound:
-          collection: MetalSlam
-    - trigger:
-        !type:DamageTrigger
-        damage: 350
-      behaviors:
-      - !type:PlaySoundBehavior
-        sound:
-          collection: MetalSlam
-      - !type:ChangeConstructionNodeBehavior
-        node: girder
-      - !type:DoActsBehavior
-        acts: ["Destruction"]
 
 - type: entity
   parent: WallDiagonalBase
@@ -851,7 +830,7 @@
     sprite: Structures/Walls/shuttle_diagonal.rsi
     state: state0
   - type: Reflect
-    reflectProb: 1
+    reflectProb: 0.25
   - type: Pullable
   - type: Airtight
     noAirWhenFullyAirBlocked: false
@@ -963,7 +942,7 @@
           4: { state: shuttle_construct-4, visible: true}
           5: { state: shuttle_construct-5, visible: true}
   - type: Reflect
-    reflectProb: 1
+    reflectProb: 0.5 # DS14
   - type: Fixtures
     fixtures:
       fix1:
@@ -1006,7 +985,7 @@
           collection: MetalSlam
     - trigger:
         !type:DamageTrigger
-        damage: 200
+        damage: 300
       behaviors:
       - !type:PlaySoundBehavior
         sound:
@@ -1057,6 +1036,7 @@
 - type: entity
   parent: WallSolid
   id: WallSolidRust
+  name: solid wall
   suffix: rusted
   components:
   - type: Sprite
@@ -1363,7 +1343,7 @@
     node: wall
 
 
-# Lavalend Walls
+# Lavaland Walls
 
 - type: entity
   parent: BaseWall
@@ -1411,6 +1391,11 @@
     - mining
     - miningB
   - type: Appearance
+  - type: Construction # DS14
+    graph: Girder
+    node: miningWall
+  - type: StaticPrice
+    price: 150
 
 - type: entity
   parent: WallDiagonalBase
@@ -1424,6 +1409,9 @@
   - type: Icon
     sprite: Structures/Walls/mining_diagonal.rsi
     state: state0
+  - type: Construction # DS14
+    graph: Girder
+    node: diagonalMiningWall
   - type: Damageable
     damageContainer: StructuralInorganic
     damageModifierSet: StructuralMetallicStrong
@@ -1452,7 +1440,8 @@
           collection: MetalSlam
       - !type:DoActsBehavior
         acts: ["Destruction"]
-
+  - type: StaticPrice
+    price: 130
 
 # Vault Walls
 
@@ -1508,7 +1497,7 @@
   name: invisible wall
   components:
   - type: TimedDespawn
-    lifetime: 15
+    lifetime: 20
   - type: Tag
     tags:
       - Wall

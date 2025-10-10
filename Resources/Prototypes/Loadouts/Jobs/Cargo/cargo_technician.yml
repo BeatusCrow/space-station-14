@@ -1,23 +1,3 @@
-# Senior times
-- type: loadoutEffectGroup
-  id: SeniorCargo
-  effects:
-  - !type:JobRequirementLoadoutEffect
-    requirement:
-      !type:RoleTimeRequirement
-      role: JobCargoTechnician
-      time: 21600 #6 hrs
-  - !type:JobRequirementLoadoutEffect
-    requirement:
-      !type:RoleTimeRequirement
-      role: JobSalvageSpecialist
-      time: 21600 #6 hrs
-  - !type:JobRequirementLoadoutEffect
-    requirement:
-      !type:DepartmentTimeRequirement
-      department: Cargo
-      time: 216000 # 60 hrs
-
 # Head
 - type: loadout
   id: CargoTechnicianHead
@@ -31,9 +11,24 @@
     jumpsuit: ClothingUniformJumpsuitCargo
 
 - type: loadout
+  id: CargoTechnicianSuit
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCargoAlt
+
+- type: loadout
+  id: CargoTechnicianFormalSuit
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCargoFormal
+
+- type: loadout
   id: CargoTechnicianJumpskirt
   equipment:
     jumpsuit: ClothingUniformJumpskirtCargo
+
+- type: loadout
+  id: CargoTechnicianFormalJumpskirt
+  equipment:
+    jumpsuit: ClothingUniformJumpskirtCargoFormal
 
 # Back
 - type: loadout
@@ -63,16 +58,27 @@
   equipment:
     shoes: ClothingShoesBootsWinterCargo
 
-# ID
+# Underwear
 - type: loadout
-  id: CargoTechnicianPDA
-  equipment:
-    id: CargoPDA
-
-- type: loadout
-  id: SeniorCourierPDA
+  id: UnderwearBottomBoxersCargoTechnician
   effects:
   - !type:GroupLoadoutEffect
-    proto: SeniorCargo
+    proto: MaleUnderwear
   equipment:
-    id: SeniorCourierPDA
+    underwearb: ClothingUnderwearBottomBoxersCargoTechnician
+
+- type: loadout
+  id: UnderwearBottomPantiesCargoTechnician
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: FemaleUnderwear
+  equipment:
+    underwearb: ClothingUnderwearBottomPantiesCargoTechnician
+
+- type: loadout
+  id: UnderwearTopBraCargoTechnician
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: FemaleUnderwear
+  equipment:
+    underweart: ClothingUnderwearTopBraCargoTechnician

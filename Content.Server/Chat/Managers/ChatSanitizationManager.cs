@@ -14,6 +14,31 @@ public sealed class ChatSanitizationManager : IChatSanitizationManager
 {
     private static readonly (Regex regex, string emoteKey)[] ShorthandToEmote =
     [
+        // Corvax-Localization-Start
+        Entry("хд", "chatsan-laughs"),
+        Entry("о-о", "chatsan-wide-eyed"), // cyrillic о
+        Entry("о.о", "chatsan-wide-eyed"), // cyrillic о
+        Entry("0_о", "chatsan-wide-eyed"), // cyrillic о
+        Entry("о/", "chatsan-waves"), // cyrillic о
+        Entry("о7", "chatsan-salutes"), // cyrillic о
+        Entry("0_o", "chatsan-wide-eyed"),
+        Entry("лмао", "chatsan-laughs"),
+        Entry("рофл", "chatsan-laughs"),
+        Entry("яхз", "chatsan-shrugs"),
+        Entry(":О", "chatsan-surprised"), // cyrillic о
+        Entry("кек", "chatsan-laughs"),
+        Entry("T_T", "chatsan-cries"),
+        Entry("Т_Т", "chatsan-cries"), // cyrillic T
+        Entry("=_(", "chatsan-cries"),
+        Entry("!с", "chatsan-laughs"),
+        Entry("!в", "chatsan-sighs"),
+        Entry("!х", "chatsan-claps"),
+        Entry("!щ", "chatsan-snaps"),
+        Entry("))", "chatsan-smiles-widely"),
+        Entry(")", "chatsan-smiles"),
+        Entry("((", "chatsan-frowns-deeply"),
+        Entry("(", "chatsan-frowns"),
+        // Corvax-Localization-End
         Entry(":)", "chatsan-smiles"),
         Entry(":]", "chatsan-smiles"),
         Entry("=)", "chatsan-smiles"),
@@ -78,6 +103,7 @@ public sealed class ChatSanitizationManager : IChatSanitizationManager
         Entry("rofl", "chatsan-laughs"),
         Entry("o7", "chatsan-salutes"),
         Entry(";_;7", "chatsan-tearfully-salutes"),
+        Entry("idk", "chatsan-shrugs"),
         Entry(";)", "chatsan-winks"),
         Entry(";]", "chatsan-winks"),
         Entry("(;", "chatsan-winks"),

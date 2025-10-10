@@ -159,6 +159,8 @@
     - id: RCD
     - id: RCDAmmo
     - id: AirGrenade
+    - id: ClothingOuterCoatAtmosWorking # DS14
+    prob: 0.75
 
 - type: entityTable
   id: FillAtmosphericsHardsuit

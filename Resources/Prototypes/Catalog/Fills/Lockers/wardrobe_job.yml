@@ -288,7 +288,8 @@
     - id: ClothingShoesBootsJack
     - id: ClothingEyesGlassesSunglasses
     - id: ClothingHeadHelmetBasic
-    - id: ClothingOuterArmorBasic
+    # - id: ClothingOuterArmorBasic # DS14-disabled
+    - id: ClothingOuterVestArmorSec # DS14
     - id: ClothingUniformJumpskirtSec
 
 - type: entity
@@ -332,6 +333,12 @@
     - id: ClothingShoesBootsSalvage
       amount: 2
     - id: ClothingUniformJumpsuitSalvageSpecialist
+      amount: 2
+    - id: ClothingUniformJumpsuitSalvageFormal # DS14
+      amount: 2
+    - id: ClothingUniformJumpskirtCargoSalvage # DS14
+      amount: 2
+    - id: ClothingUniformJumpskirtCargoSalvageFormal # DS14
       amount: 2
 
 - type: entity

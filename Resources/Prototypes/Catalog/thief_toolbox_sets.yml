@@ -38,7 +38,7 @@
   content:
   - StorageImplanter
   - DnaScramblerImplanter
-  - ChemistryBottleEphedrine
+  - DesoxyephedrineMedipen # DS14
   - SoapOmega
   - Syringe
   - DrinkShaker

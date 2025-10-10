@@ -141,13 +141,12 @@ namespace Content.Server.GameTicking
             var character = GetPlayerProfile(player);
 
             var jobBans = _banManager.GetJobBans(player.UserId);
-            if (jobBans == null || jobId != null && jobBans.Contains(jobId)) //TODO: use IsRoleBanned directly?
+            if (jobBans == null || jobId != null && jobBans.Contains(jobId))
                 return;
 
             if (jobId != null)
             {
-                var jobs = new List<ProtoId<JobPrototype>> {jobId};
-                var ev = new IsRoleAllowedEvent(player, jobs, null);
+                var ev = new IsJobAllowedEvent(player, new ProtoId<JobPrototype>(jobId));
                 RaiseLocalEvent(ref ev);
                 if (ev.Cancelled)
                     return;
@@ -284,6 +283,7 @@ namespace Content.Server.GameTicking
                     _chatSystem.DispatchStationAnnouncement(station,
                         Loc.GetString("latejoin-arrival-announcement-special",
                             ("character", MetaData(mob).EntityName),
+                                ("gender", character.Gender), // Corvax-LastnameGender
                             ("entity", mob),
                             ("job", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(jobName))),
                         Loc.GetString("latejoin-arrival-sender"),
@@ -295,6 +295,7 @@ namespace Content.Server.GameTicking
                     _chatSystem.DispatchStationAnnouncement(station,
                         Loc.GetString("latejoin-arrival-announcement",
                             ("character", MetaData(mob).EntityName),
+                                ("gender", character.Gender), // Corvax-LastnameGender
                             ("entity", mob),
                             ("job", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(jobName))),
                         Loc.GetString("latejoin-arrival-sender"),

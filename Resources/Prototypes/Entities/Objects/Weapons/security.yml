@@ -179,11 +179,11 @@
 - type: entity
   name: flash
   parent: Flash
-  suffix: 2 charges
+  suffix: 1 charges
   id: SciFlash
   components:
     - type: LimitedCharges
-      maxCharges: 2
+      maxCharges: 1 # DS14-value
 
 - type: entity
   name: portable flasher

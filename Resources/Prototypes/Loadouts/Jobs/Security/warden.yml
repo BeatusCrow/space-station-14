@@ -20,6 +20,13 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtWarden
 
+# DS14-start
+- type: loadout
+  id: WardenJumpskirtPencil
+  equipment:
+    jumpsuit: ClothingUniformJumpskirtPencilWarden
+# DS14-end
+
 # OuterClothing
 - type: loadout
   id: WardenCoat
@@ -30,3 +37,50 @@
   id: WardenArmoredWinterCoat
   equipment:
     outerClothing: ClothingOuterWinterWarden
+
+# Socks
+- type: loadout
+  id: UnderwearSocksWarden
+  equipment:
+    socks: ClothingUnderwearSocksWarden
+
+# Underwear
+- type: loadout
+  id: UnderwearBottomBoxersWarden
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: MaleUnderwear
+  equipment:
+    underwearb: ClothingUnderwearBottomBoxersWarden
+
+- type: loadout
+  id: UnderwearBottomPantiesWarden
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: FemaleUnderwear
+  equipment:
+    underwearb: ClothingUnderwearBottomPantiesWarden
+
+- type: loadout
+  id: UnderwearTopBraWarden
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: FemaleUnderwear
+  equipment:
+    underweart: ClothingUnderwearTopBraWarden
+
+# Медаль
+- type: loadoutEffectGroup
+  id: WardenMedal
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: JobWarden
+      time: 270000 # 75 hours
+
+- type: loadout
+  id: WardenMedal
+  storage:
+    back:
+    - ClothingNeckSecurityWardenMedal

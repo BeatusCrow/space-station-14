@@ -149,7 +149,7 @@ public sealed class CriminalRecordsConsoleSystem : SharedCriminalRecordsConsoleS
             // person did something sus
             (_, SecurityStatus.Suspected) => "suspected",
             // released on parole
-            (_, SecurityStatus.Paroled) => "paroled",
+            // (_, SecurityStatus.Paroled) => "paroled", // DS14-no-paroled
             // prisoner did their time
             (_, SecurityStatus.Discharged) => "released",
             // going from any other state to wanted, AOS or prisonbreak / lazy secoff never set them to released and they reoffended
@@ -161,7 +161,7 @@ public sealed class CriminalRecordsConsoleSystem : SharedCriminalRecordsConsoleS
             // criminal status removed
             (SecurityStatus.Detained, SecurityStatus.None) => "released",
             // criminal is no longer on parole
-            (SecurityStatus.Paroled, SecurityStatus.None) => "not-parole",
+            // (SecurityStatus.Paroled, SecurityStatus.None) => "not-parole", // DS14-no-paroled
             // this is impossible
             _ => "not-wanted"
         };
@@ -268,5 +268,32 @@ public sealed class CriminalRecordsConsoleSystem : SharedCriminalRecordsConsoleS
         key = new StationRecordKey(id, station);
         mob = user;
         return true;
+    }
+
+    /// <summary>
+    /// Checks if the new identity's name has a criminal record attached to it, and gives the entity the icon that
+    /// belongs to the status if it does.
+    /// </summary>
+    public void CheckNewIdentity(EntityUid uid)
+    {
+        var name = Identity.Name(uid, EntityManager);
+        var xform = Transform(uid);
+
+        // TODO use the entity's station? Not the station of the map that it happens to currently be on?
+        var station = _station.GetStationInMap(xform.MapID);
+
+        if (station != null && _records.GetRecordByName(station.Value, name) is { } id)
+        {
+            if (_records.TryGetRecord<CriminalRecord>(new StationRecordKey(id, station.Value),
+                    out var record))
+            {
+                if (record.Status != SecurityStatus.None)
+                {
+                    _criminalRecords.SetCriminalIcon(name, record.Status, uid);
+                    return;
+                }
+            }
+        }
+        RemComp<CriminalRecordComponent>(uid);
     }
 }

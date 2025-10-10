@@ -4,17 +4,25 @@
   description: job-description-paramedic
   playTimeTracker: JobParamedic
   requirements:
-  - !type:DepartmentTimeRequirement
-    department: Medical
-    time: 2.5h
+    - !type:RoleTimeRequirement
+      role: JobMedicalDoctor
+      time: 36000 # 10 hours
   startingGear: ParamedicGear
   icon: "JobIconParamedic"
   supervisors: job-supervisors-cmo
   access:
   - Medical
   - Maintenance
+  - Paramedic # DS14
+  - Coroner # DS14
   extendedAccess:
   - Chemistry
+  #start-backmen: currency
+  minBankBalance: 150
+  maxBankBalance: 250
+  wageDepartment: Medical
+  wage: 60
+  #end-backmen: currency
 
 - type: startingGear
   id: ParamedicGear
@@ -22,6 +30,7 @@
     id: ParamedicPDA
     ears: ClothingHeadsetMedical
     belt: ClothingBeltMedicalEMTFilled
+    socks: ClothingUnderwearSocksParamedic
   storage:
     back:
     - EmergencyRollerBedSpawnFolded

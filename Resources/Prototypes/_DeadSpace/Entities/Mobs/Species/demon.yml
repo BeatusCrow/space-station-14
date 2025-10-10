@@ -1,0 +1,67 @@
+- type: entity
+  parent: BaseMobSpeciesOrganic
+  id: BaseMobDemon
+  abstract: true
+  components:
+  - type: Icon
+    sprite: _ADT/Mobs/Species/Demon/parts.rsi
+    state: full_m
+  - type: HumanoidAppearance
+    species: Demon
+    hideLayersOnEquip:
+    - Hair
+    - Snout
+    - HeadTop
+    - HeadSide
+    - Tail
+  - type: Body
+    prototype: Demon
+    requiredLegs: 2
+  - type: Hunger
+  - type: Thirst
+  - type: Damageable
+    damageContainer: Biological
+  - type: MeleeWeapon
+    hidden: true
+    soundHit:
+      path: /Audio/Weapons/pierce.ogg
+    angle: 30
+    animation: WeaponArcPunch
+    damage:
+      types:
+        Piercing: 5
+  - type: Temperature
+    heatDamageThreshold: 400
+    coldDamageThreshold: 193  #starting temperature damage treshold
+    currentTemperature: 310.15
+    specificHeat: 46
+    coldDamage:
+      types:
+        Cold : 0.1 #per second, scales with temperature & other constants
+    heatDamage:
+      types:
+        Heat : 0.3 #per second, scales with temperature & other constants
+  - type: Perishable
+  - type: Sanity # DS14
+  - type: Vocal
+    sounds:
+      Male: MaleHuman
+      Female: FemaleHuman
+      Unsexed: FemaleHuman
+  - type: Speech
+    speechSounds: Lizard
+  # - type: FootPrints
+
+- type: entity
+  parent: BaseSpeciesDummy
+  id: MobDemonDummy
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HumanoidAppearance
+    species: Demon
+    hideLayersOnEquip:
+    - Hair
+    - Snout
+    - HeadTop
+    - HeadSide
+    - Tail

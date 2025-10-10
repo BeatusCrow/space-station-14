@@ -14,19 +14,36 @@ public sealed partial class StampWidget : PanelContainer
 {
     private static readonly ProtoId<ShaderPrototype> PaperStamp = "PaperStamp";
 
+    private readonly IResourceCache _resCache;
     private StyleBoxTexture _borderTexture;
     private ShaderInstance? _stampShader;
+    private Texture? _stampTexture;
+    private float _orientation;
 
     public float Orientation
     {
-        get => StampedByLabel.Orientation;
-        set => StampedByLabel.Orientation = value;
+        get => _orientation;
+        set => _orientation = value;
     }
 
-    public StampDisplayInfo StampInfo {
-        set {
-            StampedByLabel.Text = Loc.GetString(value.StampedName);
-            StampedByLabel.FontColorOverride = value.StampedColor;
+    public StampDisplayInfo StampInfo
+    {
+        set
+        {
+            if (!string.IsNullOrEmpty(value.StampTexture))
+            {
+                _stampTexture = _resCache.GetResource<TextureResource>(value.StampTexture);
+                AddChild(new TextureRect{Texture = _stampTexture});
+                StampedByLabel.Visible = false;
+            }
+            else
+            {
+                StampedByLabel.Text = Loc.GetString(value.StampedName);
+                StampedByLabel.FontColorOverride = value.StampedColor;
+                StampedByLabel.Visible = true;
+                _stampTexture = null;
+            }
+
             ModulateSelfOverride = value.StampedColor;
         }
     }
@@ -34,10 +51,13 @@ public sealed partial class StampWidget : PanelContainer
     public StampWidget()
     {
         RobustXamlLoader.Load(this);
-        var resCache = IoCManager.Resolve<IResourceCache>();
-        var borderImage = resCache.GetResource<TextureResource>(
-                "/Textures/Interface/Paper/paper_stamp_border.svg.96dpi.png");
-        _borderTexture = new StyleBoxTexture {
+        _resCache = IoCManager.Resolve<IResourceCache>();
+
+        var borderImage = _resCache.GetResource<TextureResource>(
+            "/Textures/Interface/Paper/paper_stamp_border.svg.96dpi.png");
+
+        _borderTexture = new StyleBoxTexture
+        {
             Texture = borderImage,
         };
         _borderTexture.SetPatchMargin(StyleBoxTexture.Margin.All, 7.0f);
@@ -52,9 +72,12 @@ public sealed partial class StampWidget : PanelContainer
         _stampShader?.SetParameter("objCoord", GlobalPosition * UIScale * new Vector2(1, -1));
         handle.UseShader(_stampShader);
         handle.SetTransform(GlobalPosition * UIScale, Orientation, Vector2.One);
-        base.Draw(handle);
 
-        // Restore a sane transform+shader
+        if (_stampTexture == null)
+        {
+            base.Draw(handle);
+        }
+
         handle.SetTransform(Matrix3x2.Identity);
         handle.UseShader(null);
     }

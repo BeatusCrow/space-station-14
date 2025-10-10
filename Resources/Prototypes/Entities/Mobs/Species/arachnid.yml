@@ -30,6 +30,16 @@
         amount: 5
   - type: Reactive
     reactions:
+    # DS14-start
+    - reagents: [ PestKiller ]
+      methods: [ Touch ]
+      effects:
+      - !type:HealthChange
+        scaleByQuantity: true
+        damage:
+          types:
+            Caustic: 2
+    # DS14-end
     - reagents: [Water]
       methods: [Touch]
       effects:
@@ -80,18 +90,22 @@
       - map: [ "enum.HumanoidVisualLayers.LArm" ]
       - map: [ "enum.HumanoidVisualLayers.RLeg" ]
       - map: [ "enum.HumanoidVisualLayers.LLeg" ]
-      - map: [ "enum.HumanoidVisualLayers.UndergarmentBottom" ]
-      - map: [ "enum.HumanoidVisualLayers.UndergarmentTop" ]
-      - map: ["jumpsuit"]
+      - map: [ "underwearb" ] # Sirena-Underwear
+      - map: [ "underweart" ] # Sirena-Underwear
+      # - map: [ "enum.HumanoidVisualLayers.UndergarmentBottom" ]
+      # - map: [ "enum.HumanoidVisualLayers.UndergarmentTop" ]
+      # - map: ["jumpsuit"]
       - map: ["enum.HumanoidVisualLayers.LFoot"]
       - map: ["enum.HumanoidVisualLayers.RFoot"]
+      - map: [ "socks" ] # Sirena-Underwear
+      - map: ["jumpsuit"]
       - map: ["enum.HumanoidVisualLayers.LHand"]
       - map: ["enum.HumanoidVisualLayers.RHand"]
       - map: [ "gloves" ]
       - map: [ "shoes" ]
+      - map: [ "outerClothing" ]
       - map: [ "belt" ]
       - map: [ "id" ]
-      - map: [ "outerClothing" ]
       - map: [ "enum.HumanoidVisualLayers.Tail" ] # Mentioned in moth code: This needs renaming lol.
       - map: [ "back" ]
       - map: [ "neck" ]
@@ -118,7 +132,10 @@
   - type: Inventory
     templateId: arachnid
     speciesId: arachnid
-
+  - type: Sanity # DS14
+  # - type: FootPrints # Backmen-footsteps
+    # leftBarePrint: "footprint-left-bare-spider"
+    # rightBarePrint: "footprint-right-bare-spider"
 
 - type: entity
   parent: BaseSpeciesDummy

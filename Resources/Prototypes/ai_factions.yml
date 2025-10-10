@@ -9,6 +9,10 @@
   - Revolutionary
   - AllHostile
   - Wizard
+  - Necromorfs # DS14
+  - SpiderTerror # DS14
+  - Blob # DS14
+  - SyndicateAgent # DS14-agents-faction
 
 - type: npcFaction
   id: NanoTrasen
@@ -22,6 +26,9 @@
   - AllHostile
   - Wizard
   - Xenoborg
+  - Necromorfs # DS14
+  - SpiderTerror # DS14
+  - Blob # DS14
 
 - type: npcFaction
   id: Mouse
@@ -58,6 +65,9 @@
   - AllHostile
   - Wizard
   - Xenoborg
+  - Necromorfs # DS14
+  - SpiderTerror # DS14
+  - SyndicateAgent # DS14-agents-faction
 
 - type: npcFaction
   id: SimpleNeutral
@@ -74,6 +84,24 @@
   - AllHostile
   - Wizard
   - Xenoborg
+  - Necromorfs # DS14
+  - SpiderTerror # DS14
+  - Blob # DS14
+
+# DS14-agents-faction-start
+- type: npcFaction
+  id: SyndicateAgent
+  hostile:
+  - SimpleHostile
+  - Xeno
+  - Zombie
+  - Dragon
+  - AllHostile
+  - Wizard
+  - Xenoborg
+  - Necromorfs # DS14
+  - SpiderTerror # DS14
+# DS14-agents-faction-end
 
 - type: npcFaction
   id: Xeno
@@ -88,6 +116,10 @@
   - Wizard
   - Dragon
   - Xenoborg
+  - Necromorfs # DS14
+  - SpiderTerror # DS14
+  - Blob # DS14
+  - SyndicateAgent # DS14-agents-faction
 
 - type: npcFaction
   id: Zombie
@@ -103,6 +135,10 @@
   - Wizard
   - Dragon
   - Xenoborg
+  - Necromorfs # DS14
+  - SpiderTerror # DS14
+  - Blob # DS14
+  - SyndicateAgent # DS14-agents-faction
 
 - type: npcFaction
   id: Revolutionary
@@ -114,6 +150,9 @@
   - AllHostile
   - Wizard
   - Xenoborg
+  - Necromorfs # DS14
+  - SpiderTerror # DS14
+  - Blob # DS14
 
 - type: npcFaction
   id: AllHostile
@@ -131,6 +170,10 @@
   - Revolutionary
   - Wizard
   - Xenoborg
+  - Necromorfs # DS14
+  - SpiderTerror # DS14
+  - SyndicateAgent # DS14-agents-faction
+  - Blob # DS14
 
 - type: npcFaction
   id: Wizard
@@ -148,6 +191,10 @@
   - Revolutionary
   - AllHostile
   - Xenoborg
+  - Necromorfs # DS14
+  - SpiderTerror # DS14
+  - SyndicateAgent # DS14-agents-faction
+  - Blob # DS14
 
 - type: npcFaction
   id: Xenoborg
@@ -158,6 +205,10 @@
   - Zombie
   - Revolutionary
   - Wizard
+  - Necromorfs # DS14
+  - SpiderTerror # DS14
+  - SyndicateAgent # DS14-agents-faction
+  - Blob # DS14
 
   - Xeno # rivalry
 

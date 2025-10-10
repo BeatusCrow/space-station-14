@@ -11,7 +11,7 @@
   - type: Item
     size: Small
     storedRotation: -90
-  - type: Edible
+  - type: Food
     requiresSpecialDigestion: true
   - type: SolutionContainerManager
     solutions:
@@ -67,7 +67,7 @@
   - type: ItemTogglePointLight
   - type: PointLight
     enabled: false
-    radius: 3
+    radius: 7 # DS14-value
     energy: 1
     mask: /Textures/Effects/LightMasks/cone.png
     autoRot: true
@@ -141,7 +141,6 @@
     - Snout
     - HeadTop
     - HeadSide
-    - FacialHair
 
 - type: entity
   abstract: true
@@ -190,7 +189,6 @@
     - Snout
     - HeadTop
     - HeadSide
-    - FacialHair
 
 - type: entity
   abstract: true
@@ -216,7 +214,7 @@
   - type: ItemTogglePointLight
   - type: PointLight
     enabled: false
-    radius: 3
+    radius: 4 # DS14
     energy: 2
     mask: /Textures/Effects/LightMasks/cone.png
     autoRot: true

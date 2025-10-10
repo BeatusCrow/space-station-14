@@ -1,0 +1,15 @@
+- type: construction
+  id: ClothingCraftHelmet
+  graph: ClothingCraftHelmet
+  startNode: start
+  targetNode: clothingCraftHelmet
+  category: construction-category-clothing
+  objectType: Item
+
+- type: construction
+  id: ClothingCraftArmor
+  graph: ClothingCraftArmor
+  startNode: start
+  targetNode: clothingCraftArmor
+  category: construction-category-clothing
+  objectType: Item

@@ -213,8 +213,8 @@
       coefficients:
         Blunt: 0.6
         Slash: 0.6
-        Piercing: 0.5
-        Heat: 0.3
+        Piercing: 0.6 # DS14-value
+        Heat: 0.4 # DS14-value
         Radiation: 0.1
   - type: ExplosionResistance
     damageCoefficient: 0.2
@@ -277,12 +277,15 @@
   - type: Armor
     modifiers:
       coefficients:
+        Heat: 0.8 # DS14-value
         Blunt: 0.8
-        Slash: 0.8
-        Piercing: 0.7
+        Slash: 0.9 # DS14-value
+        Piercing: 0.9 # DS14-value
+        Radiation: 0.75 # DS14-value
+        Caustic: 0.5 # DS14-value
   - type: ClothingSpeedModifier
-    walkModifier: 0.65
-    sprintModifier: 0.65
+    walkModifier: 0.85 # DS14-value
+    sprintModifier: 0.85 # DS14-value
   - type: HeldSpeedModifier
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitBrigmedic
@@ -309,11 +312,11 @@
         Blunt: 0.4
         Slash: 0.5
         Piercing: 0.6
-        Heat: 0.8
+        Heat: 0.6 # DS14-value
         Caustic: 0.7
   - type: ClothingSpeedModifier
-    walkModifier: 0.7
-    sprintModifier: 0.7
+    walkModifier: 0.75 # DS14-value
+    sprintModifier: 0.75 # DS14-value
   - type: HeldSpeedModifier
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitWarden
@@ -380,8 +383,9 @@
         Slash: 0.8
         Piercing: 0.8
         Heat: 0.4
+        Shock: 0.8 # DS14-value
         Radiation: 0.0
-        Caustic: 0.7
+        Caustic: 0.5 # DS14-value
   - type: ClothingSpeedModifier
     walkModifier: 0.8
     sprintModifier: 0.8
@@ -494,7 +498,7 @@
         Blunt: 0.6
         Slash: 0.5
         Piercing: 0.5
-        Heat: 0.8
+        Heat: 0.5 # DS14-value
         Radiation: 0.5
         Caustic: 0.6
   - type: ClothingSpeedModifier
@@ -556,17 +560,18 @@
     lowPressureMultiplier: 1000
   - type: ExplosionResistance
     damageCoefficient: 0.5
-  - type: StaminaResistance # do not add these to other equipment or mobs, we don't want to microbalance these everywhere
-    damageCoefficient: 0.75
+  # - type: StaminaResistance # do not add these to other equipment or mobs, we don't want to microbalance these everywhere
+  #   damageCoefficient: 0.75
   - type: Armor
     modifiers:
       coefficients:
         Blunt: 0.5
         Slash: 0.5
-        Piercing: 0.5
+        Piercing: 0.4 # DS14-value
         Heat: 0.5
         Radiation: 0.5
         Caustic: 0.5
+        Stun: 0.65 # DS14-value: 5 stunbaton hits for stun
   - type: ClothingSpeedModifier
     walkModifier: 0.9
     sprintModifier: 0.9
@@ -582,6 +587,10 @@
     - ScurretWearable
   - type: StaticPrice
     price: 5000
+  - type: HardsuitIdentification # DS14
+  - type: Speech # DS14
+  - type: TTS # DS14
+    voice: Adjutant
 
 # Syndicate Medic Hardsuit
 - type: entity
@@ -600,6 +609,10 @@
     tags:
     - Hardsuit
     - WhitelistChameleon
+  - type: HardsuitIdentification # DS14
+  - type: Speech # DS14
+  - type: TTS # DS14
+    voice: Adjutant
 
 #Syndicate Elite Hardsuit
 - type: entity
@@ -622,17 +635,18 @@
     damageCoefficient: 0.2
   - type: FireProtection
     reduction: 0.8
-  - type: StaminaResistance # do not add these to other equipment or mobs, we don't want to microbalance these everywhere
-    damageCoefficient: 0.6
+  # - type: StaminaResistance # do not add these to other equipment or mobs, we don't want to microbalance these everywhere
+  #   damageCoefficient: 0.6
   - type: Armor
     modifiers:
       coefficients:
         Blunt: 0.6
         Slash: 0.6
-        Piercing: 0.6
+        Piercing: 0.5 # DS14-value
         Heat: 0.2
-        Radiation: 0.01
+        Radiation: 0.05 # DS14-value
         Caustic: 0.5
+        Stun: 0.5 # DS14-value: 6 stunbaton hits for stun
   - type: Item
     size: Huge
   - type: ClothingSpeedModifier
@@ -646,6 +660,10 @@
     - CorgiWearable
     - Hardsuit
     - WhitelistChameleon
+  - type: HardsuitIdentification # DS14
+  - type: Speech # DS14
+  - type: TTS # DS14
+    voice: Adjutant
 
 #Syndicate Commander Hardsuit
 - type: entity
@@ -663,8 +681,8 @@
     lowPressureMultiplier: 1000
   - type: ExplosionResistance
     damageCoefficient: 0.5
-  - type: StaminaResistance # do not add these to other equipment or mobs, we don't want to microbalance these everywhere
-    damageCoefficient: 0.6
+  # - type: StaminaResistance # do not add these to other equipment or mobs, we don't want to microbalance these everywhere
+  #   damageCoefficient: 0.6
   - type: Armor
     modifiers:
       coefficients:
@@ -674,6 +692,7 @@
         Heat: 0.5
         Radiation: 0.25
         Caustic: 0.4
+        Stun: 0.5 # DS14-value: 6 stunbaton hits for stun
   - type: ClothingSpeedModifier
     walkModifier: 0.9
     sprintModifier: 0.9
@@ -685,7 +704,10 @@
     - CorgiWearable
     - Hardsuit
     - WhitelistChameleon
-
+  - type: HardsuitIdentification # DS14
+  - type: Speech # DS14 # DS14
+  - type: TTS
+    voice: Adjutant
 
 #Cybersun Juggernaut Hardsuit
 - type: entity
@@ -710,12 +732,13 @@
         Blunt: 0.2
         Slash: 0.2
         Piercing: 0.2
-        Heat: 0.2
+        Heat: 0.4 # DS14-value
         Radiation: 0.2
         Caustic: 0.2
+        Stun: 0.2 # DS14-value: what is stun?
   - type: ClothingSpeedModifier
-    walkModifier: 0.65
-    sprintModifier: 0.65
+    walkModifier: 0.65 # DS14-value
+    sprintModifier: 0.55 # DS14-value
   - type: HeldSpeedModifier
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitCybersun
@@ -725,6 +748,10 @@
     - CorgiWearable
     - Hardsuit
     - WhitelistChameleon
+  - type: HardsuitIdentification # DS14
+  - type: Speech # DS14
+  - type: TTS # DS14
+    voice: Adjutant
 
 #Wizard Hardsuit
 - type: entity
@@ -876,6 +903,10 @@
     sprite: Clothing/OuterClothing/Hardsuits/ERTSuits/ertleader.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitERTLeader
+  - type: HardsuitIdentification # DS14
+  - type: Speech # DS14
+  - type: TTS # DS14
+    voice: Glados
 
 #ERT Chaplain Hardsuit
 - type: entity
@@ -906,6 +937,10 @@
     clothingPrototype: ClothingHeadHelmetHardsuitERTEngineer
   - type: FireProtection
     reduction: 0.8
+  - type: HardsuitIdentification # DS14
+  - type: Speech # DS14
+  - type: TTS # DS14
+    voice: Glados
 
 #ERT Medic Hardsuit
 - type: entity
@@ -920,6 +955,10 @@
     sprite: Clothing/OuterClothing/Hardsuits/ERTSuits/ertmedical.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitERTMedical
+  - type: HardsuitIdentification # DS14
+  - type: Speech # DS14
+  - type: TTS # DS14
+    voice: Glados
 
 #ERT Security Hardsuit
 - type: entity
@@ -938,6 +977,10 @@
     tags:
     - Hardsuit
     - WhitelistChameleon
+  - type: HardsuitIdentification # DS14
+  - type: Speech # DS14
+  - type: TTS # DS14
+    voice: Glados
 
 #ERT Janitor Hardsuit
 - type: entity
@@ -952,6 +995,10 @@
     sprite: Clothing/OuterClothing/Hardsuits/ERTSuits/ertjanitor.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitERTJanitor
+  - type: HardsuitIdentification # DS14
+  - type: Speech # DS14
+  - type: TTS # DS14
+    voice: Glados
 
 #Deathsquad
 - type: entity
@@ -971,26 +1018,36 @@
     heatingCoefficient: 0.001
     coolingCoefficient: 0.001
   - type: ExplosionResistance
-    damageCoefficient: 0.2
+    damageCoefficient: 0.1
   - type: FireProtection
-    reduction: 0.8
-  - type: StaminaResistance # do not add these to other equipment or mobs, we don't want to microbalance these everywhere
-    damageCoefficient: 0.15 # Needs 21 hits with a disabler to stun :godo:
+    reduction: 0.5 # DS14-value
+  # - type: StaminaResistance # do not add these to other equipment or mobs, we don't want to microbalance these everywhere
+  #   damageCoefficient: 0.15 # Needs 21 hits with a disabler to stun :godo:
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.1 #best armor in the game
-        Slash: 0.1
-        Piercing: 0.1
+        Blunt: 0.2 #best armor in the game
+        Slash: 0.2
+        Poison: 0.05 # DS14-value: what is poison?
+        Piercing: 0.2
         Heat: 0.1
-        Radiation: 0.1
+        Cold: 0.1
+        Shock: 0.1
+        Radiation: 0.05
         Caustic: 0.1
+        Stun: 0.05 # DS14-value: what is stun?
   - type: ClothingSpeedModifier
     walkModifier: 1.0
-    sprintModifier: 1.0
+    sprintModifier: 0.9
   - type: HeldSpeedModifier
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitDeathsquad
+  - type: HardsuitIdentification # DS14
+  - type: Speech # DS14
+  - type: TTS # DS14
+    voice: Adjutant
+  - type: Tag # DS14
+    tags: [] # ignore "WhitelistChameleon" tag
 
 #CBURN Hardsuit
 - type: entity

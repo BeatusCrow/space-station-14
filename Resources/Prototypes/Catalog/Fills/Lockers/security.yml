@@ -28,13 +28,12 @@
     children:
     - id: FlashlightSeclite
     - id: WeaponDisabler
-    - id: WeaponTaser
     - id: ClothingBeltSecurityFilled
     - id: Flash
     - id: ClothingEyesGlassesSecurity
     - id: ClothingHandsGlovesCombat
-    - id: ClothingShoesBootsJack
-    - id: ClothingOuterCoatWarden
+    # - id: ClothingShoesBootsJack # DS14-disabled
+    # - id: ClothingOuterCoatWarden # DS14-disabled
     - id: ClothingOuterWinterWarden
     - id: RubberStampWarden
     - id: DoorRemoteArmory
@@ -46,7 +45,10 @@
       amount: 2
     - id: NetworkConfigurator
     - id: Binoculars
-    - id: WeaponEnergyShotgun
+    - id: ClothingNeckBodyCamera # DS14
+      amount: 4
+    - id: BoxTapeRecorder # DS14
+    - id: CriminalRecordsMonitor
 
 - type: entityTable
   id: FillLockerWardenHarduit
@@ -71,26 +73,29 @@
   table: !type:AllSelector
     children:
     - id: FlashlightSeclite
-      prob: 0.8
-    - id: WeaponDisabler
-    - id: WeaponTaser
-    - id: ClothingUniformJumpsuitSecGrey
-      prob: 0.3
+    #   prob: 0.8 # DS14-disabled
+    # - id: WeaponDisabler # DS14-disabled
+    # - id: ClothingUniformJumpsuitSecGrey # DS14-disabled
+    #   prob: 0.3
     - id: ClothingHeadHelmetBasic
-    - id: ClothingOuterArmorBasic
+    # - id: ClothingOuterArmorBasic # DS14-disabled
+    - id: ClothingOuterVestArmorSec # DS14
     - id: ClothingBeltSecurityFilled
     - id: Flash
       prob: 0.5
     - id: ClothingEyesGlassesSecurity
     - id: ClothingHeadsetSecurity
     - id: ClothingHandsGlovesColorBlack
-    - id: ClothingShoesBootsJack
-    - id: WeaponMeleeNeedle
-      prob: 0.1
+    # - id: ClothingShoesBootsJack # DS14-disabled
+    # - id: WeaponMeleeNeedle # DS14-disabled
+    #   prob: 0.1
     - id: HoloprojectorSecurity
       prob: 0.6
-    - id: BookSpaceLaw
-      prob: 0.5
+    # - id: BookSpaceLaw # DS14-disabled
+    #   prob: 0.5
+    - id: ERTloadoutSecuritySecondary # DS14
+    - id: ClothingNeckBodyCamera # DS14
+    - id: ClothingMaskGasSecurity # DS14
 
 - type: entity
   id: LockerBrigmedicFilled
@@ -106,18 +111,21 @@
   id: FillLockerBrigmedic
   table: !type:AllSelector
     children:
-    - id: ClothingEyesGlassesSecurity
-    - id: WeaponTaser
-    - id: WeaponDisabler
+    - id: ClothingHeadsetBrigmedic
     - id: TrackingImplanter
-      amount: 2
+    - id: RubberStampBrigmedic
     - id: ClothingOuterHardsuitBrigmedic
-    - id: BoxSterileMask
-    - id: ClothingHeadHatBeretBrigmedic
+    - id: ClothingHandsGlovesLatex
     - id: ClothingOuterCoatAMG
     - id: ClothingUniformJumpsuitBrigmedic
     - id: ClothingUniformJumpskirtBrigmedic
     - id: ClothingUniformJumpskirtOfLife
+    - id: ClothingHeadHatBeretBrigmedic
+    - id: ClothingHeadHatBeretSecurityMedic
+    - id: ClothingHeadHelmetSecurityMedic
+    - id: ClothingOuterVestArmorMedSec
+    - id: ClothingOuterVestSecurityMedic
+    - id: ClothingOuterCoatLabSecurityMedic
       prob: 0.1
     - id: MedkitFilled
     - !type:GroupSelector
@@ -155,18 +163,23 @@
     - id: ClothingHeadHatDetGadget
     - id: ClothingNeckTieDet
     - id: ClothingOuterVestDetective
-    - id: ClothingOuterCoatDetectiveLoadout
-    - id: FlippoEngravedLighter
+    - id: ClothingOuterCoatDetective
     - id: FlashlightSeclite
     - id: ForensicScanner
     - id: LogProbeCartridge
     - id: BoxForensicPad
+      amount: 2
     - id: DrinkDetFlask
     - id: ClothingHandsGlovesForensic
     - id: RubberStampDetective
     - id: HoloprojectorSecurity
     - id: BoxEvidenceMarkers
     - id: HandLabeler
+    - id: FlippoEngravedLighter # DS14
+    - id: ADTtelescopicBaton # ADT
+    - id: BoxFolderRed # DS14
+    - id: BoxFolderYellow # DS14
+    - id: BoxTapeRecorder # DS14
 
 - type: entity
   id: ClosetBombFilled
@@ -187,7 +200,7 @@
     - id: Wirecutter
     - id: Screwdriver
     - id: Multitool
-      prob: 0.5
+      prob: 0.75 # DS14-value
 
 - type: entity
   parent: [GunSafeBaseSecure, BaseSecurityContraband]
@@ -279,7 +292,7 @@
     children:
     - id: WeaponShotgunEnforcer
       amount: 2
-    - id: BoxLethalshot
+    - id: MagazineShotgun
       amount: 4
 
 - type: entity
@@ -337,3 +350,44 @@
     children:
     - id: WeaponLaserCarbine
       amount: 3
+
+# DS14-start
+
+- type: entity
+  parent: [GunSafeBaseSecure, BaseSecurityContraband]
+  id: GunSafeDominator
+  name: dominators safe
+  components:
+  - type: StorageFill
+    contents:
+    - id: PistolDominator
+      amount: 3
+
+- type: entity
+  parent: [GunSafeBaseSecure, BaseSecurityContraband]
+  id: GunSafeArmorHeavy
+  name: armor heavy safe
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingOuterArmorHeavy
+    - id: ClothingShoesSwat
+    - id: ClothingMaskGasSwat
+    - id: ClothingHeadHelmetSwat
+
+- type: entity
+  id: LockerBlueShieldFilled
+  suffix: BlueShield, Filled
+  parent: LockerBlueShield
+  components:
+  - type: StorageFill
+    contents:
+      - id: NitrogenTankFilled
+      - id: OxygenTankFilled
+      - id: MedkitFilled
+      - id: MedkitCombatFilled
+      - id: MedkitAdvancedFilled
+      - id: ClothingEyesHudAdvanced
+      - id: RubberStampBlueShield
+      - id: WeaponDisabler
+      - id: ClothingHeadHelmetSwat

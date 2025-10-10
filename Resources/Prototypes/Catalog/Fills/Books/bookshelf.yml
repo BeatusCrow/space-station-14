@@ -81,6 +81,9 @@
     - id: BookSpaceEncyclopedia
     - id: BookSpaceLaw
     - id: BookTheBookOfControl
+    - id: HyperLinkBookCorporateLaw # Corvax-HyperLink
+    - id: HyperLinkBookSOPSecurity # Corvax-HyperLink
+    - id: HyperLinkBookSOPLaw # Corvax-HyperLink
 
 - type: entityTable
   id: RandomBookTable

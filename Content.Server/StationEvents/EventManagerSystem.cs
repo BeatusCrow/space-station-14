@@ -71,7 +71,7 @@ public sealed class EventManagerSystem : EntitySystem
             return;
         }
 
-        if (!_prototype.Resolve(randomLimitedEvent, out _))
+        if (!_prototype.TryIndex(randomLimitedEvent, out _))
         {
             Log.Warning("A requested event is not available!");
             return;
@@ -104,7 +104,7 @@ public sealed class EventManagerSystem : EntitySystem
 
         foreach (var eventid in selectedEvents)
         {
-            if (!_prototype.Resolve(eventid, out var eventproto))
+            if (!_prototype.TryIndex(eventid, out var eventproto))
             {
                 Log.Warning("An event ID has no prototype index!");
                 continue;
@@ -248,6 +248,9 @@ public sealed class EventManagerSystem : EntitySystem
     private bool CanRun(EntityPrototype prototype, StationEventComponent stationEvent, int playerCount, TimeSpan currentTime)
     {
         if (GameTicker.IsGameRuleActive(prototype.ID))
+            return false;
+
+        if (stationEvent.WillNotStartRandomly)
             return false;
 
         if (stationEvent.MaxOccurrences.HasValue && GetOccurrences(prototype) >= stationEvent.MaxOccurrences.Value)

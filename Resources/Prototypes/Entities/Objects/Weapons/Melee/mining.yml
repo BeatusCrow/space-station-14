@@ -239,7 +239,7 @@
   - type: LeechOnMarker
     leech:
       groups:
-        Brute: -21
+        Brute: -11 # DS14-value
   - type: Tag
     tags:
       - Pickaxe

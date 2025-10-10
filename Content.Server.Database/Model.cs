@@ -406,6 +406,7 @@ namespace Content.Server.Database
         public string Sex { get; set; } = null!;
         public string Gender { get; set; } = null!;
         public string Species { get; set; } = null!;
+        public string Voice { get; set; } = null!; // Corvax-TTS
         [Column(TypeName = "jsonb")] public JsonDocument? Markings { get; set; } = null!;
         public string HairName { get; set; } = null!;
         public string HairColor { get; set; } = null!;
@@ -704,6 +705,11 @@ namespace Content.Server.Database
         [Required] public LogImpact Impact { get; set; }
 
         [Required] public DateTime Date { get; set; }
+
+        /// <summary>
+        /// The current time in the round in ticks since the start of the round.
+        /// </summary>
+        public long CurTime { get; set; }
 
         [Required] public string Message { get; set; } = default!;
 

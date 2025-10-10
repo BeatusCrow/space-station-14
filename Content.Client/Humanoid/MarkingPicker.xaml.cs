@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.DeadSpace.Interfaces.Client;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Humanoid.Prototypes;
@@ -20,6 +21,7 @@ public sealed partial class MarkingPicker : Control
     [Dependency] private readonly MarkingManager _markingManager = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly IEntityManager _entityManager = default!;
+    private IClientSponsorsManager? _sponsorsManager; // DS14-sponsors
 
     private readonly SpriteSystem _sprite;
 
@@ -127,6 +129,7 @@ public sealed partial class MarkingPicker : Control
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
+        IoCManager.Instance!.TryResolveType(out _sponsorsManager); // DS14-sponsors
 
         _sprite = _entityManager.System<SpriteSystem>();
 
@@ -230,6 +233,16 @@ public sealed partial class MarkingPicker : Control
 
             var item = CMarkingsUnused.AddItem($"{GetMarkingName(marking)}", _sprite.Frame0(marking.Sprites[0]));
             item.Metadata = marking;
+            // DS14-sponsors-start
+            if (_sponsorsManager != null && marking.SponsorOnly)
+            {
+                item.Disabled = true;
+                if (_sponsorsManager.TryGetInfo(out var sponsor))
+                {
+                    item.Disabled = !sponsor.AllowedMarkings.Contains(marking.ID);
+                }
+            }
+            // DS14-sponsors-end
         }
 
         CMarkingPoints.Visible = _currentMarkings.PointsLeft(_selectedMarkingCategory) != -1;
@@ -404,7 +417,7 @@ public sealed partial class MarkingPicker : Control
 
         var stateNames = GetMarkingStateNames(prototype);
         _currentMarkingColors.Clear();
-        CMarkingColors.RemoveAllChildren();
+        CMarkingColors.DisposeAllChildren();
         List<ColorSelectorSliders> colorSliders = new();
         for (int i = 0; i < prototype.Sprites.Count; i++)
         {

@@ -1,10 +1,15 @@
 using Content.Server.Chat.Systems;
+using Content.Server.Emp;
+using Content.Server.Radio.Components;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Radio;
 using Content.Shared.Radio.Components;
 using Content.Shared.Radio.EntitySystems;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
+using Content.Shared.Corvax.TTS;
+using Robust.Server.Audio;
+using Robust.Shared.Audio;
 
 namespace Content.Server.Radio.EntitySystems;
 
@@ -12,6 +17,7 @@ public sealed class HeadsetSystem : SharedHeadsetSystem
 {
     [Dependency] private readonly INetManager _netMan = default!;
     [Dependency] private readonly RadioSystem _radio = default!;
+    [Dependency] private readonly AudioSystem _audio = default!; // DS14
 
     public override void Initialize()
     {
@@ -20,6 +26,8 @@ public sealed class HeadsetSystem : SharedHeadsetSystem
         SubscribeLocalEvent<HeadsetComponent, EncryptionChannelsChangedEvent>(OnKeysChanged);
 
         SubscribeLocalEvent<WearingHeadsetComponent, EntitySpokeEvent>(OnSpeak);
+
+        SubscribeLocalEvent<HeadsetComponent, EmpPulseEvent>(OnEmpPulse);
     }
 
     private void OnKeysChanged(EntityUid uid, HeadsetComponent component, EncryptionChannelsChangedEvent args)
@@ -66,6 +74,7 @@ public sealed class HeadsetSystem : SharedHeadsetSystem
     protected override void OnGotUnequipped(EntityUid uid, HeadsetComponent component, GotUnequippedEvent args)
     {
         base.OnGotUnequipped(uid, component, args);
+        component.IsEquipped = false;
         RemComp<ActiveRadioComponent>(uid);
         RemComp<WearingHeadsetComponent>(args.Equipee);
     }
@@ -77,9 +86,6 @@ public sealed class HeadsetSystem : SharedHeadsetSystem
 
         if (component.Enabled == value)
             return;
-
-        component.Enabled = value;
-        Dirty(uid, component);
 
         if (!value)
         {
@@ -97,6 +103,9 @@ public sealed class HeadsetSystem : SharedHeadsetSystem
 
     private void OnHeadsetReceive(EntityUid uid, HeadsetComponent component, ref RadioReceiveEvent args)
     {
+        // TTS-edit-start
+        _audio.PlayPvs(component.RadioReceiveSoundPath, uid, AudioParams.Default.WithVolume(-10f));
+
         // TODO: change this when a code refactor is done
         // this is currently done this way because receiving radio messages on an entity otherwise requires that entity
         // to have an ActiveRadioComponent
@@ -110,6 +119,22 @@ public sealed class HeadsetSystem : SharedHeadsetSystem
         }
 
         if (TryComp(parent, out ActorComponent? actor))
+        {
             _netMan.ServerSendMessage(args.ChatMsg, actor.PlayerSession.Channel);
+            if (parent != args.MessageSource && TryComp(args.MessageSource, out TTSComponent? _))
+            {
+                args.Receivers.Add(parent);
+            }
+        }
+        // TTS-edit-end
+    }
+
+    private void OnEmpPulse(EntityUid uid, HeadsetComponent component, ref EmpPulseEvent args)
+    {
+        if (component.Enabled)
+        {
+            args.Affected = true;
+            args.Disabled = true;
+        }
     }
 }

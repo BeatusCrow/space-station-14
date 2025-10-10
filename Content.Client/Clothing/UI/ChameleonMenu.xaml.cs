@@ -54,7 +54,7 @@ public sealed partial class ChameleonMenu : DefaultWindow
 
         foreach (var id in _possibleIds)
         {
-            if (!_prototypeManager.Resolve(id, out EntityPrototype? proto))
+            if (!_prototypeManager.TryIndex(id, out EntityPrototype? proto))
                 continue;
 
             var lowId = id.Id.ToLowerInvariant();
@@ -75,8 +75,8 @@ public sealed partial class ChameleonMenu : DefaultWindow
             button.OnPressed += _ => OnIdSelected?.Invoke(id);
             Grid.AddChild(button);
             var entityPrototypeView = new EntityPrototypeView();
-            button.AddChild(entityPrototypeView);
-            entityPrototypeView.SetPrototype(proto);
+            entityPrototypeView.SetPrototype(proto); // DS14-chameleon-fix
+            button.AddChild(entityPrototypeView); // DS14-chameleon-fix
         }
     }
 

@@ -86,6 +86,7 @@
   - SolarControlComputerCircuitboard
   - SolarTrackerElectronics
   - EmitterCircuitboard
+  - GeneratorRTGMachineCircuitboard # DS14-uranium-rework
 
 - type: technology
   id: AtmosphericTech
@@ -118,6 +119,25 @@
   - RipleyCentralElectronics
   - RipleyPeripheralsElectronics
   - MechEquipmentGrabber
+
+# DS14-start
+
+- type: technology
+  id: HUD
+  name: research-technology-hud
+  icon:
+    sprite: Clothing/Eyes/Hud/diag.rsi
+    state: icon
+  discipline: Industrial
+  tier: 2
+  cost: 7000
+  recipeUnlocks:
+  - ClothingEyesHudDiagnostic
+  - ClothingEyesHudMedical
+  - ClothingEyesHudSecurity
+  - ClothingEyesHudAdvanced
+
+# DS14-end
 
 # Tier 2
 
@@ -183,6 +203,8 @@
     - MiningDrillDiamond
     - AdvancedMineralScannerEmpty
     - BorgModuleAdvancedMining
+    - SalvageExpeditionsComputerCircuitboard # Corvax-Cringe
+    - BorgModuleAdvancedMining # DS14
 
 # Tier 3
 

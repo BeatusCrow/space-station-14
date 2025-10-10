@@ -35,6 +35,7 @@ using Robust.Shared.Toolshed;
 using Robust.Shared.Utility;
 using System.Linq;
 using static Content.Shared.Configurable.ConfigurationComponent;
+using Content.Shared.IdentityManagement;
 
 namespace Content.Server.Administration.Systems
 {
@@ -65,6 +66,7 @@ namespace Content.Server.Administration.Systems
         [Dependency] private readonly AdminFrozenSystem _freeze = default!;
         [Dependency] private readonly IPlayerManager _playerManager = default!;
         [Dependency] private readonly SiliconLawSystem _siliconLawSystem = default!;
+        [Dependency] private readonly TransformSystem _transform = default!;
 
         private readonly Dictionary<ICommonSession, List<EditSolutionsEui>> _openSolutionUis = new();
 
@@ -120,7 +122,7 @@ namespace Content.Server.Administration.Systems
                     prayerVerb.Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/pray.svg.png"));
                     prayerVerb.Act = () =>
                     {
-                        _quickDialog.OpenDialog(player, "Subtle Message", "Message", "Popup Message", (string message, string popupMessage) =>
+                        _quickDialog.OpenDialog(player, "Subtle Message to " + targetActor.PlayerSession.Name, "Message", "Popup Message", (string message, string popupMessage) =>
                         {
                             _prayerSystem.SendSubtleMessage(targetActor.PlayerSession, player, message, popupMessage == "" ? Loc.GetString("prayer-popup-subtle-default") : popupMessage);
                         });
@@ -242,6 +244,14 @@ namespace Content.Server.Administration.Systems
                         Act = () =>
                         {
                             EnsureComp<AdminFrozenComponent>(args.Target);
+                            // DS14-start
+                            if (TryComp(args.Target, out TransformComponent? transform))
+                            {
+                                var coordinates = _transform.GetMoverCoordinates(args.Target, transform);
+                                var name = Identity.Entity(args.Target, EntityManager);
+                                _popup.PopupCoordinates(Loc.GetString("admin-freeze-popup", ("user", name)), coordinates, PopupType.MediumCaution);
+                            }
+                            // DS14-end
                         },
                         Impact = LogImpact.Medium,
                     });

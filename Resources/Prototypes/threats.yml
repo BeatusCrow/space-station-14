@@ -4,6 +4,8 @@
   weights:
     Dragon: 1
     Revenant: 1
+    Demons: 1
+    ShadowDemon: 1
 
 - type: ninjaHackingThreat
   id: Dragon
@@ -14,3 +16,13 @@
   id: Revenant
   announcement: terror-revenant
   rule: RevenantSpawn
+
+- type: ninjaHackingThreat
+  id: Demons
+  announcement: terror-revenant
+  rule: DemonsInvasion
+
+- type: ninjaHackingThreat
+  id: ShadowDemon
+  announcement: terror-revenant
+  rule: ShadowDemonInvasion

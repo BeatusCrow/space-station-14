@@ -1,0 +1,5 @@
+- type: localizedDataset
+  id: NamesLastDeathSquad
+  values:
+    prefix: names-death-squad-last-dataset-
+    count: 58

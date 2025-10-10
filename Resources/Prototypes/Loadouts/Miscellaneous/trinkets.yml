@@ -6,7 +6,7 @@
     requirement:
       !type:DepartmentTimeRequirement
       department: Command
-      time: 1h
+      time: 3600 # 1 hour
 
 # Flowers
 - type: loadout
@@ -27,6 +27,13 @@
   storage:
     back:
     - ClothingMultipleHeadphones
+
+# DS14: HatDeer
+- type: loadout
+  id: HatDeer
+  storage:
+    back:
+    - ClothingHeadHatDeer
 
 # Toys
 - type: loadout
@@ -105,31 +112,6 @@
     back:
     - CigarGold
   groupBy: "smokeables"
-
-# Folders
-- type: loadout
-  id: BoxFolderBaseThreePapers
-  storage:
-    back:
-    - BoxFolderBaseThreePapers
-  groupBy: "folders"
-
-- type: loadout
-  id: BoxFolderPlasticClipboardThreePapers
-  storage:
-    back:
-    - BoxFolderPlasticClipboardThreePapers
-  groupBy: "folders"
-
-- type: loadout
-  id: BoxFolderClipboardThreePapers
-  effects:
-  - !type:GroupLoadoutEffect
-    proto: Command
-  storage:
-    back:
-    - BoxFolderClipboardThreePapers
-  groupBy: "folders"
 
 # Pins
 - type: loadout
@@ -333,7 +315,7 @@
   - !type:JobRequirementLoadoutEffect
     requirement:
       !type:OverallPlaytimeRequirement
-      time: 10h
+      time: 36000 # 10hr
   storage:
     back:
     - TowelColorWhite
@@ -345,7 +327,7 @@
   - !type:JobRequirementLoadoutEffect
     requirement:
       !type:OverallPlaytimeRequirement
-      time: 500h
+      time: 1800000 # 500hr
   storage:
     back:
     - TowelColorSilver
@@ -357,7 +339,7 @@
   - !type:JobRequirementLoadoutEffect
     requirement:
       !type:OverallPlaytimeRequirement
-      time: 1000h
+      time: 3600000 # 1000hr
   storage:
     back:
     - TowelColorGold
@@ -370,7 +352,7 @@
     requirement:
       !type:DepartmentTimeRequirement
       department: Cargo
-      time: 100h
+      time: 360000 # 100hr
   storage:
     back:
     - TowelColorLightBrown
@@ -383,7 +365,7 @@
     requirement:
       !type:DepartmentTimeRequirement
       department: Civilian
-      time: 100h
+      time: 360000 # 100hr
   storage:
     back:
     - TowelColorGreen
@@ -396,7 +378,7 @@
     requirement:
       !type:DepartmentTimeRequirement
       department: Command
-      time: 100h
+      time: 360000 # 100hr
   storage:
     back:
     - TowelColorDarkBlue
@@ -409,7 +391,7 @@
     requirement:
       !type:DepartmentTimeRequirement
       department: Engineering
-      time: 100h
+      time: 360000 # 100hr
   storage:
     back:
     - TowelColorOrange
@@ -422,7 +404,7 @@
     requirement:
       !type:DepartmentTimeRequirement
       department: Medical
-      time: 100h
+      time: 360000 # 100hr
   storage:
     back:
     - TowelColorLightBlue
@@ -435,7 +417,7 @@
     requirement:
       !type:DepartmentTimeRequirement
       department: Science
-      time: 100h
+      time: 360000 # 100hr
   storage:
     back:
     - TowelColorPurple
@@ -448,7 +430,7 @@
     requirement:
       !type:DepartmentTimeRequirement
       department: Security
-      time: 100h
+      time: 360000 # 100hr
   storage:
     back:
     - TowelColorRed
@@ -461,7 +443,7 @@
     requirement:
       !type:RoleTimeRequirement
       role: JobPassenger
-      time: 100h
+      time: 360000 # 100hr
   storage:
     back:
     - TowelColorGray
@@ -474,7 +456,7 @@
     requirement:
       !type:RoleTimeRequirement
       role: JobChaplain
-      time: 100h
+      time: 360000 # 100hr
   storage:
     back:
     - TowelColorBlack
@@ -487,7 +469,7 @@
     requirement:
       !type:RoleTimeRequirement
       role: JobLibrarian
-      time: 100h
+      time: 360000 # 100hr
   storage:
     back:
     - TowelColorDarkGreen
@@ -500,7 +482,7 @@
     requirement:
       !type:RoleTimeRequirement
       role: JobLawyer
-      time: 100h
+      time: 360000 # 100hr
   storage:
     back:
     - TowelColorMaroon
@@ -513,7 +495,7 @@
     requirement:
       !type:RoleTimeRequirement
       role: JobClown
-      time: 100h
+      time: 360000 # 100hr
   storage:
     back:
     - TowelColorYellow
@@ -526,7 +508,7 @@
     requirement:
       !type:RoleTimeRequirement
       role: JobMime
-      time: 100h
+      time: 360000 # 100hr
   storage:
     back:
     - TowelColorMime

@@ -7,7 +7,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.Administration.Commands;
 
-[AdminCommand(AdminFlags.AdminWho)]
+[AnyCommand] // Corvax: Allow use to everyone
 public sealed class AdminWhoCommand : LocalizedCommands
 {
     [Dependency] private readonly IAfkManager _afkManager = default!;

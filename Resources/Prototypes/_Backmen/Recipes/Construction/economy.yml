@@ -1,0 +1,17 @@
+﻿- type: construction
+  id: eftpos
+  graph: eftpos
+  startNode: start
+  targetNode: eftpos
+  category: construction-category-tools
+  objectType: Item
+
+- type: construction
+  id: ATM
+  graph: ATM
+  startNode: start
+  targetNode: ATM
+  category: construction-category-utilities
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: true

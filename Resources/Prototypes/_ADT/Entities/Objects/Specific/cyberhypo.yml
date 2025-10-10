@@ -1,0 +1,23 @@
+- type: entity
+  parent: BaseItem
+  id: ADTCyberHypospray
+  name: киберсан гипоспрей
+  description: Относительно массовая модель, созданная с помощью реверс-инженеринга на основе боевого гипоспрея NT для оперативников Мародёров Горлекса. Имеет повышенную вместимость в ущерб скорости применения.
+  components:
+  - type: Sprite
+    sprite: _ADT/Objects/Specific/cyberhypo.rsi
+    state: hypo
+  - type: Item
+    sprite: _ADT/Objects/Specific/cyberhypo.rsi
+  - type: SolutionContainerManager
+    solutions:
+      hypospray:
+        maxVol: 30
+  - type: RefillableSolution
+    solution: hypospray
+  - type: ExaminableSolution
+    solution: hypospray
+  - type: Hypospray
+    onlyAffectsMobs: false
+  - type: UseDelay
+    delay: 1.0

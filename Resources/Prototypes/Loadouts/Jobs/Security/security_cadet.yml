@@ -2,9 +2,47 @@
 - type: loadout
   id: RedJumpsuit
   equipment:
-    jumpsuit: ClothingUniformJumpsuitColorRed
+    jumpsuit: ClothingUniformJumpsuitSecGrey
+
+# DS14-start
+- type: loadout
+  id: SecurityJumpsuitBlue
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitSecBlue
+# DS14-end
 
 - type: loadout
   id: RedJumpskirt
   equipment:
-    jumpsuit: ClothingUniformJumpskirtColorRed
+    jumpsuit: ClothingUniformJumpskirtSecGrey
+
+# Socks
+- type: loadout
+  id: UnderwearSocksCadet
+  equipment:
+    socks: ClothingUnderwearSocksCadet
+
+# Underwear
+- type: loadout
+  id: UnderwearBottomBoxersCadet
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: MaleUnderwear
+  equipment:
+    underwearb: ClothingUnderwearBottomBoxersCadet
+
+- type: loadout
+  id: UnderwearBottomPantiesCadet
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: FemaleUnderwear
+  equipment:
+    underwearb: ClothingUnderwearBottomPantiesCadet
+
+- type: loadout
+  id: UnderwearTopBraCadet
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: FemaleUnderwear
+  equipment:
+    underweart: ClothingUnderwearTopBraCadet

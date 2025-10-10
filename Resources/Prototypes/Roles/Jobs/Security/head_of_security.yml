@@ -6,16 +6,14 @@
   requirements:
     - !type:RoleTimeRequirement
       role: JobWarden
-      time: 1h
-    - !type:RoleTimeRequirement
-      role: JobDetective
-      time: 1h # knowing how to use the tools is important
-    - !type:RoleTimeRequirement
-      role: JobSecurityOfficer
-      time: 5h
+      time: 36000 # 10 hours
     - !type:DepartmentTimeRequirement
       department: Security
-      time: 10h
+      time: 144000 # 40 hours
+    - !type:OverallPlaytimeRequirement
+      time: 360000 # 100 hours
+    - !type:AgeRequirement
+      requiredAge: 24
   weight: 10
   startingGear: HoSGear
   icon: "JobIconHeadOfSecurity"
@@ -26,12 +24,19 @@
   - Command
   - Brig
   - Security
+  - Brigmedic # DS14
   - Armory
   - Maintenance
   - Service
   - External
   - Detective
   - Cryogenics
+  #start-backmen: currency
+  minBankBalance: 400
+  maxBankBalance: 600
+  wageDepartment: Command
+  wage: 150
+  #end-backmen: currency
   special:
   - !type:AddImplantSpecial
     implants: [ MindShieldImplant ]
@@ -46,11 +51,11 @@
     id: HoSPDA
     gloves: ClothingHandsGlovesCombat
     ears: ClothingHeadsetAltSecurity
-    pocket1: WeaponPistolMk58
   storage:
     back:
     - Flash
-    - MagazinePistol
+    - HyperLinkBookCorporateLaw
+    - HyperLinkBookSOPSecurity
 
 - type: chameleonOutfit
   id: HeadOfSecurityChameleonOutfit

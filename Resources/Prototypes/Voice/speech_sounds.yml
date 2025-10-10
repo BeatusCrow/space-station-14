@@ -128,10 +128,16 @@
   id: Vox
   saySound:
     path: /Audio/Voice/Talk/vox.ogg
+    params:
+        volume: -2
   askSound:
     path: /Audio/Voice/Talk/vox_ask.ogg
+    params:
+        volume: -2
   exclaimSound:
     path: /Audio/Voice/Talk/vox_exclaim.ogg
+    params:
+        volume: -2
 
 - type: speechSounds
   id: Arachnid
@@ -150,6 +156,15 @@
     path: /Audio/Animals/cat_meow.ogg
   exclaimSound:
     path: /Audio/Animals/cat_meow.ogg
+
+- type: speechSounds
+  id: Neco
+  saySound:
+    path: /Audio/_DeadSpace/Voice/Neco/neco_speak1.ogg
+  askSound:
+    path: /Audio/_DeadSpace/Voice/Neco/neco_speak1.ogg
+  exclaimSound:
+    path: /Audio/_DeadSpace/Voice/Neco/neco_speak1.ogg
 
 - type: speechSounds
   id: Dog
@@ -177,15 +192,6 @@
     path: /Audio/Animals/goat_bah.ogg
   exclaimSound:
     path: /Audio/Animals/goat_bah.ogg
-
-- type: speechSounds
-  id: Vulpkanin
-  saySound:
-    path: /Audio/Voice/Talk/vulp.ogg
-  askSound:
-    path: /Audio/Voice/Talk/vulp_ask.ogg
-  exclaimSound:
-    path: /Audio/Voice/Talk/vulp_exclaim.ogg
 
 - type: speechSounds
   id: Wawa

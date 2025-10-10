@@ -124,7 +124,6 @@
     - AtmosStatic
     - CablesStatic
     - PaperworkStatic
-    - TowelsStatic
     - CargoStatic
     - MaterialsStatic
     - BasicChemistryStatic
@@ -136,7 +135,6 @@
   - type: EmagLatheRecipes
     emagStaticPacks:
     - SecurityAmmoStatic
-    - SyndicateAmmoStatic
   - type: BlueprintReceiver
     whitelist:
       tags:
@@ -211,6 +209,8 @@
     - Janitor
     - Instruments
     - Equipment
+    # - FauxTiles # DS14: moved to CutterMachine recipes
+    - NightVisionTech # DS14
   - type: EmagLatheRecipes
     emagDynamicPacks:
     - SecurityAmmo
@@ -258,6 +258,7 @@
     - CargoBoardsStatic
     - MedicalBoardsStatic
     - EngineeringBoardsStatic
+    # - CircuitFloorsStatic # DS14: moved to CutterMachine recipes
     dynamicPacks:
     - EngineeringBoards
     - CargoBoards
@@ -314,6 +315,7 @@
     - RoboticsStatic
     - BorgModulesStatic
     - BorgLimbsStatic
+    - BorgSecLimbsStatic # DS14
     dynamicPacks:
     - Robotics
     - BorgModules
@@ -398,6 +400,7 @@
     - SecurityPracticeStatic
     - SecurityAmmoStatic
     - SecurityWeaponsStatic
+    - SecurityBorgModulesStatic # DS14
     dynamicPacks:
     - SalvageSecurityBoards
     - SalvageSecurityWeapons
@@ -407,9 +410,6 @@
     - SecurityAmmo
     - SecurityWeapons
     - SecurityDisablers
-  - type: EmagLatheRecipes
-    emagStaticPacks:
-    - SyndicateAmmoStatic
   - type: MaterialStorage
     whitelist:
       tags:
@@ -446,9 +446,6 @@
       runningState: icon
       staticPacks:
       - SecurityAmmoStatic
-    - type: EmagLatheRecipes
-      emagStaticPacks:
-      - SyndicateAmmoStatic
     - type: MaterialStorage
       whitelist:
         tags:
@@ -518,7 +515,6 @@
     idleState: icon
     runningState: building
     staticPacks:
-    - TowelsStatic
     - ClothingCivilian
     - ClothingCargo
     - ClothingCommand
@@ -532,6 +528,7 @@
     - Scarves
     - Carpets
     - Bedsheets
+    - DoubleBedsheets # DS14
   - type: EmagLatheRecipes
     emagStaticPacks:
     - ClothingCentComm
@@ -676,7 +673,7 @@
   description: This is a cutter. It cuts. Add variety to your station floor with eye-pleasing patterns! Don't stick your fingers in.
   components:
   - type: Transform
-    noRot: false
+    noRot: true # DS14
   - type: Sprite
     sprite: Structures/Machines/cuttermachine.rsi
     snapCardinals: true
@@ -695,22 +692,15 @@
     idleState: icon
     runningState: building
     staticPacks:
-    - FloorDarkTilesStatic
-    - FloorSteelTilesStatic
-    - FloorWhiteTilesStatic
-    - FloorMaintsTilesStatic
-    - FloorWoodTilesStatic
-    - FloorConcreteTilesStatic
+    - FloorTilesStatic
     - CircuitFloorsStatic
-    - FloorMarbleTilesStatic
     dynamicPacks:
-    - FauxTiles
+    - FauxTiles # DS14
   - type: MaterialStorage
     whitelist:
       tags:
         - Sheet
-        - Metal
-        - Wooden
         - RawMaterial
+        - Ingot
         - Plastic
   - type: OreSiloClient

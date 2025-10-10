@@ -33,7 +33,8 @@ namespace Content.Client.VendingMachines.UI
 
         public VendingMachineMenu()
         {
-            MinSize = SetSize = new Vector2(250, 150);
+            MinSize = new Vector2(320, 200); // DS14-resize
+            SetSize = new Vector2(450, 200); // DS14-resize
             RobustXamlLoader.Load(this);
             IoCManager.InjectDependencies(this);
 
@@ -120,7 +121,7 @@ namespace Content.Client.VendingMachines.UI
             {
                 var entry = inventory[i];
 
-                if (!_prototypeManager.Resolve(entry.ID, out var prototype))
+                if (!_prototypeManager.TryIndex(entry.ID, out var prototype))
                 {
                     _amounts[entry.ID] = 0;
                     continue;

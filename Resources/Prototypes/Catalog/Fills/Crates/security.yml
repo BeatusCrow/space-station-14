@@ -91,7 +91,7 @@
       - id: MindShieldImplanter
         amount: 4
       - id: TrackingImplanter
-        amount: 4
+        amount: 2
 
 - type: entity
   parent: CrateSecgear
@@ -109,3 +109,25 @@
       amount: 1
     - id: Bola # replace with 4 e-bolas when added
       amount: 4
+
+# DS14-start
+
+- type: entity
+  id: CrateSecurityHardsuit
+  parent: CrateSecgear
+  components:
+  - type: StorageFill
+    contents:
+      - id: ClothingOuterHardsuitSecurity
+        amount: 2
+
+- type: entity
+  id: CrateSecurityUSSPjuggernaut
+  parent: CrateSecgear
+  components:
+  - type: StorageFill
+    contents:
+      - id: ClothingOuterArmorUSSPjuggernaut
+      - id: ADTClothingHeadUSSPjuggernautHelmetArmored
+      - id: ClothingUniformJumpsuitUSSPBlack
+      - id: ClothingHandsGlovesLeatherUSSPBlack

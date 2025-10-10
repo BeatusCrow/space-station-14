@@ -12,7 +12,6 @@
   - type: Tag
     tags:
     - Spear
-    - ScurretWearable
   - type: Fixtures
     fixtures:
       fix1:
@@ -71,6 +70,7 @@
   - type: SolutionInjectOnEmbed
     transferAmount: 2
     solution: melee
+    blockSlots: OUTERCLOTHING
   - type: SolutionTransfer
     maxTransferAmount: 2
   - type: Wieldable
@@ -218,7 +218,7 @@
 
 - type: entity
   name: sharkminnow tooth spear
-  parent: Spear
+  parent: Spear 
   id: SpearSharkMinnow
   description: A spear with a sharkminnow tooth as a tip.
   components:

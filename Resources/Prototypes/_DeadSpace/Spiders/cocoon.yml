@@ -1,0 +1,150 @@
+- type: entity
+  name: паучий кокон
+  parent: BaseMob
+  id: CocoonSpider
+  components:
+  - type: Tag
+    tags:
+    - Wall
+  - type: Physics
+    bodyType: Static
+  - type: Sprite
+    scale: 0.7, 0.7
+    noRot: true
+    sprite: _DeadSpace/Spiders/egg.rsi
+    layers:
+    - state: cocoon
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+  - type: Damageable
+    damageContainer: Biological
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Dead
+  - type: Appearance
+  - type: Evolution
+    createGhostRole: true
+    ghostRoleName: паук ужаса
+    ghostRoleDesk: Вы только что созрели.
+    duration: 300
+    spawnedEntities:
+      - MobSpiderTerrorWarrior
+      - MobSpiderTerrorBuilder
+      - MobSpiderTerrorMedic
+      - MobSpiderTerrorGuardianLvl2
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  name: королевский паучий кокон
+  parent: BaseMob
+  id: CocoonKingBloodSpider
+  components:
+  - type: Tag
+    tags:
+    - Wall
+  - type: Physics
+    bodyType: Static
+  - type: Sprite
+    scale: 0.7, 0.7
+    noRot: true
+    sprite: _DeadSpace/Spiders/egg.rsi
+    layers:
+    - state: king_cocoon
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+  - type: Damageable
+    damageContainer: Biological
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Dead
+  - type: Appearance
+  - type: Evolution
+    createGhostRole: true
+    ghostRoleName: королевский паук ужаса
+    ghostRoleDesk: Вы только что созрели.
+    duration: 500
+    spawnedEntities:
+      - MobSpiderTerrorRoyalGuard
+      - MobSpiderTerrorPrincess
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  id: SpiderCocoon
+  parent: BaseMob
+  name: паучий кокон
+  description: В нём что-то есть.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ExamineBlood
+  - type: Clickable
+  - type: RequireProjectileTarget
+    active: False
+  - type: Physics
+    bodyType: KinematicController
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.4
+        density: 60
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+  - type: Sprite
+    scale: 1, 1
+    noRot: true
+    drawdepth: Mobs
+    sprite: _DeadSpace/Spiders/cocoon.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: SPIDER-WEBBING-1
+  - type: RandomSprite
+    available:
+    - enum.DamageStateVisualLayers.Base:
+        SPIDER-WEBBING-1: ""
+        SPIDER-WEBBING-2: ""
+        SPIDER-WEBBING-3: ""
+  - type: Butcherable
+    spawned:
+    - id: MaterialWebSilk1
+      amount: 1
+  - type: Cocoon
+  - type: Tag
+    tags:
+      - CannotSuicide
+  - type: MobState
+    allowedStates:
+    - Dead
+    - Alive
+  - type: MobThresholds
+    thresholds:
+      1: Dead
+      0: Alive
+  - type: Damageable
+    damageContainer: Biological
+    damage:
+      types:
+        Blunt: 1
+  - type: Stamina
+  - type: Muted
+  - type: Appearance
+  - type: ZombieImmune
+  - type: ImmunitetInfectionDead
+  - type: Pullable

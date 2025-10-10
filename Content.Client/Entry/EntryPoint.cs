@@ -1,6 +1,8 @@
 using Content.Client.Administration.Managers;
 using Content.Client.Changelog;
 using Content.Client.Chat.Managers;
+using Content.Client.Corvax.DiscordAuth;
+using Content.Client.Corvax.JoinQueue;
 using Content.Client.DebugMon;
 using Content.Client.Eui;
 using Content.Client.Fullscreen;
@@ -69,6 +71,8 @@ namespace Content.Client.Entry
         [Dependency] private readonly JobRequirementsManager _jobRequirements = default!;
         [Dependency] private readonly ContentLocalizationManager _contentLoc = default!;
         [Dependency] private readonly ContentReplayPlaybackManager _playbackMan = default!;
+        [Dependency] private readonly JoinQueueManager _queueManager = default!; // Corvax-Queue
+        [Dependency] private readonly DiscordAuthManager _discordAuthManager = default!; // Corvax-DiscordAuth
         [Dependency] private readonly IResourceManager _resourceManager = default!;
         [Dependency] private readonly IReplayLoadManager _replayLoad = default!;
         [Dependency] private readonly ILogManager _logManager = default!;
@@ -77,21 +81,18 @@ namespace Content.Client.Entry
         [Dependency] private readonly IEntitySystemManager _entitySystemManager = default!;
         [Dependency] private readonly ClientsidePlaytimeTrackingManager _clientsidePlaytimeManager = default!;
 
-        public override void PreInit()
+        public override void Init()
         {
-            ClientContentIoC.Register(Dependencies);
+            ClientContentIoC.Register();
 
             foreach (var callback in TestingCallbacks)
             {
                 var cast = (ClientModuleTestingCallbacks) callback;
                 cast.ClientBeforeIoC?.Invoke();
             }
-        }
 
-        public override void Init()
-        {
-            Dependencies.BuildGraph();
-            Dependencies.InjectDependencies(this);
+            IoCManager.BuildGraph();
+            IoCManager.InjectDependencies(this);
 
             _contentLoc.Initialize();
             _componentFactory.DoAutoRegistrations();
@@ -126,8 +127,12 @@ namespace Content.Client.Entry
             _prototypeManager.RegisterIgnore("roundAnnouncement");
             _prototypeManager.RegisterIgnore("wireLayout");
             _prototypeManager.RegisterIgnore("alertLevels");
+            _prototypeManager.RegisterIgnore("ertTeams"); // DS14 ERT Teams
+            _prototypeManager.RegisterIgnore("ertShuttle"); // DS14 ERT Shuttles
             _prototypeManager.RegisterIgnore("nukeopsRole");
             _prototypeManager.RegisterIgnore("ghostRoleRaffleDecider");
+            _prototypeManager.RegisterIgnore("stationGoal"); // DS14 StationGoal
+            _prototypeManager.RegisterIgnore("sponsorLoadout"); // Corvax-Loadout
             _prototypeManager.RegisterIgnore("codewordGenerator");
             _prototypeManager.RegisterIgnore("codewordFaction");
 
@@ -176,6 +181,8 @@ namespace Content.Client.Entry
             _voteManager.Initialize();
             _userInterfaceManager.SetDefaultTheme("SS14DefaultTheme");
             _userInterfaceManager.SetActiveTheme(_configManager.GetCVar(CVars.InterfaceTheme));
+            _queueManager.Initialize(); // Corvax-Queue
+            _discordAuthManager.Initialize(); // Corvax-DiscordAuth
             _documentParsingManager.Initialize();
             _titleWindowManager.Initialize();
 

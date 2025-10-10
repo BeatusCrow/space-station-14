@@ -12,6 +12,7 @@ using Content.Shared.Verbs;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
+using Content.Shared.DeadSpace.Events.Roles.Components;
 
 namespace Content.Server.Administration.Systems;
 
@@ -29,6 +30,8 @@ public sealed partial class AdminVerbSystem
     private static readonly EntProtoId DefaultThiefRule = "Thief";
     private static readonly EntProtoId DefaultChangelingRule = "Changeling";
     private static readonly EntProtoId ParadoxCloneRuleId = "ParadoxCloneSpawn";
+    private static readonly EntProtoId DefaultUnitologyRule = "Unitology"; // DS14
+    private static readonly EntProtoId DefaultSpiderTerrorRule = "SpiderTerror"; // DS14
     private static readonly ProtoId<StartingGearPrototype> PirateGearId = "PirateGear";
 
     // All antag verbs have names so invokeverb works.
@@ -76,6 +79,23 @@ public sealed partial class AdminVerbSystem
             Message = string.Join(": ", initialInfectedName, Loc.GetString("admin-verb-make-initial-infected")),
         };
         args.Verbs.Add(initialInfected);
+
+        // DS14-start
+        var blobName = Loc.GetString("admin-verb-text-make-blob");
+        Verb blob = new()
+        {
+            Text = blobName,
+            Category = VerbCategory.Antag,
+            Icon = new SpriteSpecifier.Rsi(new("/Textures/_Backmen/Interface/Actions/blob.rsi"), "blobFactory"),
+            Act = () =>
+            {
+                EnsureComp<Shared.Backmen.Blob.Components.BlobCarrierComponent>(args.Target).HasMind = HasComp<ActorComponent>(args.Target);
+            },
+            Impact = LogImpact.High,
+            Message = string.Join(": ", blobName, Loc.GetString("admin-verb-make-blob")),
+        };
+        args.Verbs.Add(blob);
+        // DS14-end
 
         var zombieName = Loc.GetString("admin-verb-text-make-zombie");
         Verb zombie = new()
@@ -138,6 +158,38 @@ public sealed partial class AdminVerbSystem
         };
         args.Verbs.Add(headRev);
 
+        // DS14-start
+        var uniName = Loc.GetString("admin-verb-text-make-unitolog");
+        Verb uni = new()
+        {
+            Text = uniName,
+            Category = VerbCategory.Antag,
+            Icon = new SpriteSpecifier.Rsi(new ResPath("/Textures/_DeadSpace/Interface/Misc/antag_icons.rsi"), "Unitology"),
+            Act = () =>
+            {
+                _antag.ForceMakeAntag<UnitologyRuleComponent>(targetPlayer, DefaultUnitologyRule);
+            },
+            Impact = LogImpact.High,
+            Message = string.Join(": ", uniName, Loc.GetString("admin-verb-make-unitolog")),
+        };
+        args.Verbs.Add(uni);
+
+        var spiderTerrorName = Loc.GetString("admin-verb-text-make-spider-terror");
+        Verb spiderTerror = new()
+        {
+            Text = spiderTerrorName,
+            Category = VerbCategory.Antag,
+            Icon = new SpriteSpecifier.Rsi(new ResPath("/Textures/_DeadSpace/Interface/Misc/antag_icons.rsi"), "Egg"),
+            Act = () =>
+            {
+                _antag.ForceMakeAntag<SpiderTerrorRuleComponent>(targetPlayer, DefaultSpiderTerrorRule);
+            },
+            Impact = LogImpact.High,
+            Message = string.Join(": ", spiderTerrorName, Loc.GetString("admin-verb-make-spider-terror")),
+        };
+        args.Verbs.Add(spiderTerror);
+        // DS14-end
+
         var thiefName = Loc.GetString("admin-verb-text-make-thief");
         Verb thief = new()
         {
@@ -191,5 +243,26 @@ public sealed partial class AdminVerbSystem
 
         if (HasComp<HumanoidAppearanceComponent>(args.Target)) // only humanoids can be cloned
             args.Verbs.Add(paradox);
+
+        // DS14-start
+        var eventRoleName = Loc.GetString("admin-verb-text-make-event-role");
+        Verb eventRole = new()
+        {
+            Priority = -1,
+            Text = eventRoleName,
+            Category = VerbCategory.Antag,
+            Icon = new SpriteSpecifier.Rsi(new ResPath("/Textures/_DeadSpace/Interface/Misc/antag_icons.rsi"), "Event"),
+            Act = () =>
+            {
+                if (HasComp<EventRoleComponent>(args.Target))
+                    RemComp<EventRoleComponent>(args.Target);
+                else
+                    EnsureComp<EventRoleComponent>(args.Target);
+            },
+            Impact = LogImpact.High,
+            Message = string.Join(": ", eventRoleName, Loc.GetString("admin-verb-make-event-role")),
+        };
+        args.Verbs.Add(eventRole);
+        // DS14-end
     }
 }

@@ -45,7 +45,7 @@ public sealed partial class NukeopsRuleComponent : Component
     /// Whether or not nukie left their outpost
     /// </summary>
     [DataField]
-    public bool LeftOutpost;
+    public bool LeftOutpost = false;
 
     /// <summary>
     ///     Enables opportunity to get extra TC for war declaration
@@ -81,7 +81,7 @@ public sealed partial class NukeopsRuleComponent : Component
     ///     Minimal operatives count for war declaration
     /// </summary>
     [DataField]
-    public int WarDeclarationMinOps = 4;
+    public int WarDeclarationMinOps = 0;
 
     [DataField]
     public WinType WinType = WinType.Neutral;

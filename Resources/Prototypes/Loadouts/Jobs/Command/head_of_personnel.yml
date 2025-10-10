@@ -6,7 +6,7 @@
     requirement:
       !type:RoleTimeRequirement
       role: JobHeadOfPersonnel
-      time: 20h
+      time: 72000 #20 hrs
 
 # Professional HoP Time
 - type: loadoutEffectGroup
@@ -16,7 +16,7 @@
     requirement:
       !type:RoleTimeRequirement
       role: JobHeadOfPersonnel
-      time: 15h # special reward for HoP mains
+      time: 54000 #15 hrs, special reward for HoP mains
 
 # Jumpsuit
 - type: loadout
@@ -40,6 +40,14 @@
   id: HoPCloak
   equipment:
     neck: ClothingNeckCloakHop
+
+- type: loadout
+  id: HoPAltCloak
+  equipment:
+    neck: ADTClothingNeckHoPAltCloak
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: ProfessionalHoP
 
 - type: loadout
   id: HoPMantle
@@ -68,3 +76,34 @@
   id: HoPWintercoat
   equipment:
     outerClothing: ClothingOuterWinterHoP
+
+# Shoes
+- type: loadout
+  id: ShoesBootsLaceup
+  equipment:
+    shoes: ClothingShoesBootsLaceup
+
+# Underwear
+- type: loadout
+  id: UnderwearBottomBoxersHeadofPersonnel
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: MaleUnderwear
+  equipment:
+    underwearb: ClothingUnderwearBottomBoxersHeadofPersonnel
+
+- type: loadout
+  id: UnderwearBottomPantiesHeadofPersonnel
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: FemaleUnderwear
+  equipment:
+    underwearb: ClothingUnderwearBottomPantiesHeadofPersonnel
+
+- type: loadout
+  id: UnderwearTopBraHeadofPersonnel
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: FemaleUnderwear
+  equipment:
+    underweart: ClothingUnderwearTopBraHeadofPersonnel

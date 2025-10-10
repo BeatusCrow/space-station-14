@@ -5,9 +5,6 @@
   components:
   - type: Sprite
     sprite: Structures/Wallmounts/posters.rsi
-  - type: Damageable
-    damageContainer: StructuralInorganic
-    damageModifierSet: Card
   - type: Destructible
     thresholds:
     - trigger: # Excess damage, don't spawn entities
@@ -21,7 +18,7 @@
         acts: ["Destruction"]
     - trigger:
         !type:DamageTrigger
-        damage: 15
+        damage: 5
       behaviors:
       - !type:PlaySoundBehavior
         sound:
@@ -890,9 +887,9 @@
 
 - type: entity
   parent: PosterBase
-  id: PosterLegitEnlist
-  name: "Enlist"
-  description: "Enlist in the Nanotrasen Deathsquadron reserves today!"
+  id: PosterLegitEnlist  # DS14 Replaced
+  name: "Love Ian"
+  description: "Ian is love, Ian is life."
   components:
   - type: Sprite
     state: poster29_legit

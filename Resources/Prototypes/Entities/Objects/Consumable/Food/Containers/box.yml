@@ -46,9 +46,7 @@
       - Donut
   - type: Item
     sprite: Objects/Consumable/Food/Baked/donut.rsi
-    size: Normal
-    shape:
-    - 0,0,2,1
+    size: Small
     heldPrefix: box
   - type: StorageFill
     contents:
@@ -130,10 +128,7 @@
       - Egg
   - type: Item
     sprite: Objects/Consumable/Food/egg.rsi
-    size: Normal
-    shape:
-    - 0,0,2,1
-    storedOffset: 0,-6
+    size: Small
   - type: StorageFill
     contents:
     - id: FoodEgg
@@ -228,7 +223,6 @@
     heldPrefix: box
     shape:
     - 0,0,2,1
-    storedOffset: 0,-6
   - type: Appearance
   - type: EntityStorageVisuals
     stateDoorOpen: box-open
@@ -373,10 +367,7 @@
       - DonkPocket
   - type: Item
     sprite: Objects/Consumable/Food/Baked/donkpocket.rsi
-    size: Normal
-    shape:
-    - 0,0,2,1
-    storedOffset: -1,1
+    size: Small
   - type: StorageFill
     contents:
     - id: FoodDonkpocket
@@ -527,13 +518,12 @@
     heldPrefix: box
   - type: Storage
     maxItemSize: Normal
-    grid:
-    - 0,0,3,3
+    # grid: # DS14
+    # - 0,0,3,3
   - type: Tag
     tags:
     - Trash
     - HappyHonk
-    - BoxCardboard
   - type: StorageFill
     contents:
       - id: ToyMouse
@@ -652,9 +642,9 @@
   suffix: Toy Unsafe, Snacks
   name: syndicate snack box
   components:
-  - type: Storage
-    grid:
-    - 0,0,5,2
+  # - type: Storage # DS14
+  #   grid:
+  #   - 0,0,5,2
   - type: StorageFill
     contents:
     # toy
@@ -685,15 +675,15 @@
       orGroup: Drink2Pool
     - id: DrinkColaCan
       orGroup: Drink2Pool
-    - id: DrinkColaCan
-      amount: 2
+    # - id: DrinkColaCan # DS14
+    #   amount: 2
     # food
-    - id: FoodSaladValid
-      prob: 0.05
-      amount: 4
-      orGroup: FoodPool
+    # - id: FoodSaladValid # DS14
+    #   prob: 0.05
+    #   amount: 4
+    #   orGroup: FoodPool
     - id: FoodSnackSyndi
-      amount: 4
+      amount: 3 # DS14
       orGroup: FoodPool
 
 - type: entity
@@ -705,8 +695,7 @@
   - type: Tag
     tags:
     - Trash
-    - CluwneHappyHonk # BAD: Intentional removal of parent tag
-    - BoxCardboard
+    - CluwneHappyHonk
   - type: Sprite
     sprite: Objects/Storage/Happyhonk/cluwne.rsi
     state: box
@@ -725,6 +714,8 @@
   components:
   - type: StorageFill
     contents:
+      - id: FoodBurgerCrazy
+        orGroup: Burgers
       - id: FoodBurgerCheese
         orGroup: Burgers
       - id: DrinkColaCan
@@ -781,8 +772,8 @@
         orGroup: GiftPool
       - id: PersonalAI
         orGroup: GiftPool
-      - id: CrayonBox
-        orGroup: GiftPool
+      # - id: CrayonBox # DS14
+      #   orGroup: GiftPool
       - id: ToySword
         orGroup: GiftPool
       - id: RevolverCapGun
@@ -806,8 +797,8 @@
     contents:
       - id: FoodBurgerBig
         amount: 1
-      - id: FoodMealFriesCheesy
-        amount: 1
+      # - id: FoodMealFriesCheesy
+      #   amount: 1
       - id: DrinkColaBottleFull
         amount: 1
       - id: FoodPieAppleSlice
@@ -860,8 +851,8 @@
         orGroup: GiftPool
       - id: ToySword
         orGroup: GiftPool
-      - id: RevolverCapGun
-        orGroup: GiftPool
+      # - id: RevolverCapGun
+      #   orGroup: GiftPool
       - id: ToyRubberDuck
         orGroup: GiftPool
       - id: BikeHorn
@@ -884,13 +875,11 @@
     grid:
     - 0,0,1,1
     maxItemSize: Normal
-    whitelist: # TODO BoxCardboard shouldn't have whitelisted storage
+    whitelist:
       tags:
       - ClothMade
   - type: Item
     size: Normal
-    shape:
-    - 0,0,1,1
   - type: StorageFill
     contents:
     - id: MaterialCloth10

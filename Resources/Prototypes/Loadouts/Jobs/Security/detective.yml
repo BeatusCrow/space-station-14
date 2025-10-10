@@ -36,6 +36,34 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtDetectiveGrey
 
+# DS14-start
+- type: loadout
+  id: NoirJumpsuitAlt
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitDetectiveGreyAlt
+
+- type: loadout
+  id: DetectiveJumpsuitAlt
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitDetectiveAlt
+
+- type: loadout
+  id: NoirJumpskirtPencil
+  equipment:
+    jumpsuit: ClothingUniformJumpskirtPencilDetectiveGrey
+# DS14-end
+
+# Back
+- type: loadout
+  id: DetectiveSatchel
+  equipment:
+    back: ClothingBackpackSatchelDetective
+
+- type: loadout
+  id: DetectiveGreySatchel
+  equipment:
+    back: ClothingBackpackSatchelDetectiveGrey
+
 # OuterClothing
 - type: loadout
   id: DetectiveArmorVest
@@ -51,3 +79,66 @@
   id: DetectiveCoatGrey
   equipment:
     outerClothing: ClothingOuterCoatDetectiveLoadoutGrey
+
+- type: loadout
+  id: DetectiveCoatAlt
+  equipment:
+    outerClothing: ClothingOuterCoatDetectiveAlt
+
+# Shoes
+- type: loadout
+  id: DetectiveBoots
+  equipment:
+    shoes: ClothingShoesBootsDetective
+
+- type: loadout
+  id: DetectiveGreyBoots
+  equipment:
+    shoes: ClothingShoesBootsDetectiveGrey
+
+# Socks
+- type: loadout
+  id: UnderwearSocksDetective
+  equipment:
+    socks: ClothingUnderwearSocksDetective
+
+# Underwear
+- type: loadout
+  id: UnderwearBottomBoxersDetective
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: MaleUnderwear
+  equipment:
+    underwearb: ClothingUnderwearBottomBoxersDetective
+
+- type: loadout
+  id: UnderwearBottomPantiesDetective
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: FemaleUnderwear
+  equipment:
+    underwearb: ClothingUnderwearBottomPantiesDetective
+
+- type: loadout
+  id: UnderwearTopBraDetective
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: FemaleUnderwear
+  equipment:
+    underweart: ClothingUnderwearTopBraDetective
+
+# Медаль
+- type: loadoutEffectGroup
+  id: SecurityDetectiveMedal
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: JobDetective
+      time: 270000 # 75 hours
+
+- type: loadout
+  id: DetectiveMedal
+  storage:
+    back:
+    - ClothingNeckDetectiveMedal
