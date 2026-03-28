@@ -196,23 +196,23 @@ jobs:
         echo " CONTENT SOURCE CODE REMOVED"
         echo "========================================="
 
-      # 8. Создание чистых архивов без исходного кода (адаптировано для SS14)
-      - name: Create clean archives (without source code)
-        id: package
-        run: |
-        VERSION="${{ steps.version.outputs.version }}"
-        BUILD_ROOT="${{ steps.artifacts.outputs.build_root }}"
+    # 8. Создание чистых архивов без исходного кода (адаптировано для SS14)
+    - name: Create clean archives (without source code)
+      id: package
+      run: |
+      VERSION="${{ steps.version.outputs.version }}"
+      BUILD_ROOT="${{ steps.artifacts.outputs.build_root }}"
 
-        echo "========================================="
-        echo "CREATING CLEAN PACKAGES"
-        echo "========================================="
+      echo "========================================="
+      echo "CREATING CLEAN PACKAGES"
+      echo "========================================="
 
-        # Проверяем, что BUILD_ROOT существует
-        if [ ! -d "$BUILD_ROOT" ]; then
-          echo "❌ Error: Build root directory not found!"
-          exit 1
-        fi
+      # Проверяем, что BUILD_ROOT существует
+      if [ ! -d "$BUILD_ROOT" ]; then
+        echo "❌ Error: Build root directory not found!"
+        exit 1
+      fi
 
-        echo "Build root: $BUILD_ROOT"
-        echo "Contents:"
-        ls -la $BUILD_ROOT
+      echo "Build root: $BUILD_ROOT"
+      echo "Contents:"
+      ls -la $BUILD_ROOT
