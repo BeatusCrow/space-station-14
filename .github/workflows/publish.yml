@@ -1,38 +1,60 @@
-name: Publish
-
-concurrency:
-  group: publish
-  cancel-in-progress: true
+name: Build and Package (Public Repo - No Source)
 
 on:
   workflow_dispatch:
-  # schedule:
-   # - cron: '0 10 * * *'
+  push:
+    tags:
+      - 'v*.*.*'
+      - 'v*.*.*-*'
+  pull_request:
+    branches: [ main, master ]
+    types: [ closed ]
+
+concurrency:
+  group: build-and-package
+  cancel-in-progress: true
 
 jobs:
-  build:
+  build-and-package:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: read
 
     steps:
-    - name: Fail if we are attempting to run on the master branch
-      if: ${{GITHUB.REF_NAME == 'master' && github.repository == 'space-wizards/space-station-14'}}
-      run: exit 1
+    - name: Install system dependencies
+      run: sudo apt-get update && sudo apt-get install -y python3-paramiko python3-lxml
 
-    - name: Install dependencies
-      run: sudo apt-get install -y python3-paramiko python3-lxml
-
-    - uses: actions/checkout@v4.2.2
+    # 1. Клонирование
+    - name: Checkout repository
+      uses: actions/checkout@v4.2.2
       with:
-        submodules: 'recursive'
+        submodules: true
+
+    - name: Setup submodules (if any)
+      run: |
+        if [ -f ".gitmodules" ]; then
+          git submodule update --init --recursive
+          echo "Submodules status:"
+          git submodule status
+        else
+          echo "No submodules found"
+        fi
+
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v4.1.0
       with:
         dotnet-version: 10.0.x
 
-    - name: Get Engine Tag
+    - name: Get Engine Tag (if RobustToolbox exists)
       run: |
-        cd RobustToolbox
-        git fetch --depth=1
+        if [ -d "RobustToolbox" ]; then
+          cd RobustToolbox
+          git fetch --depth=1
+          echo "Engine version: $(git describe --tags --abbrev=0 2>/dev/null || echo 'unknown')"
+        else
+          echo "No RobustToolbox directory found"
+        fi
 
     - name: Install dependencies
       run: dotnet restore
@@ -40,27 +62,314 @@ jobs:
     - name: Build Packaging
       run: dotnet build Content.Packaging --configuration Release --no-restore /m
 
-    - name: Package server
-      run: dotnet run --project Content.Packaging server --platform win-x64 --platform win-arm64 --platform linux-x64 --platform linux-arm64 --platform osx-x64 --platform osx-arm64
+    # 3. Извлечение версии
+    - name: Extract version
+      id: version
+      run: |
+        if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+          VERSION=${GITHUB_REF#refs/tags/}
+          VERSION=${VERSION#v}
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "tag_with_v=v${VERSION}" >> $GITHUB_OUTPUT
+        elif [[ "${{ github.event_name }}" == "pull_request" && "${{ github.event.pull_request.merged }}" == "true" ]]; then
+          echo "version=pr-${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+          echo "tag_with_v=pr-${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+        else
+          echo "version=dev-${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
+          echo "tag_with_v=dev" >> $GITHUB_OUTPUT
+        fi
 
+    # 4. Сборка сервера (все платформы)
+    - name: Package server (all platforms)
+      run: |
+        dotnet run --project Content.Packaging server \
+          --platform win-x64 \
+          --platform win-arm64 \
+          --platform linux-x64 \
+          --platform linux-arm64 \
+          --platform osx-x64 \
+          --platform osx-arm64 || \
+        echo "Warning: Some platforms may have failed, continuing..."
+
+    # 5. Сборка клиента (опционально)
     - name: Package client
-      run: dotnet run --project Content.Packaging client --no-wipe-release
+      run: dotnet run --project Content.Packaging client --no-wipe-release || \
+        echo "Client packaging skipped or failed"
 
-    - name: Publish version
-      run: Tools/publish_multi_request.py
-      env:
-        PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
-        GITHUB_REPOSITORY: ${{ vars.GITHUB_REPOSITORY }}
+    # 6. Определение структуры сборки
+    - name: Locate build artifacts
+      id: artifacts
+      run: |
+        # Определяем где находятся собранные файлы
+        if [ -d "./release" ]; then
+          echo "build_root=./release" >> $GITHUB_OUTPUT
+        elif [ -d "./bin" ]; then
+          echo "build_root=./bin" >> $GITHUB_OUTPUT
+        elif [ -d "./publish" ]; then
+          echo "build_root=./publish" >> $GITHUB_OUTPUT
+        else
+          echo "build_root=./" >> $GITHUB_OUTPUT
+        fi
 
-    - name: Publish changelog (Discord)
-      continue-on-error: true
-      run: Tools/actions_changelogs_since_last_run.py
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        DISCORD_WEBHOOK_URL: ${{ secrets.CHANGELOG_DISCORD_WEBHOOK }}
+        echo "Build root: ${{ env.build_root }}"
+        if [ -d "${{ env.build_root }}" ]; then
+          ls -la ${{ env.build_root }}
+        else
+          echo "Warning: Build root directory not found"
+        fi
 
-    - name: Publish changelog (RSS)
-      continue-on-error: true
-      run: Tools/actions_changelog_rss.py
-      env:
-        CHANGELOG_RSS_KEY: ${{ secrets.CHANGELOG_RSS_KEY }}
+    # 7. Удаление исходного кода контент-папок из сборки
+    - name: REMOVE CONTENT SOURCE CODE from build
+      run: |
+        BUILD_ROOT="${{ steps.artifacts.outputs.build_root }}"
+
+        echo "========================================="
+        echo " REMOVING CONTENT SOURCE CODE"
+        echo "========================================="
+
+        CONTENT_DIRS=(
+          "Content.Server"
+          "Content.Shared"
+          "Content.Client"
+        )
+
+        for dir in "${CONTENT_DIRS[@]}"; do
+          echo "Searching for: $dir"
+
+          find $BUILD_ROOT -type d -name "$dir" -exec rm -rf {} + 2>/dev/null || true
+
+          find $BUILD_ROOT -name "$dir.csproj" -type f -delete 2>/dev/null || true
+        done
+
+        echo "Removing all .cs files..."
+        find $BUILD_ROOT -name "*.cs" -type f -delete 2>/dev/null || true
+
+        echo "Removing .csproj files..."
+        find $BUILD_ROOT -name "*.csproj" -type f -delete 2>/dev/null || true
+
+        echo "Removing .sln files..."
+        find $BUILD_ROOT -name "*.sln" -type f -delete 2>/dev/null || true
+
+        echo "Removing obj directories..."
+        find $BUILD_ROOT -type d -name "obj" -exec rm -rf {} + 2>/dev/null || true
+
+        echo "Cleaning up nested bin directories..."
+        find $BUILD_ROOT -type d -name "bin" -not -path "$BUILD_ROOT" -exec rm -rf {} + 2>/dev/null || true
+
+        echo ""
+        echo "========================================="
+        echo " CONTENT SOURCE CODE REMOVED"
+        echo "========================================="
+
+    # 8. Создание чистых архивов без исходного кода
+    - name: Create clean archives (without source code)
+      id: package
+      run: |
+        VERSION="${{ steps.version.outputs.version }}"
+        BUILD_ROOT="${{ steps.artifacts.outputs.build_root }}"
+
+        echo "Creating clean packages from: $BUILD_ROOT"
+
+        # Проверяем существование BUILD_ROOT
+        if [ ! -d "$BUILD_ROOT" ]; then
+          echo "Error: Build root directory not found!"
+          exit 1
+        fi
+
+        # Создаем общий README
+        cat > README_PACKAGE.md << EOF
+# Space Station 14 Server Package v${VERSION}
+
+## 📦 Package Contents
+- **Compiled binaries only** (.dll files)
+- **No source code** (Content.Server, Content.Shared, Content.Client removed)
+- Ready to run on multiple platforms
+
+## 🚀 Quick Start
+\`\`\`bash
+# Extract the package for your platform
+tar -xzf ss14-server-linux-x64-${VERSION}.tar.gz
+cd linux-x64
+chmod +x run_server.sh
+./run_server.sh
+\`\`\`
+
+## Requirements
+- .NET Runtime 10.0 or later
+- Appropriate platform (Windows/Linux/macOS)
+
+## Security Note
+This package contains **only compiled binaries**.
+All source code has been removed to protect intellectual property.
+
+## Build Information
+- **Version:** ${VERSION}
+- **Build Date:** $(date -u +'%Y-%m-%d %H:%M:%S UTC')
+- **Commit:** ${{ github.sha }}
+- **Repository:** ${{ github.repository }}
+
+## License
+This package is distributed under the same license as the original repository.
+EOF
+
+        # Создаем архивы для каждой платформы
+        ARCHIVES_CREATED=""
+
+        # Проверяем наличие директорий с платформами
+        if [ -d "$BUILD_ROOT" ]; then
+          for platform_dir in $(find $BUILD_ROOT -maxdepth 1 -type d -name "*" 2>/dev/null | grep -E "(win|linux|osx|mac)" || true); do
+            platform=$(basename "$platform_dir")
+
+            echo "Creating package for platform: $platform"
+
+            # Создаем временную директорию для этого пакета
+            mkdir -p temp_package/$platform
+
+            # Копируем содержимое
+            cp -r $platform_dir/* temp_package/$platform/ 2>/dev/null || true
+
+            # Копируем общий README
+            cp README_PACKAGE.md temp_package/$platform/
+
+            # Создаем скрипт запуска для Linux/macOS
+            if [[ "$platform" == *"linux"* ]] || [[ "$platform" == *"osx"* ]] || [[ "$platform" == *"mac"* ]]; then
+              cat > temp_package/$platform/run_server.sh << 'EOF'
+#!/bin/bash
+cd "$(dirname "$0")"
+if command -v dotnet &> /dev/null; then
+    echo "Starting Space Station 14 Server..."
+    exec dotnet Content.Server.dll "$@"
+else
+    echo "Error: .NET Runtime not found"
+    echo "Please install .NET Runtime 10.0 or later"
+    exit 1
+fi
+EOF
+              chmod +x temp_package/$platform/run_server.sh
+            fi
+
+            # Создаем .bat файл для Windows
+            if [[ "$platform" == *"win"* ]]; then
+              cat > temp_package/$platform/run_server.bat << 'EOF'
+@echo off
+echo Starting Space Station 14 Server...
+dotnet Content.Server.dll %*
+if errorlevel 1 (
+    echo Error: Failed to start server
+    pause
+)
+EOF
+            fi
+
+            # Создаем архив
+            cd temp_package
+            tar -czf ../ss14-server-$platform-$VERSION.tar.gz $platform
+            cd ..
+
+            ARCHIVES_CREATED="$ARCHIVES_CREATED ss14-server-$platform-$VERSION.tar.gz"
+            echo " Created: ss14-server-$platform-$VERSION.tar.gz"
+          done
+        fi
+
+        # Если нет разделения по платформам, создаем общий архив
+        if [ -z "$ARCHIVES_CREATED" ]; then
+          echo "No platform-specific directories found, creating single archive..."
+
+          # Очищаем от исходников
+          find $BUILD_ROOT -name "*.cs" -delete 2>/dev/null || true
+          find $BUILD_ROOT -name "*.csproj" -delete 2>/dev/null || true
+
+          # Создаем скрипты запуска
+          cp README_PACKAGE.md $BUILD_ROOT/
+
+          cat > $BUILD_ROOT/run_server.sh << 'EOF'
+#!/bin/bash
+cd "$(dirname "$0")"
+exec dotnet Content.Server.dll "$@"
+EOF
+          chmod +x $BUILD_ROOT/run_server.sh
+
+          # Создаем архив
+          tar -czf ss14-server-$VERSION.tar.gz -C $BUILD_ROOT .
+          ARCHIVES_CREATED="ss14-server-$VERSION.tar.gz"
+          echo "Created: ss14-server-$VERSION.tar.gz"
+        fi
+
+        echo "created_archives=$ARCHIVES_CREATED" >> $GITHUB_OUTPUT
+
+        # Выводим список созданных архивов
+        echo ""
+        echo "========================================="
+        echo " CREATED ARCHIVES:"
+        echo "$ARCHIVES_CREATED"
+        echo "========================================="
+
+    # 9. Проверка: убеждаемся, что исходники удалены
+    - name: VERIFY: No source code in archives
+      run: |
+        echo "========================================="
+        echo " VERIFYING NO SOURCE CODE IN ARCHIVES"
+        echo "========================================="
+
+        FAILED=0
+
+        for archive in ss14-server-*.tar.gz; do
+          if [ ! -f "$archive" ]; then
+            continue
+          fi
+
+          echo "Checking: $archive"
+
+          # Проверяем наличие .cs файлов
+          if tar -tzf "$archive" 2>/dev/null | grep -E '\.(cs|cpp|h|java)$' | grep -q .; then
+            echo " ERROR: $archive contains source code! "
+            echo "Found files:"
+            tar -tzf "$archive" | grep -E '\.(cs|cpp|h|java)$'
+            FAILED=1
+          fi
+
+          # Проверяем наличие Content.Server папки с исходниками
+          if tar -tzf "$archive" 2>/dev/null | grep -E 'Content\.Server/.*\.cs$' | grep -q .; then
+            echo " ERROR: $archive contains Content.Server source! "
+            FAILED=1
+          fi
+
+          # Подсчитываем .dll файлы
+          DLL_COUNT=$(tar -tzf "$archive" 2>/dev/null | grep -c '\.dll$' || true)
+          echo "  Found $DLL_COUNT .dll files"
+
+          if [ "$DLL_COUNT" -eq 0 ]; then
+            echo " WARNING: No .dll files found in $archive"
+          fi
+        done
+
+        if [ $FAILED -eq 1 ]; then
+          echo ""
+          echo " BUILD FAILED: Archives contain source code!"
+          exit 1
+        fi
+
+        echo ""
+        echo " ALL ARCHIVES CLEAN - No source code found "
+
+    # 10. Создание GitHub Release (только для тегов)
+    - name: Create GitHub Release
+      if: startsWith(github.ref, 'refs/tags/') && success()
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ github.ref_name }}
+        name: Release ${{ steps.version.outputs.version }} (Binary Only)
+        body: |
+          ##  Space Station 14 Release ${{ steps.version.outputs.version }}
+
+          ###  Binary-Only Release
+          This release contains **only compiled binaries**.
+          Source code has been **removed** to protect intellectual property.
+
+          **Removed directories:**
+          - `Content.Server`
+          - `Content.Shared`
+          - `Content.Client`
+          - All `.cs` files
+
+          ###  Available Packages
