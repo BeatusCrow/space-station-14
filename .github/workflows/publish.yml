@@ -6,9 +6,6 @@ on:
     tags:
       - 'v*.*.*'
       - 'v*.*.*-*'
-  pull_request:
-    branches: [ main, master ]
-    types: [ closed ]
 
 concurrency:
   group: build-and-package
@@ -23,15 +20,13 @@ jobs:
 
     steps:
     - name: Install system dependencies
-      run: sudo apt-get update && sudo apt-get install -y python3-paramiko python3-lxml
+      run: sudo apt-get update && sudo apt-get install -y python3-paramiko python3-lxml unzip
 
-    # 1. Клонирование (без токенов, так как репозиторий публичный)
     - name: Checkout repository
       uses: actions/checkout@v4.2.2
       with:
         submodules: false
 
-    # 2. Если есть публичные подмодули, инициализируем их
     - name: Setup submodules (if any)
       run: |
         if [ -f ".gitmodules" ]; then
@@ -63,7 +58,6 @@ jobs:
     - name: Build Packaging
       run: dotnet build Content.Packaging --configuration Release --no-restore /m
 
-    # 3. Извлечение версии
     - name: Extract version
       id: version
       run: |
@@ -72,15 +66,11 @@ jobs:
           VERSION=${VERSION#v}
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
           echo "tag_with_v=v${VERSION}" >> $GITHUB_OUTPUT
-        elif [[ "${{ github.event_name }}" == "pull_request" && "${{ github.event.pull_request.merged }}" == "true" ]]; then
-          echo "version=pr-${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
-          echo "tag_with_v=pr-${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
         else
           echo "version=dev-${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
           echo "tag_with_v=dev" >> $GITHUB_OUTPUT
         fi
 
-    # 4. Сборка сервера (все платформы)
     - name: Package server (all platforms)
       run: |
         dotnet run --project Content.Packaging server \
@@ -89,130 +79,206 @@ jobs:
           --platform linux-x64 \
           --platform linux-arm64 \
           --platform osx-x64 \
-          --platform osx-arm64 || \
-        echo "Warning: Some platforms may have failed, continuing..."
+          --platform osx-arm64
 
-    # 5. Сборка клиента (опционально)
     - name: Package client
       run: dotnet run --project Content.Packaging client --no-wipe-release || \
         echo "Client packaging skipped or failed"
 
-    # 6. Определение структуры сборки (исправлено для SS14)
-    - name: Locate build artifacts
-      id: artifacts
+    - name: Verify build output
       run: |
         echo "========================================="
-        echo " LOCATING BUILD ARTIFACTS"
+        echo " BUILD OUTPUT VERIFICATION"
         echo "========================================="
-
-        # Выводим структуру директорий для отладки
-        echo "Current directory structure (first 3 levels):"
-        find . -maxdepth 3 -type d | head -30
-
+        echo "Contents of ./release:"
+        ls -la ./release/
         echo ""
-        echo "Looking for build output..."
+        echo "Number of server archives:"
+        ls -1 ./release/SS14.Server_*.zip 2>/dev/null | wc -l
 
-        # SS14: Content.Packaging создает папку release/
-        if [ -d "./release" ]; then
-          echo " Found ./release directory"
-          echo "build_root=./release" >> $GITHUB_OUTPUT
-          ls -la ./release
-
-        # Альтернатива: если есть bin/Release
-        elif [ -d "./bin/Release" ]; then
-          echo " Found ./bin/Release directory"
-          echo "build_root=./bin/Release" >> $GITHUB_OUTPUT
-          ls -la ./bin/Release
-
-        # Альтернатива: если есть publish/
-        elif [ -d "./publish" ]; then
-          echo " Found ./publish directory"
-          echo "build_root=./publish" >> $GITHUB_OUTPUT
-          ls -la ./publish
-
-        # Проверяем, может быть сборка в Content.Server/bin
-        elif [ -d "./Content.Server/bin/Release" ]; then
-          echo " Found ./Content.Server/bin/Release directory"
-          echo "build_root=./Content.Server/bin/Release" >> $GITHUB_OUTPUT
-          ls -la ./Content.Server/bin/Release
-
-        else
-          echo " ERROR: No build directory found!"
-          echo ""
-          echo "Searching for .dll files to locate build:"
-          find . -name "*.dll" -type f 2>/dev/null | head -20
-
-          echo ""
-          echo "Searching for Content.Server.dll:"
-          find . -name "Content.Server.dll" -type f 2>/dev/null
-
-          exit 1
-        fi
-
-        echo ""
-        echo "Build root set to: ${{ env.build_root }}"
-
-    # 7. Удаление исходного кода контент-папок из сборки
-    - name: REMOVE CONTENT SOURCE CODE from build
-      run: |
-        BUILD_ROOT="${{ steps.artifacts.outputs.build_root }}"
-
-        echo "========================================="
-        echo "REMOVING CONTENT SOURCE CODE"
-        echo "========================================="
-
-        CONTENT_DIRS=(
-          "Content.Server"
-          "Content.Shared"
-          "Content.Client"
-          "Content.IntegrationTests"
-          "Content.Tests"
-          "Content.Packaging"
-        )
-
-        for dir in "${CONTENT_DIRS[@]}"; do
-          echo "Searching for: $dir"
-          find $BUILD_ROOT -type d -name "$dir" -exec rm -rf {} + 2>/dev/null || true
-          find $BUILD_ROOT -name "$dir.csproj" -type f -delete 2>/dev/null || true
-        done
-
-        echo "Removing all .cs files..."
-        find $BUILD_ROOT -name "*.cs" -type f -delete 2>/dev/null || true
-
-        echo "Removing .csproj files..."
-        find $BUILD_ROOT -name "*.csproj" -type f -delete 2>/dev/null || true
-
-        echo "Removing .sln files..."
-        find $BUILD_ROOT -name "*.sln" -type f -delete 2>/dev/null || true
-
-        echo "Removing obj directories..."
-        find $BUILD_ROOT -type d -name "obj" -exec rm -rf {} + 2>/dev/null || true
-
-        echo "Cleaning up nested bin directories..."
-        find $BUILD_ROOT -type d -name "bin" -not -path "$BUILD_ROOT" -exec rm -rf {} + 2>/dev/null || true
-
-        echo ""
-        echo "========================================="
-        echo " CONTENT SOURCE CODE REMOVED"
-        echo "========================================="
-
-    # 8. Создание чистых архивов без исходного кода (адаптировано для SS14)
-    - name: Create clean archives (without source code)
+    - name: Create clean packages from server archives
       id: package
       run: |
         VERSION="${{ steps.version.outputs.version }}"
-        BUILD_ROOT="${{ steps.artifacts.outputs.build_root }}"
 
         echo "========================================="
-        echo "CREATING CLEAN PACKAGES"
+        echo " CREATING CLEAN PACKAGES"
+        echo "========================================="
+        echo "Version: $VERSION"
+
+        ARCHIVES_CREATED=""
+
+        # Обрабатываем каждый серверный архив
+        for zip_file in ./release/SS14.Server_*.zip; do
+          if [ ! -f "$zip_file" ]; then
+            echo "No server archives found in ./release/"
+            continue
+          fi
+
+          # Извлекаем платформу из имени файла
+          filename=$(basename "$zip_file")
+          platform=$(echo "$filename" | sed 's/SS14.Server_//' | sed 's/.zip//')
+
+          echo ""
+          echo "========================================="
+          echo "Processing: $platform"
+          echo "========================================="
+
+          # Создаем временную директорию
+          mkdir -p "temp_${platform}"
+
+          # Распаковываем архив
+          echo "Extracting $filename..."
+          unzip -q "$zip_file" -d "temp_${platform}"
+
+          # Удаляем исходники и временные файлы
+          echo "Cleaning source files..."
+          find "temp_${platform}" -name "*.cs" -type f -delete 2>/dev/null || true
+          find "temp_${platform}" -name "*.csproj" -type f -delete 2>/dev/null || true
+          find "temp_${platform}" -name "*.sln" -type f -delete 2>/dev/null || true
+          find "temp_${platform}" -type d -name "obj" -exec rm -rf {} + 2>/dev/null || true
+          find "temp_${platform}" -type d -name "Content.Server" -exec rm -rf {} + 2>/dev/null || true
+          find "temp_${platform}" -type d -name "Content.Shared" -exec rm -rf {} + 2>/dev/null || true
+          find "temp_${platform}" -type d -name "Content.Client" -exec rm -rf {} + 2>/dev/null || true
+
+          # Удаляем PDB файлы (символы отладки)
+          find "temp_${platform}" -name "*.pdb" -type f -delete 2>/dev/null || true
+
+          # Создаем скрипт запуска для Unix
+          if [[ "$platform" == *"linux"* ]] || [[ "$platform" == *"osx"* ]] || [[ "$platform" == *"mac"* ]]; then
+            cat > "temp_${platform}/run_server.sh" << 'SCRIPT'
+#!/bin/bash
+cd "$(dirname "$0")"
+if command -v dotnet &> /dev/null; then
+    echo "Starting Space Station 14 Server..."
+    exec dotnet Content.Server.dll "$@"
+else
+    echo "Error: .NET Runtime not found"
+    echo "Please install .NET Runtime 10.0 or later"
+    exit 1
+fi
+SCRIPT
+            chmod +x "temp_${platform}/run_server.sh"
+          fi
+
+          # Создаем .bat файл для Windows
+          if [[ "$platform" == *"win"* ]]; then
+            cat > "temp_${platform}/run_server.bat" << 'SCRIPT'
+@echo off
+echo Starting Space Station 14 Server...
+dotnet Content.Server.dll %*
+if errorlevel 1 (
+    echo Error: Failed to start server
+    pause
+)
+SCRIPT
+          fi
+
+          # Проверяем, что нет .cs файлов
+          CS_FILES=$(find "temp_${platform}" -name "*.cs" -type f 2>/dev/null | wc -l)
+          if [ "$CS_FILES" -gt 0 ]; then
+            echo " WARNING: Found $CS_FILES .cs files in package!"
+            find "temp_${platform}" -name "*.cs" -type f
+          fi
+
+          # Проверяем наличие Content.Server.dll
+          if [ -f "temp_${platform}/Content.Server.dll" ]; then
+            echo " Content.Server.dll found"
+          else
+            echo " WARNING: Content.Server.dll not found"
+          fi
+
+          # Создаем tar.gz архив
+          cd temp_${platform}
+          ARCHIVE_NAME="ss14-server-${platform}-${VERSION}.tar.gz"
+          tar -czf "../${ARCHIVE_NAME}" .
+          cd ..
+
+          ARCHIVES_CREATED="$ARCHIVES_CREATED $ARCHIVE_NAME"
+          echo " Created: $ARCHIVE_NAME"
+          echo "Size: $(du -h $ARCHIVE_NAME | cut -f1)"
+
+          # Очищаем временные файлы
+          rm -rf "temp_${platform}"
+        done
+
+        echo ""
+        echo "========================================="
+        echo " CREATED ARCHIVES:"
+        echo "$ARCHIVES_CREATED"
         echo "========================================="
 
-        # Проверяем, что BUILD_ROOT существует
-        if [ ! -d "$BUILD_ROOT" ]; then
-          echo " Error: Build root directory not found!"
+        echo "created_archives=$ARCHIVES_CREATED" >> $GITHUB_OUTPUT
+
+        # Список файлов для отладки
+        echo ""
+        echo "Files in current directory:"
+        ls -la *.tar.gz 2>/dev/null || echo "No tar.gz files found"
+
+    - name: VERIFY: No source code in archives
+      run: |
+        echo "========================================="
+        echo " VERIFYING NO SOURCE CODE IN ARCHIVES"
+        echo "========================================="
+
+        FAILED=0
+
+        for archive in ss14-server-*.tar.gz; do
+          if [ ! -f "$archive" ]; then
+            echo "No archives found to verify"
+            continue
+          fi
+
+          echo "Checking: $archive"
+
+          # Проверяем наличие .cs файлов
+          if tar -tzf "$archive" 2>/dev/null | grep -E '\.(cs|cpp|h)$' | grep -q .; then
+            echo " ERROR: $archive contains source code!"
+            echo "Found files:"
+            tar -tzf "$archive" | grep -E '\.(cs|cpp|h)$'
+            FAILED=1
+          else
+            echo " No source code found"
+          fi
+
+          # Подсчитываем .dll файлы
+          DLL_COUNT=$(tar -tzf "$archive" 2>/dev/null | grep -c '\.dll$' || true)
+          echo "  Found $DLL_COUNT .dll files"
+
+          if [ "$DLL_COUNT" -eq 0 ]; then
+            echo " WARNING: No .dll files found"
+          fi
+        done
+
+        if [ $FAILED -eq 1 ]; then
+          echo ""
+          echo " BUILD FAILED: Archives contain source code!"
           exit 1
         fi
 
-        echo "Build root: $BUILD_ROOT"
-        echo "Contents:"
-        ls -la $BUILD_ROOT
+        echo ""
+        echo " ALL ARCHIVES CLEAN"
+
+    - name: Create GitHub Release
+      if: startsWith(github.ref, 'refs/tags/') && success()
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ github.ref_name }}
+        name: Release ${{ steps.version.outputs.version }} (Binary Only)
+        body: |
+          ## Release ${{ steps.version.outputs.version }}
+
+          ### Binary-Only Release
+          This release contains only compiled binaries.
+          Source code has been removed.
+
+          ### Available Packages
+          ${{ steps.package.outputs.created_archives }}
+
+          ### Quick Start
+
+          **Linux/macOS:**
+          ```bash
+          tar -xzf ss14-server-linux-x64-${{ steps.version.outputs.version }}.tar.gz
+          chmod +x run_server.sh
+          ./run_server.sh
