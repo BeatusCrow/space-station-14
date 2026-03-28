@@ -1,4 +1,4 @@
-name: Build and Package (Public Repo - No Source)
+name: Build and Package
 
 on:
   workflow_dispatch:
@@ -20,21 +20,17 @@ jobs:
 
     steps:
     - name: Install system dependencies
-      run: sudo apt-get update && sudo apt-get install -y python3-paramiko python3-lxml unzip
+      run: sudo apt-get update && sudo apt-get install -y unzip
 
     - name: Checkout repository
       uses: actions/checkout@v4.2.2
       with:
         submodules: false
 
-    - name: Setup submodules (if any)
+    - name: Setup submodules
       run: |
         if [ -f ".gitmodules" ]; then
           git submodule update --init --recursive
-          echo "Submodules status:"
-          git submodule status
-        else
-          echo "No submodules found"
         fi
 
     - name: Setup .NET Core
@@ -42,14 +38,11 @@ jobs:
       with:
         dotnet-version: 10.0.x
 
-    - name: Get Engine Tag (if RobustToolbox exists)
+    - name: Get Engine Tag
       run: |
         if [ -d "RobustToolbox" ]; then
           cd RobustToolbox
           git fetch --depth=1
-          echo "Engine version: $(git describe --tags --abbrev=0 2>/dev/null || echo 'unknown')"
-        else
-          echo "No RobustToolbox directory found"
         fi
 
     - name: Install dependencies
@@ -65,13 +58,11 @@ jobs:
           VERSION=${GITHUB_REF#refs/tags/}
           VERSION=${VERSION#v}
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
-          echo "tag_with_v=v${VERSION}" >> $GITHUB_OUTPUT
         else
           echo "version=dev-${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
-          echo "tag_with_v=dev" >> $GITHUB_OUTPUT
         fi
 
-    - name: Package server (all platforms)
+    - name: Package server
       run: |
         dotnet run --project Content.Packaging server \
           --platform win-x64 \
@@ -81,204 +72,57 @@ jobs:
           --platform osx-x64 \
           --platform osx-arm64
 
-    - name: Package client
-      run: dotnet run --project Content.Packaging client --no-wipe-release || \
-        echo "Client packaging skipped or failed"
-
-    - name: Verify build output
-      run: |
-        echo "========================================="
-        echo " BUILD OUTPUT VERIFICATION"
-        echo "========================================="
-        echo "Contents of ./release:"
-        ls -la ./release/
-        echo ""
-        echo "Number of server archives:"
-        ls -1 ./release/SS14.Server_*.zip 2>/dev/null | wc -l
-
-    - name: Create clean packages from server archives
+    - name: Create packages
       id: package
       run: |
         VERSION="${{ steps.version.outputs.version }}"
 
-        echo "========================================="
-        echo " CREATING CLEAN PACKAGES"
-        echo "========================================="
-        echo "Version: $VERSION"
-
-        ARCHIVES_CREATED=""
-
-        # Обрабатываем каждый серверный архив
         for zip_file in ./release/SS14.Server_*.zip; do
           if [ ! -f "$zip_file" ]; then
-            echo "No server archives found in ./release/"
             continue
           fi
 
-          # Извлекаем платформу из имени файла
           filename=$(basename "$zip_file")
           platform=$(echo "$filename" | sed 's/SS14.Server_//' | sed 's/.zip//')
 
-          echo ""
-          echo "========================================="
-          echo "Processing: $platform"
-          echo "========================================="
-
-          # Создаем временную директорию
           mkdir -p "temp_${platform}"
-
-          # Распаковываем архив
-          echo "Extracting $filename..."
           unzip -q "$zip_file" -d "temp_${platform}"
 
-          # Удаляем исходники и временные файлы
-          echo "Cleaning source files..."
+          rm -rf "temp_${platform}/Content.Server" 2>/dev/null || true
+          rm -rf "temp_${platform}/Content.Shared" 2>/dev/null || true
+          rm -rf "temp_${platform}/Content.Client" 2>/dev/null || true
           find "temp_${platform}" -name "*.cs" -type f -delete 2>/dev/null || true
           find "temp_${platform}" -name "*.csproj" -type f -delete 2>/dev/null || true
-          find "temp_${platform}" -name "*.sln" -type f -delete 2>/dev/null || true
-          find "temp_${platform}" -type d -name "obj" -exec rm -rf {} + 2>/dev/null || true
-          find "temp_${platform}" -type d -name "Content.Server" -exec rm -rf {} + 2>/dev/null || true
-          find "temp_${platform}" -type d -name "Content.Shared" -exec rm -rf {} + 2>/dev/null || true
-          find "temp_${platform}" -type d -name "Content.Client" -exec rm -rf {} + 2>/dev/null || true
 
-          # Удаляем PDB файлы (символы отладки)
-          find "temp_${platform}" -name "*.pdb" -type f -delete 2>/dev/null || true
-
-          # Создаем скрипт запуска для Unix
-          if [[ "$platform" == *"linux"* ]] || [[ "$platform" == *"osx"* ]] || [[ "$platform" == *"mac"* ]]; then
-            cat > "temp_${platform}/run_server.sh" << 'SCRIPT'
-#!/bin/bash
-cd "$(dirname "$0")"
-if command -v dotnet &> /dev/null; then
-    echo "Starting Space Station 14 Server..."
-    exec dotnet Content.Server.dll "$@"
-else
-    echo "Error: .NET Runtime not found"
-    echo "Please install .NET Runtime 10.0 or later"
-    exit 1
-fi
-SCRIPT
-            chmod +x "temp_${platform}/run_server.sh"
-          fi
-
-          # Создаем .bat файл для Windows
-          if [[ "$platform" == *"win"* ]]; then
-            cat > "temp_${platform}/run_server.bat" << 'SCRIPT'
-@echo off
-echo Starting Space Station 14 Server...
-dotnet Content.Server.dll %*
-if errorlevel 1 (
-    echo Error: Failed to start server
-    pause
-)
-SCRIPT
-          fi
-
-          # Проверяем, что нет .cs файлов
-          CS_FILES=$(find "temp_${platform}" -name "*.cs" -type f 2>/dev/null | wc -l)
-          if [ "$CS_FILES" -gt 0 ]; then
-            echo " WARNING: Found $CS_FILES .cs files in package!"
-            find "temp_${platform}" -name "*.cs" -type f
-          fi
-
-          # Проверяем наличие Content.Server.dll
-          if [ -f "temp_${platform}/Content.Server.dll" ]; then
-            echo " Content.Server.dll found"
-          else
-            echo " WARNING: Content.Server.dll not found"
-          fi
-
-          # Создаем tar.gz архив
           cd temp_${platform}
-          ARCHIVE_NAME="ss14-server-${platform}-${VERSION}.tar.gz"
-          tar -czf "../${ARCHIVE_NAME}" .
+          zip -r "../ss14-server-${platform}-${VERSION}.zip" .
+          tar -czf "../ss14-server-${platform}-${VERSION}.tar.gz" .
           cd ..
 
-          ARCHIVES_CREATED="$ARCHIVES_CREATED $ARCHIVE_NAME"
-          echo " Created: $ARCHIVE_NAME"
-          echo "Size: $(du -h $ARCHIVE_NAME | cut -f1)"
-
-          # Очищаем временные файлы
           rm -rf "temp_${platform}"
         done
-
-        echo ""
-        echo "========================================="
-        echo " CREATED ARCHIVES:"
-        echo "$ARCHIVES_CREATED"
-        echo "========================================="
-
-        echo "created_archives=$ARCHIVES_CREATED" >> $GITHUB_OUTPUT
-
-        # Список файлов для отладки
-        echo ""
-        echo "Files in current directory:"
-        ls -la *.tar.gz 2>/dev/null || echo "No tar.gz files found"
-
-    - name: VERIFY: No source code in archives
-      run: |
-        echo "========================================="
-        echo " VERIFYING NO SOURCE CODE IN ARCHIVES"
-        echo "========================================="
-
-        FAILED=0
-
-        for archive in ss14-server-*.tar.gz; do
-          if [ ! -f "$archive" ]; then
-            echo "No archives found to verify"
-            continue
-          fi
-
-          echo "Checking: $archive"
-
-          # Проверяем наличие .cs файлов
-          if tar -tzf "$archive" 2>/dev/null | grep -E '\.(cs|cpp|h)$' | grep -q .; then
-            echo " ERROR: $archive contains source code!"
-            echo "Found files:"
-            tar -tzf "$archive" | grep -E '\.(cs|cpp|h)$'
-            FAILED=1
-          else
-            echo " No source code found"
-          fi
-
-          # Подсчитываем .dll файлы
-          DLL_COUNT=$(tar -tzf "$archive" 2>/dev/null | grep -c '\.dll$' || true)
-          echo "  Found $DLL_COUNT .dll files"
-
-          if [ "$DLL_COUNT" -eq 0 ]; then
-            echo " WARNING: No .dll files found"
-          fi
-        done
-
-        if [ $FAILED -eq 1 ]; then
-          echo ""
-          echo " BUILD FAILED: Archives contain source code!"
-          exit 1
-        fi
-
-        echo ""
-        echo " ALL ARCHIVES CLEAN"
 
     - name: Create GitHub Release
       if: startsWith(github.ref, 'refs/tags/') && success()
       uses: softprops/action-gh-release@v1
       with:
         tag_name: ${{ github.ref_name }}
-        name: Release ${{ steps.version.outputs.version }} (Binary Only)
-        body: |
-          ## Release ${{ steps.version.outputs.version }}
+        name: Release ${{ steps.version.outputs.version }}
+        files: |
+          ss14-server-*.zip
+          ss14-server-*.tar.gz
+        draft: false
+        prerelease: ${{ contains(github.ref_name, '-') }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-          ### Binary-Only Release
-          This release contains only compiled binaries.
-          Source code has been removed.
-
-          ### Available Packages
-          ${{ steps.package.outputs.created_archives }}
-
-          ### Quick Start
-
-          **Linux/macOS:**
-          ```bash
-          tar -xzf ss14-server-linux-x64-${{ steps.version.outputs.version }}.tar.gz
-          chmod +x run_server.sh
-          ./run_server.sh
+    - name: Upload artifacts
+      if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: ss14-server-${{ steps.version.outputs.version }}
+        path: |
+          ss14-server-*.zip
+          ss14-server-*.tar.gz
+        retention-days: 30
+        if-no-files-found: error
