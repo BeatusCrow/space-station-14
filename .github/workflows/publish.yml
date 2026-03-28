@@ -175,19 +175,3 @@ jobs:
           echo "Error: Build root directory not found!"
           exit 1
         fi
-
-        cat > README_PACKAGE.md << 'EOF'
-# Space Station 14 Server Package
-
-## Package Contents
-- Compiled binaries only (.dll files)
-- No source code (Content.Server, Content.Shared, Content.Client removed)
-- Ready to run on multiple platforms
-
-## Quick Start
-```bash
-# Extract the package for your platform
-tar -xzf ss14-server-linux-x64-${VERSION}.tar.gz
-cd linux-x64
-chmod +x run_server.sh
-./run_server.sh
