@@ -97,26 +97,60 @@ jobs:
       run: dotnet run --project Content.Packaging client --no-wipe-release || \
         echo "Client packaging skipped or failed"
 
-    # 6. Определение структуры сборки
+    # 6. Определение структуры сборки (исправлено для SS14)
     - name: Locate build artifacts
       id: artifacts
       run: |
+        echo "========================================="
+        echo " LOCATING BUILD ARTIFACTS"
+        echo "========================================="
+
+        # Выводим структуру директорий для отладки
+        echo "Current directory structure (first 3 levels):"
+        find . -maxdepth 3 -type d | head -30
+
+        echo ""
+        echo "Looking for build output..."
+
+        # SS14: Content.Packaging создает папку release/
         if [ -d "./release" ]; then
+          echo " Found ./release directory"
           echo "build_root=./release" >> $GITHUB_OUTPUT
-        elif [ -d "./bin" ]; then
-          echo "build_root=./bin" >> $GITHUB_OUTPUT
+          ls -la ./release
+
+        # Альтернатива: если есть bin/Release
+        elif [ -d "./bin/Release" ]; then
+          echo " Found ./bin/Release directory"
+          echo "build_root=./bin/Release" >> $GITHUB_OUTPUT
+          ls -la ./bin/Release
+
+        # Альтернатива: если есть publish/
         elif [ -d "./publish" ]; then
+          echo " Found ./publish directory"
           echo "build_root=./publish" >> $GITHUB_OUTPUT
+          ls -la ./publish
+
+        # Проверяем, может быть сборка в Content.Server/bin
+        elif [ -d "./Content.Server/bin/Release" ]; then
+          echo " Found ./Content.Server/bin/Release directory"
+          echo "build_root=./Content.Server/bin/Release" >> $GITHUB_OUTPUT
+          ls -la ./Content.Server/bin/Release
+
         else
-          echo "build_root=./" >> $GITHUB_OUTPUT
+          echo " ERROR: No build directory found!"
+          echo ""
+          echo "Searching for .dll files to locate build:"
+          find . -name "*.dll" -type f 2>/dev/null | head -20
+
+          echo ""
+          echo "Searching for Content.Server.dll:"
+          find . -name "Content.Server.dll" -type f 2>/dev/null
+
+          exit 1
         fi
 
-        echo "Build root: ${{ env.build_root }}"
-        if [ -d "${{ env.build_root }}" ]; then
-          ls -la ${{ env.build_root }}
-        else
-          echo "Warning: Build root directory not found"
-        fi
+        echo ""
+        echo "Build root set to: ${{ env.build_root }}"
 
     # 7. Удаление исходного кода контент-папок из сборки
     - name: REMOVE CONTENT SOURCE CODE from build
