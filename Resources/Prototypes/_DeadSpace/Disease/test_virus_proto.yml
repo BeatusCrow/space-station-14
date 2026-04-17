@@ -1,0 +1,46 @@
+- type: virus
+  id: TestVirusProto
+  name: Plague
+  distribution:
+    - Surface
+  ttl: 10
+  size: 0.4
+  timeBetweenDisintegration: 5.0
+  passiveGeneration: 0.5
+  mothsForDecay: 2.5
+  stages:
+  - stage: 0
+    duration: 20
+    recoveryСhance: 0.2
+    transitionСhanceUp: 0.8
+    transitionСhanceBack: 0.2
+    symptoms:
+    - !type:SymptomSneezingData
+      chance: 1.0
+      interval: 5
+      severity: 0.5
+    treatments:
+    - !type:ReagentTreatmentData
+      reagent: Spaceacillin
+      amount: 10
+      effectiveness: 0.8
+  - stage: 1
+    duration: 30
+    recoveryСhance: 0.8
+    transitionСhanceUp: 0.2
+    transitionСhanceBack: 0.2
+    symptoms:
+    - !type:SymptomSneezingData
+      chance: 1.0
+      interval: 5
+      severity: 1.0
+    treatments:
+    - !type:ReagentTreatmentData
+      reagent: SpaceacillinUltra
+      amount: 12
+      effectiveness: 0.5
+      # Мне кажется, что нужно еще добавить аналог symptoms или treatments при выздоравлении. То есть через подобные методы выдавать тот же
+      # иммунитет. И соответственно добавить поле ImmunityComponent, чтобы сущности не заражались повторно (опциональное поле).
+  recoveryActions:
+  - !type:RecoveryActionLaughterData
+    chance: 0.9
