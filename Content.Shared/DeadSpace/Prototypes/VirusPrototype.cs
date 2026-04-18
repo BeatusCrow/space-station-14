@@ -1,6 +1,7 @@
 using Robust.Shared.Prototypes;
 using Content.Shared.DeadSpace.Disease;
 using Content.Shared.DeadSpace.Disease.RecoveryActions;
+using Content.Shared.DeadSpace.Disease.Events;
 
 namespace Content.Shared.DeadSpace.Prototypes;
 
@@ -76,6 +77,12 @@ public sealed partial class VirusPrototype : IPrototype
     /// </summary>
     [DataField("recoveryActions")]
     public List<BaseRecoveryActionsData> RecoveryActions { get; private set; } = new();
+
+    /// <summary>
+    /// События, которые могут вызвать появление вируса в раунде.
+    /// </summary>
+    [DataField("sourceEvents")]
+    public List<BaseVirusSourceData> SourceEvents { get; private set; } = new();
 }
 
 [Flags]

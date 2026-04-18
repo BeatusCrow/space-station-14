@@ -9,8 +9,10 @@
   passiveGeneration: 0.5
   mothsForDecay: 2.5
   stages:
+  # стадия номер 1
   - stage: 0
     duration: 20
+    # я бы еще добавил поле, отвечающее за возможность заражать на данном этапе.
     recoveryСhance: 0.2
     transitionСhanceUp: 0.8
     transitionСhanceBack: 0.2
@@ -21,26 +23,95 @@
       severity: 0.5
     treatments:
     - !type:ReagentTreatmentData
-      reagent: Spaceacillin
+      id: YorshTreatment
+      reagent: Yorsh
       amount: 10
       effectiveness: 0.8
+      requiredDuration: 0
+      strength: RegressOneStage # это лечение должно показать, что на 0 этапе "сброс" работает как полное излечение
+    - !type:ReagentTreatmentData
+      id: AlexanderTreatment
+      reagent: Alexander
+      amount: 12
+      effectiveness: 0.9
+      requiredDuration: 0
+      strength: SlowProgression # демонстрация замедления болезни
+      cooldown: 5
+      slowMultiplier: 1.5
+  # стадия номер 2
   - stage: 1
     duration: 30
-    recoveryСhance: 0.8
-    transitionСhanceUp: 0.2
+    recoveryСhance: 0.2
+    transitionСhanceUp: 0.8
     transitionСhanceBack: 0.2
     symptoms:
     - !type:SymptomSneezingData
       chance: 1.0
-      interval: 5
+      interval: 2
       severity: 1.0
     treatments:
     - !type:ReagentTreatmentData
-      reagent: SpaceacillinUltra
+      id: AlexanderTreatment
+      reagent: Alexander
       amount: 12
-      effectiveness: 0.5
+      effectiveness: 0.9
+      requiredDuration: 4
+      strength: RegressOneStage # просто демонстрация отката этапа болезни
+    - !type:ReagentTreatmentData
+      id: YorshTreatment
+      reagent: Yorsh
+      amount: 12
+      effectiveness: 0.9
+      requiredDuration: 2
+      strength: Cure # демонстрация полного излечения
+  # стадия номер 3
+  - stage: 2
+    duration: 20
+    recoveryСhance: 0.2
+    transitionСhanceUp: 0.8
+    transitionСhanceBack: 0.2
+    symptoms:
+    - !type:SymptomSneezingData
+      chance: 1.0
+      interval: 2
+      severity: 1.0
+    treatments:
+    - !type:ReagentTreatmentData
+      id: AlexanderTreatment
+      reagent: Alexander
+      amount: 12
+      effectiveness: 0.9
+      requiredDuration: 4
+      strength: PauseProgression # просто демонстрация отсрочки перехода на другой этап
+      cooldown: 2
+      pauseDuration: 20
+    - !type:ReagentTreatmentData
+      id: YorshTreatment
+      reagent: Yorsh
+      amount: 12
+      effectiveness: 0.9
+      requiredDuration: 2
+      strength: RegressMultipleStages # демонстрация отката 2х этапов
+      stagesToRegress: 2
       # Мне кажется, что нужно еще добавить аналог symptoms или treatments при выздоравлении. То есть через подобные методы выдавать тот же
       # иммунитет. И соответственно добавить поле ImmunityComponent, чтобы сущности не заражались повторно (опциональное поле).
   recoveryActions:
   - !type:RecoveryActionLaughterData
     chance: 0.9
+  sourceEvents:
+  - !type:HypothermiaSourceData
+    chance: 0.9
+    minRoundTime: 0
+    checkInterval: 0
+    exposureTime: 5
+    temperatureThreshold: 308
+
+
+
+- type: reagent
+  id: ViralSubstance
+  name: reagent-name-viral-substance
+  group: Biological
+  desc: reagent-desc-viral-substance
+  physicalDesc: reagent-physical-desc-viral
+  color: "#98FB98"

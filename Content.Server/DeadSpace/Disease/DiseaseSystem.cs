@@ -24,6 +24,8 @@ using Robust.Shared.Random;
 using System.Reflection;
 using Content.Shared.DeadSpace.Disease.RecoveryActions;
 using System.Linq;
+using Content.Shared.Chemistry.EntitySystems;
+using Content.Shared.FixedPoint;
 
 namespace Content.Server.DeadSpace.Disease;
 
@@ -36,10 +38,13 @@ public sealed class DiseaseSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
+    [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
 
     // Кеш делегатов для вызова методов симптомов
     private readonly Dictionary<string, Action<EntityUid, BaseSymptomData>> _handlerSymptomCache = new();
     private readonly Dictionary<string, Action<EntityUid, BaseRecoveryActionsData>> _handlerActionsCache = new();
+    private readonly Dictionary<string, Func<EntityUid, BaseTreatmentData, bool>> _handlerTreatmentCache = new();
 
     private List<string> _fingerlessGloves = new List<string>() // беспалые перчатки не должны защищать от заражения
     {
@@ -85,30 +90,26 @@ public sealed class DiseaseSystem : EntitySystem
                 {
                     virus.MaxStage = proto.Stages.Count - 1;
 
-                    foreach (DiseaseStageData currentStage in proto.Stages)
+                    var currentStage = proto.Stages.FirstOrDefault(s => s.Stage == virus.CurrentStage);
+                    if (currentStage == null)
+                        continue;
+
+                    if (virus.NextStageTick == null)
                     {
-                        if (currentStage.Stage != virus.CurrentStage)
-                            continue;
-
-                        if (virus.NextStageTick == null)
-                            InitStageTime(virus, currentStage.Duration);
-                        else
-                            CheckCurrentStage(uid, virus, currentStage);
-
-
-                        ProcessSymptoms(uid, currentStage.Symptoms);
+                        InitStageTime(virus, currentStage.Duration);
                     }
-                }
-                //var currentStageData = virus.Stages.FirstOrDefault(s => s.Stage == disease.CurrentStage);
-            }
-            //// Уменьшаем время стадии
-            //disease.StageTimeRemaining -= frameTime;
+                    else
+                    {
+                        CheckCurrentStage(uid, virus, currentStage);
+                    }
 
-            //// Проверяем переход на следующую стадию
-            //if (disease.StageTimeRemaining <= 0)
-            //{
-            //    AdvanceToNextStage(uid, disease);
-            //}
+                    // Обработка лечения
+                    ProcessTreatments(uid, virus, proto, currentStage);
+
+                    // Обработка симптомов с учётом таймеров
+                    ProcessSymptoms(uid, currentStage.Symptoms, virus, proto, currentStage);
+                }
+            }
         }
     }
 
@@ -243,15 +244,86 @@ public sealed class DiseaseSystem : EntitySystem
         }
     }
 
+    #region вспомогательные методы для событий
+
+    public bool TryAddVirus(EntityUid uid, string virusId)
+    {
+        if (!_prototype.TryIndex<VirusPrototype>(virusId, out var proto))
+            return false;
+
+        var infected = EnsureComp<InfectedComponent>(uid);
+
+        if (infected.Virus.Any(v => v.VirusId == virusId))
+            return false;
+
+        var virusData = new InfectedaVirusData
+        {
+            VirusId = virusId,
+            CurrentStage = 0,
+            DistributionWay = TypeOfDistribution.Surface
+        };
+
+        var firstStage = proto.Stages.FirstOrDefault(s => s.Stage == 0);
+        if (firstStage != null)
+        {
+            virusData.NextStageTick = _gameTiming.CurTime + TimeSpan.FromSeconds(firstStage.Duration);
+        }
+
+        infected.Virus.Add(virusData);
+
+        Log.Info($"Entity {ToPrettyString(uid)} infected with {virusId}");
+        return true;
+    }
+
+    public bool HasVirus(EntityUid uid, string virusId)
+    {
+        return TryComp(uid, out InfectedComponent? infected) &&
+               infected.Virus.Any(v => v.VirusId == virusId);
+    }
+
+    public IEnumerable<EntityUid> GetAllInfectedEntities(string virusId)
+    {
+        var query = EntityQueryEnumerator<InfectedComponent>();
+        while (query.MoveNext(out var uid, out var infected))
+        {
+            if (infected.Virus.Any(v => v.VirusId == virusId))
+                yield return uid;
+        }
+    }
+
+    #endregion
+
     #region вызов симптомов
-    private void ProcessSymptoms(EntityUid uid, List<BaseSymptomData> symptoms)
+    /// <summary>
+    /// Метод, который перебирает все симптомы данного этапа болезни и проверяет, не пора ли их применить.
+    /// </summary>
+    /// <param name="uid"> Сущность, к которой применится симптом </param>
+    /// <param name="symptoms"> Список симптомов данной стадии </param>
+    /// <param name="virus"> Информация о конкретной болезни в организме сущности </param>
+    /// <param name="proto"> Прототип вируса </param>
+    /// <param name="currentStage"> Класс, содержащий информацию о текущей стадии болезни </param>
+    private void ProcessSymptoms(
+        EntityUid uid,
+        List<BaseSymptomData> symptoms,
+        InfectedaVirusData virus,
+        VirusPrototype proto,
+        DiseaseStageData currentStage)
     {
         foreach (var symptom in symptoms)
         {
-            if (_random.Prob(symptom.Chance))
+            int symptomIndex = InfectedaVirusData.GetSymptomIndex(proto, currentStage, symptom);
+
+            if (!virus.IsSymptomReady(symptom, _gameTiming, symptomIndex))
+                continue;
+
+            if (!_random.Prob(symptom.Chance))
             {
-                ProcessSymptom(uid, symptom);
+                virus.ResetSymptomTimer(symptom, _gameTiming, symptomIndex);
+                continue;
             }
+
+            ProcessSymptom(uid, symptom);
+            virus.ResetSymptomTimer(symptom, _gameTiming, symptomIndex);
         }
     }
 
@@ -342,18 +414,263 @@ public sealed class DiseaseSystem : EntitySystem
     }
     #endregion
 
+    #region вызов способов лечения
+    private void ProcessTreatments(
+        EntityUid uid,
+        InfectedaVirusData virus,
+        VirusPrototype proto,
+        DiseaseStageData currentStage)
+    {
+        foreach (var treatment in currentStage.Treatments)
+        {
+            int treatmentIndex = InfectedaVirusData.GetTreatmentIndex(proto, currentStage, treatment);
+
+            bool conditionMet = ProcessTreatment(uid, treatment);
+
+            virus.UpdateTreatmentProgress(treatmentIndex, treatment, _gameTiming, conditionMet);
+
+            // то есть тут обработка мгновенного лечения
+            if (treatment.RequiredDuration <= 0)
+            {
+                if (!IsTreatmentCooldownReady(virus, treatmentIndex, treatment))
+                    continue;
+
+                if (conditionMet && _random.Prob(treatment.Effectiveness))
+                {
+                    ApplyTreatmentEffect(uid, virus, proto, treatment);
+                    SetTreatmentCooldown(virus, treatmentIndex, treatment);
+                }
+                continue;
+            }
+
+            // а тут того, что требует непрерывного выполнения условия в течение определенного времени
+            if (virus.IsTreatmentComplete(treatmentIndex, treatment))
+            {
+                if (!IsTreatmentCooldownReady(virus, treatmentIndex, treatment))
+                    continue;
+
+                if (_random.Prob(treatment.Effectiveness))
+                {
+                    ApplyTreatmentEffect(uid, virus, proto, treatment);
+                }
+                virus.ResetTreatmentProgress(treatmentIndex);
+            }
+        }
+    }
+
+    private bool IsTreatmentCooldownReady(InfectedaVirusData virus, int treatmentIndex, BaseTreatmentData treatment)
+    {
+        if (treatment.Cooldown <= 0)
+            return true;
+
+        if (!virus.TreatmentCooldowns.TryGetValue(treatmentIndex, out var nextTime))
+            return true;
+
+        return _gameTiming.CurTime >= nextTime;
+    }
+
+    private void SetTreatmentCooldown(InfectedaVirusData virus, int treatmentIndex, BaseTreatmentData treatment)
+    {
+        if (treatment.Cooldown > 0)
+        {
+            virus.TreatmentCooldowns[treatmentIndex] = _gameTiming.CurTime + TimeSpan.FromSeconds(treatment.Cooldown);
+        }
+    }
+
+    /// <summary>
+    /// Обрабатывает лечение и возвращает true, если условие лечения выполнено.
+    /// </summary>
+    private bool ProcessTreatment(EntityUid uid, BaseTreatmentData treatmentData)
+    {
+        if (treatmentData == null)
+            return false;
+
+        var handlerName = treatmentData.HandlerMethodName;
+
+        if (!_handlerTreatmentCache.TryGetValue(handlerName, out var handler))
+        {
+            handler = CreateTreatmentHandler(handlerName, treatmentData.GetType());
+            if (handler != null)
+                _handlerTreatmentCache[handlerName] = handler;
+            else
+                return false;
+        }
+
+        return handler(uid, treatmentData);
+    }
+
+    private Func<EntityUid, BaseTreatmentData, bool>? CreateTreatmentHandler(string methodName, Type dataType)
+    {
+        var method = GetType().GetMethod(methodName,
+            BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance,
+            null,
+            new[] { typeof(EntityUid), dataType },
+            null);
+
+        if (method == null)
+        {
+            Logger.Error($"Method '{methodName}' not found in DiseaseSystem");
+            return null;
+        }
+
+        // Проверяем, что метод возвращает bool
+        if (method.ReturnType != typeof(bool))
+        {
+            Logger.Error($"Method '{methodName}' must return bool");
+            return null;
+        }
+
+        return (uid, data) => (bool)method.Invoke(this, new object[] { uid, data })!;
+    }
+
+    /// <summary>
+    /// Применяет эффект лечения в зависимости от Strength.
+    /// </summary>
+    private void ApplyTreatmentEffect(EntityUid uid, InfectedaVirusData virus, VirusPrototype proto, BaseTreatmentData treatment)
+    {
+        switch (treatment.Strength)
+        {
+            case TreatmentStrength.RegressOneStage:
+                RegressStages(uid, virus, proto, 1);
+                break;
+
+            case TreatmentStrength.RegressMultipleStages:
+                RegressStages(uid, virus, proto, treatment.StagesToRegress);
+                break;
+
+            case TreatmentStrength.Cure:
+                TryDoRecoveryAction(uid, virus.VirusId);
+                TryDeleteVirus(uid, virus);
+                break;
+
+            case TreatmentStrength.SlowProgression:
+                ApplySlowProgression(uid, virus, treatment);
+                break;
+
+            case TreatmentStrength.PauseProgression:
+                ApplyPauseProgression(uid, virus, treatment);
+                break;
+
+            default:
+                Logger.Warning($"Unknown treatment strength: {treatment.Strength}");
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Откатывает болезнь на указанное количество стадий.
+    /// </summary>
+    private void RegressStages(EntityUid uid, InfectedaVirusData virus, VirusPrototype proto, int stages)
+    {
+        int newStage = Math.Max(0, virus.CurrentStage - stages);
+
+        if (newStage == virus.CurrentStage)
+        {
+            Log.Debug($"Болезнь уже на минимальной стадии, откат невозможен"); // Debug
+            Log.Debug($"Выздоровел"); // Debug
+            TryDoRecoveryAction(uid, virus.VirusId);
+            TryDeleteVirus(uid, virus);
+            return;
+        }
+
+        int oldStage = virus.CurrentStage;
+        virus.CurrentStage = newStage;
+
+        var newStageData = proto.Stages.FirstOrDefault(s => s.Stage == newStage);
+        if (newStageData != null)
+        {
+            virus.NextStageTick = _gameTiming.CurTime + TimeSpan.FromSeconds(newStageData.Duration);
+        }
+
+        Log.Debug($"Болезнь {virus.VirusId} откатилась с {oldStage} до {virus.CurrentStage} стадии у {ToPrettyString(uid)}"); // Debug
+    }
+
+    /// <summary>
+    /// Замедляет прогрессию болезни.
+    /// </summary>
+    private void ApplySlowProgression(EntityUid uid, InfectedaVirusData virus, BaseTreatmentData treatment)
+    {
+        if (treatment.RequiredDuration <= 0)
+        {
+            Logger.Warning($"SlowProgression with RequiredDuration=0 is not allowed for {ToPrettyString(uid)}");
+            return;
+        }
+
+        if (virus.NextStageTick == null)
+            return;
+
+        var currentTime = _gameTiming.CurTime;
+        var remainingTime = virus.NextStageTick.Value - currentTime;
+
+        // Увеличиваем оставшееся время
+        var newRemainingTime = remainingTime * treatment.SlowMultiplier;
+        virus.NextStageTick = currentTime + newRemainingTime;
+
+        Logger.Info($"Прогрессия болезни {virus.VirusId} замедлена в {treatment.SlowMultiplier}x раз у {ToPrettyString(uid)}");
+    }
+
+    /// <summary>
+    /// Ставит прогрессию на паузу.
+    /// </summary>
+    private void ApplyPauseProgression(EntityUid uid, InfectedaVirusData virus, BaseTreatmentData treatment)
+    {
+        if (treatment.RequiredDuration <= 0)
+        {
+            Logger.Warning($"ApplyPauseProgression with RequiredDuration=0 is not allowed for {ToPrettyString(uid)}");
+            return;
+        }
+
+        if (virus.NextStageTick == null)
+            return;
+
+        // Добавляем время паузы к времени следующей стадии
+        virus.NextStageTick = virus.NextStageTick.Value + TimeSpan.FromSeconds(treatment.PauseDuration);
+
+        Logger.Info($"Прогрессия болезни {virus.VirusId} приостановлена на {treatment.PauseDuration} сек у {ToPrettyString(uid)}");
+    }
+    #endregion
+
     #region симптомы
     // Методы-обработчики симптомов прямо в DiseaseSystem
     private void SymptomSneezing(EntityUid uid, SymptomSneezingData data)
     {
-        //Log.Error("SymptomSneezing");
+        _chat.TryEmoteWithChat(uid, "Sneeze", ChatTransmitRange.Normal);
     }
     #endregion
 
     #region способы лечения
-    private void ReagentTreatment(EntityUid uid, ReagentTreatmentData data)
+    /// В данном разделе реализуются методы-обработчики способов лечения.
+    /// Каждый метод должен принимать EntityUid и конкретный класс данных лечения,
+    /// а возвращать bool, который указывает, было ли лечение успешным (т.е. выполнены ли условия для лечения).
+
+    /// <summary>
+    /// Способ лечения через реагент. Проверяет, есть ли в организме сущности достаточное количество определенного реагента.
+    /// </summary>
+    private bool ReagentTreatment(EntityUid uid, ReagentTreatmentData data)
     {
-        Log.Error("SymptomSneezing");
+        var requiredAmountFixed = FixedPoint2.New(data.Amount);
+        var totalAmount = _solutionContainerSystem.GetTotalPrototypeQuantity(uid, data.ReagentId);
+
+        var hasEnough = totalAmount >= requiredAmountFixed;
+
+        return hasEnough;
+    }
+
+    /// <summary>
+    /// Способ лечения через температуру. Проверяет, находится ли текущая температура сущности в заданном диапазоне.
+    /// </summary>
+    private bool TemperatureTreatment(EntityUid uid, TemperatureTreatmentData data)
+    {
+        if (!TryComp<TemperatureComponent>(uid, out var temp))
+        {
+            Log.Debug($"Сущность {ToPrettyString(uid)} не имеет TemperatureComponent");
+            return false;
+        }
+
+        var inRange = temp.CurrentTemperature >= data.MinTemperature &&
+                      temp.CurrentTemperature <= data.MaxTemperature;
+
+        return inRange;
     }
     #endregion
 
@@ -363,19 +680,4 @@ public sealed class DiseaseSystem : EntitySystem
         Log.Error($"Yeah {data.Chance}");
     }
     #endregion
-
-    //private void AdvanceToNextStage(EntityUid uid, DiseaseComponent disease)
-    //{
-    //    var nextStage = disease.Stages.FirstOrDefault(s => s.Stage == disease.CurrentStage + 1);
-    //    if (nextStage != null)
-    //    {
-    //        disease.CurrentStage++;
-    //        disease.StageTimeRemaining = nextStage.Duration;
-    //    }
-    //    else
-    //    {
-    //        // Болезнь закончилась - можно вылечить
-    //        RemComp<DiseaseComponent>(uid);
-    //    }
-    //}
 }
